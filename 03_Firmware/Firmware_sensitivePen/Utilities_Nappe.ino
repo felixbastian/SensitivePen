@@ -1,4 +1,4 @@
-void GetRaw() 
+void printNappeData() 
 {
   
   if (muca.updated()) 

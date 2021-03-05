@@ -31,6 +31,7 @@ BLEBas  blebas;  // battery
 void setup()
 {
   Serial.begin(115200);
+  
   //MPU Launch
   status = mpu9250.begin();
   if (status < 0)
@@ -96,6 +97,12 @@ void loop()
   
   Serial.print("------------    MPU Var Data    --------------");
   GetMpuData(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-  GetRaw();
+
+  //Print on the serial
+  printAcceleration();
+  printGyroscope();
+  printMagnetometre();
+  
+  printNappeData();
   delay(100);
 }
