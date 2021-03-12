@@ -1,3 +1,14 @@
+/*
+ * Firmwrae that sends dats data of the sensitive pen:
+ * Format:
+ * -> Nappe : z(Indcol)X(ValueHexa)X...X... ..q
+ * -> MPU : 
+ *    - Acceleration : a(ValueX)c(ValueY)c(ValueZ)q
+ *    - Gyroscope : g(ValueX)c(ValueY)c(ValueZ)q
+ *    - Magnetmetre : m(ValueX)c(ValueY)c(ValueZ)q
+ */
+
+
 #if (RAMEND < 1000)
   #define SERIAL_BUFFER_SIZE 16
 #else

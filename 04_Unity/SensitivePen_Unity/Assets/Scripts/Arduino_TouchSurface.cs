@@ -29,6 +29,14 @@ public class Arduino_TouchSurface : MonoBehaviour
 	private List<Vector3> accCollection = new List<Vector3> (); // collection storing acceleration data to compute moving mean
 	public int nAcc = 5; // max size of accCollection (size of filter)
 
+	public Vector3 gyroscope = Vector3.zero;
+	private List<Vector3> gyrCollection = new List<Vector3>(); // collection storing acceleration data to compute moving mean
+	public int nGyr = 5; // max size of accCollection (size of filter)
+
+	public Vector3 magnetometer = Vector3.zero;
+	private List<Vector3> magCollection = new List<Vector3>(); // collection storing acceleration data to compute moving mean
+	public int nMag = 5; // max size of accCollection (size of filter)
+
 	void Start ()
 	{
 		// Initialize point grid as gameobjects
@@ -150,10 +158,7 @@ public class Arduino_TouchSurface : MonoBehaviour
 			// GET COORDINATES
 			if (serialdata_ != null) {
 				if (serialdata_.Length == 2 + 4 * COLS) {
-					//int[] rawdat_ = serialdata_.Split ('x').Select (str => int.Parse (str)).ToArray (); // get 
 					int[] rawdat_ = serialdata_.Split ('x').Select (str => int.Parse (str, System.Globalization.NumberStyles.HexNumber)).ToArray ();
-					//print (rawdat_.Length);
-					//print (COLS+1);
 					if (rawdat_.Length == COLS + 1) { // COLS + 1 ROW
 						int j = rawdat_ [0];
 						for (int k = 1; k < rawdat_.Length; k++) {
@@ -169,25 +174,28 @@ public class Arduino_TouchSurface : MonoBehaviour
 			// GET ACCELERATION
 			if (serialdata_ != null) {
 				if (serialdata_.Length == 3*3+2) {
-					int[] acc_ = serialdata_.Split ('c').Select (str => int.Parse (str, System.Globalization.NumberStyles.HexNumber)).ToArray ();
-					if (acc_.Length == 3) {
-						this.accCollection.Add (new Vector3 (acc_ [0], acc_ [1], acc_ [2]));
-						while (this.accCollection.Count > this.nAcc) {
-							this.accCollection.RemoveAt (0);
-						}
-
-						// Compute moving mean filter
-						Vector3 smoothAcc_ = Vector3.zero;
-						foreach (Vector3 curAcc_ in this.accCollection) {
-							smoothAcc_ += curAcc_;
-						}
-						smoothAcc_ /= (float)this.accCollection.Count; 
-
-						this.acceleration = smoothAcc_;
-						this.acceleration /= 10000f; // map acceleration TO CHANGE
-						this.dataCounter++;
-					}
+						getSerialDataMPUHexa(serialdata_, 'c', ref accCollection, ref acceleration, nAcc);
 				} 
+			}
+			break;
+		case 'g':
+			// GET GGYROSCOPE
+			if (serialdata_ != null)
+			{
+				if (serialdata_.Length == 3 * 3 + 2)
+				{
+					getSerialDataMPUHexa(serialdata_, 'c', ref gyrCollection, ref gyroscope, nGyr);
+				}
+			}
+			break;
+		case 'm':
+			// GET GGYROSCOPE
+			if (serialdata_ != null)
+			{
+				if (serialdata_.Length == 3 * 3 + 2)
+				{
+					getSerialDataMPUHexa(serialdata_, 'c', ref magCollection, ref magnetometer, nMag);
+				}
 			}
 			break;
 
@@ -202,6 +210,39 @@ public class Arduino_TouchSurface : MonoBehaviour
 			yield return new WaitForSeconds (waitTime);
 			print ("Serial data rate = " + this.dataCounter / waitTime + " data/s");
 			this.dataCounter = 0;
+		}
+	}
+	private void movingMeanFilter(ref List<Vector3> collection, ref Vector3 coord)
+    {
+		// Compute moving mean filter
+		Vector3 smoothAcc_ = Vector3.zero;
+		foreach (Vector3 curAcc_ in collection)
+		{
+			smoothAcc_ += curAcc_;
+		}
+		smoothAcc_ /= (float)collection.Count;
+
+		coord = smoothAcc_;
+		coord /= 10000f; // map acceleration TO CHANGE
+
+	}
+	private void getSerialDataMPUHexa(string serialData, char sep, ref List<Vector3> collection, ref Vector3 Vcoord, int n)
+    {
+		/*
+		 * Get the MPU data from the serialData
+		 */
+		int[] coord = serialData.Split(sep).Select(str => int.Parse(str, System.Globalization.NumberStyles.HexNumber)).ToArray();
+		if (coord.Length == 3)
+		{
+			collection.Add(new Vector3(coord[0], coord[1], coord[2]));
+			while (collection.Count > n)
+			{
+				collection.RemoveAt(0);
+			}
+
+			// Compute moving mean filter
+			movingMeanFilter(ref collection, ref Vcoord);
+			this.dataCounter++;
 		}
 	}
 }
