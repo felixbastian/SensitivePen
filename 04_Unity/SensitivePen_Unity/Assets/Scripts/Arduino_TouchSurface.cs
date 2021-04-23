@@ -245,4 +245,24 @@ public class Arduino_TouchSurface : MonoBehaviour
 			this.dataCounter++;
 		}
 	}
+
+	private void getSerialDataMPUDEc(string serialData, char sep, ref List<Vector3> collection, ref Vector3 Vcoord, int n)
+	{
+		/*
+		 * Get the MPU data from the serialData
+		 */
+		int[] coord = serialData.Split(sep).Select(str => int.Parse(str, System.Globalization.NumberStyles.Integer)).ToArray();
+		if (coord.Length == 3)
+		{
+			collection.Add(new Vector3(coord[0], coord[1], coord[2]));
+			while (collection.Count > n)
+			{
+				collection.RemoveAt(0);
+			}
+
+			// Compute moving mean filter
+			movingMeanFilter(ref collection, ref Vcoord);
+			this.dataCounter++;
+		}
+	}
 }

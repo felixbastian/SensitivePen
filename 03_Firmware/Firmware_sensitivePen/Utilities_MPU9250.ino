@@ -14,7 +14,7 @@ void GetMpuData(float *ax, float *ay, float *az, float *gx, float *gy, float *gz
   *mz = mpu9250.getMagZ_uT();
 }
 
-void printAcceleration()
+void printSerialAcceleration()
 {
   /*
    * Print acceleration data on serial
@@ -27,7 +27,23 @@ void printAcceleration()
   Serial.print(az);
   Serial.print('q');                                    // q
 }
-void printGyroscope()
+void printBluetoothAcceleration()
+{
+  /*
+   * Print acceleration data on serial
+   */
+  bleuart.print('a' +ax +'c' +ay +'c' +az + 'q');
+}
+
+void printBluetoothGyroscope()
+{
+  /*
+   * Print acceleration data on serial
+   */
+  //bleuart.print('g' +gx +'c' +gy +'c' +gz + 'q');
+  bleuart.print(gx);
+}
+void printSerialGyroscope()
 {
   /*
    * Print gyroscope data on serial
@@ -40,7 +56,7 @@ void printGyroscope()
   Serial.print(gz);
   Serial.print('q');                                    // q
 }
-void printMagnetometre()
+void printSerialMagnetometre()
 {
   /*
    * Print magnetometre data on serial

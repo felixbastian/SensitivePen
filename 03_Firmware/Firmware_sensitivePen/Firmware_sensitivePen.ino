@@ -32,6 +32,7 @@ int status;
 float ax, ay, az; // store accelerometre values
 float gx, gy, gz; // store gyroscope values
 float mx, my, mz; // store magneto values
+float x;
 
 // BLE Service
 BLEDfu  bledfu;  // OTA DFU service
@@ -42,7 +43,7 @@ BLEBas  blebas;  // battery
 void setup()
 {
   Serial.begin(115200);
-  
+  x=50.0;
   //MPU Launch
   status = mpu9250.begin();
   if (status < 0)
@@ -53,8 +54,8 @@ void setup()
     Serial.println(status);
   }
   
-  //Serial.println("Bluefruit52 BLEUART Example");
-  //Serial.println("---------------------------\n");
+  Serial.println("Bluefruit52 BLEUART Example");
+  Serial.println("---------------------------\n");
 
   // Setup the BLE LED to be enabled on CONNECT
   // Note: This is actually the default behaviour, but provided
@@ -68,7 +69,7 @@ void setup()
 
   Bluefruit.begin();
   Bluefruit.setTxPower(4);    // Check bluefruit.h for supported values
-  Bluefruit.setName("PEN");
+  Bluefruit.setName("SENSITIVEPEN");
   //Bluefruit.setName(getMcuUniqueID()); // useful testing with multiple central connections
   Bluefruit.Periph.setConnectCallback(connect_callback);
   Bluefruit.Periph.setDisconnectCallback(disconnect_callback);
@@ -101,19 +102,25 @@ void setup()
 
 void loop()
 {
+
   //Read the sensor
   mpu9250.readSensor();
   Serial.print("---------------    MPU Data    ---------------");
-  printMPUData();
+  //printMPUData();
   
   Serial.print("------------    MPU Var Data    --------------");
   GetMpuData(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
 
-  //Print on the serial
+  /*----------- Print on the serial ------------------
   printAcceleration();
   printGyroscope();
   printMagnetometre();
   
   printNappeData();
+  */
+  //printBluetoothNappeData();
+  //printBluetoothAcceleration();
+  //printBluetoothGyroscope();
+
   delay(100);
 }

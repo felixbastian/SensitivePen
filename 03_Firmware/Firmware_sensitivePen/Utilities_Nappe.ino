@@ -1,4 +1,4 @@
-void printNappeData() 
+void printSerialNappeData() 
 {
   
   if (muca.updated()) 
@@ -24,6 +24,23 @@ void printNappeData()
         
       }
       Serial.print('q'); 
+    }
+  }
+}
+
+void printBluetoothNappeData() 
+{
+  if (muca.updated()) 
+  {
+   for (int i = 0; i < ROWS_USE; i++) 
+   {
+      for( int j = 0; j < NUM_COLUMNS; j++)
+      {
+        if (muca.grid[i*12+j] > 0)
+        {
+          bleuart.print(i+','+j+','+muca.grid[i*12+j]);
+        }
+      }
     }
   }
 }
