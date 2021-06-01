@@ -27,16 +27,6 @@ namespace Skateboard
         {
             movuinoDataSet = new MovuinoDataSet(dataPath);
             i = 1;
-            IEnumerator ok()
-            {
-                this.gameObject.transform.Rotate(new Vector3(0, 45, 0));
-                yield return new WaitForSeconds(0.5f);
-                this.gameObject.transform.Rotate(new Vector3(180, 0, 0));
-                yield return new WaitForSeconds(0.5f);
-                this.gameObject.transform.Rotate(new Vector3(0, 45, 0));
-                
-            }
-            StartCoroutine(ok());
 
             //movuinoDataSet.showColumns();
             print(movuinoDataSet.GetValue("time", 0));

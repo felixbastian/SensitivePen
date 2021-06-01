@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Movuino;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace Graph
 
         //--------- Movuino part -----
         [SerializeField] private MovuinoBehaviour movuinoBehaviour;
+        [SerializeField] private MovuinoDataSet movuinoDataSet;
 
         //test
         private List<float> liste;
@@ -62,14 +64,36 @@ namespace Graph
         }
         private void Update()
         {
-            //Data of differents curve
-            curveList[0].valueList.Add(movuinoBehaviour.angleAccelOrientationSmooth.x); //movuinoBehaviour.MovingMean(movuinoBehaviour.angleAccelOrientation.x, ref movuinoBehaviour.listMeanX)
-            curveList[1].valueList.Add(movuinoBehaviour.angleAccelOrientationSmooth.y);
-            curveList[2].valueList.Add(movuinoBehaviour.angleAccelOrientationSmooth.z);
+            float valX=0;
+            float valY=0;
+            float valZ=0;
 
-            angleX.text = "Angle X : " + (int)movuinoBehaviour.angleAccelOrientationSmooth.x;
-            angleY.text = "Angle Y : " + (int)movuinoBehaviour.angleAccelOrientationSmooth.y;
-            angleZ.text = "Angle Z : " + (int)movuinoBehaviour.angleAccelOrientationSmooth.z;
+            //Data of differents curve
+            if (Convert.ToBoolean(movuinoBehaviour))
+            {
+                valX = movuinoBehaviour.angleAccelOrientationSmooth.x;
+                valY = movuinoBehaviour.angleAccelOrientationSmooth.y;
+                valZ = movuinoBehaviour.angleAccelOrientationSmooth.z;
+            }
+            else if (Convert.ToBoolean(movuinoDataSet))
+            {
+                valX = movuinoDataSet.acceleration.x;
+                valY = movuinoDataSet.acceleration.y;
+                valZ = movuinoDataSet.acceleration.z;
+            }
+            else
+            {
+                valX = 0;
+                valY = 0;
+                valZ = 0;
+            }
+            curveList[0].valueList.Add(valX); //movuinoBehaviour.MovingMean(movuinoBehaviour.angleAccelOrientation.x, ref movuinoBehaviour.listMeanX)
+            curveList[1].valueList.Add(valY);
+            curveList[2].valueList.Add(valZ);
+
+            angleX.text = "Angle X : " + (int)valX;
+            angleY.text = "Angle Y : " + (int)valY;
+            angleZ.text = "Angle Z : " + (int)valZ;
 
             for (int k =0; k<nbCurve; k++)
             {

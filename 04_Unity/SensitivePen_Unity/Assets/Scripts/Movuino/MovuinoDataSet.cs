@@ -11,7 +11,7 @@ namespace Movuino
     /// <summary>
     /// Class That represent a complete file of data of a movuino
     /// </summary>
-    public class MovuinoDataSet
+    public class MovuinoDataSet: MonoBehaviour
     {
         private string dataPath;
         List<object[]> rawData_ = new List<object[]>();
@@ -32,8 +32,19 @@ namespace Movuino
             Debug.Log("Reading... " + dataPath);
             //rawData_ = ReadCSV(dataPath);
             _rawData = ConvertCSVtoDataTable(dataPath);
+            i = 0;
+            Debug.Log(GetValue("posAngX", 25));
 
         }
+
+        public int i;
+
+        #region Properties
+        public float time { get { return GetValue("time",i); } }
+        public Vector3 acceleration { get { return GetAcceleration(i); } }
+        public Vector3 gyroscope { get { return GetGyroscope(i); } }
+        public Vector3 magnetometre { get { return GetMagnetometre(i); } }
+        #endregion
 
         public Vector3 GetVector(string columnX, string columnY, string columnZ, int i)
         {
@@ -62,7 +73,7 @@ namespace Movuino
         /// Get a complete column.
         /// </summary>
         /// <param name="columnName"></param>
-        /// <returns>List of floats <=> dataTable.[columnName].Value</returns>
+        /// <returns>List of floats <=> dataTable[columnName].Value</returns>
         public List<float> GetColumn(string columnName)
         {
             List<float> column = new List<float>();
