@@ -37,7 +37,7 @@ namespace Movuino
         public Vector3 angleGyrOrientation {  get { return GetAngleGyrEulerIntegratino(); } }
 
 
-        public Vector3 _accel;
+        Vector3 _accel;
         Vector3 _gyr;
         Vector3 _mag;
 
