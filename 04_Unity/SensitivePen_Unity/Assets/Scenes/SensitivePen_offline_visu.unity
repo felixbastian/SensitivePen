@@ -427,6 +427,7 @@ GameObject:
   - component: {fileID: 1497267968}
   - component: {fileID: 1497267967}
   - component: {fileID: 1497267972}
+  - component: {fileID: 1497267971}
   m_Layer: 0
   m_Name: Pen
   m_TagString: Untagged
@@ -510,6 +511,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &1497267971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497267966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a21445e18272e4291ebe1854bf30cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
 --- !u!114 &1497267972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1215,6 +1229,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
         type: 3}
+      propertyPath: _yMax
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
+      propertyPath: movuinoDataSet
+      value: 
+      objectReference: {fileID: 1497267971}
+    - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
       propertyPath: movuinoBehaviour
       value: 
       objectReference: {fileID: 0}
@@ -1407,6 +1436,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168271862883777920, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -65.3999
       objectReference: {fileID: 0}
     - target: {fileID: 8168271863355271780, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
         type: 3}

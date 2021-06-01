@@ -17,10 +17,11 @@ public class SensitivePenBehaviour_live_visu : MonoBehaviour
 
     public void FixedUpdate()
     {
-        angleAccel = movuinoBehaviour.angleAccelOrientationRaw;
-        this.gameObject.transform.Rotate(movuinoBehaviour.gyroscopeRaw * Time.deltaTime);
+        angleAccel = movuinoBehaviour.angleGyrOrientation;
+        //this.gameObject.transform.Rotate(movuinoBehaviour.gyroscopeRaw * Time.deltaTime);
+        this.gameObject.transform.localEulerAngles = new Vector3(angleAccel.x,angleAccel.y, angleAccel.z);
 
-
+       
         if (Input.GetKeyDown(KeyCode.G))
         {
             this.gameObject.transform.eulerAngles = GameObject.Find("OrbitCamera").transform.eulerAngles;

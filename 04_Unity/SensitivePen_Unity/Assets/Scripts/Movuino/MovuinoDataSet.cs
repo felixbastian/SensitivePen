@@ -27,7 +27,7 @@ namespace Movuino
         {
             get { return _rawData.Rows; }
         }
-        public MovuinoDataSet(string dataPath)
+        public void Init(string dataPath)
         {
             Debug.Log("Reading... " + dataPath);
             //rawData_ = ReadCSV(dataPath);

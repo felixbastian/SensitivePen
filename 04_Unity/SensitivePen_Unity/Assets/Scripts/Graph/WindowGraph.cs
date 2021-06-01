@@ -71,9 +71,9 @@ namespace Graph
             //Data of differents curve
             if (Convert.ToBoolean(movuinoBehaviour))
             {
-                valX = movuinoBehaviour.angleAccelOrientationSmooth.x;
-                valY = movuinoBehaviour.angleAccelOrientationSmooth.y;
-                valZ = movuinoBehaviour.angleAccelOrientationSmooth.z;
+                valX = movuinoBehaviour.angleGyrOrientation.x;
+                valY = movuinoBehaviour.angleGyrOrientation.y;
+                valZ = movuinoBehaviour.angleGyrOrientation.z;
             }
             else if (Convert.ToBoolean(movuinoDataSet))
             {

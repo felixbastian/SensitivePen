@@ -16,15 +16,17 @@ public class SensitivePenBehaviour_offline_visu : MonoBehaviour
     private bool end;
     public void Awake()
     {
-        movuinoDataSet = new MovuinoDataSet(dataPath);
+        movuinoDataSet = GetComponent<MovuinoDataSet>();
+        movuinoDataSet.Init(dataPath);
         movuinoDataSet.i = 1;
+
         print("oooook   " + (movuinoDataSet.GetValue("time", 1) - movuinoDataSet.GetValue("time", 0)));
         InvokeRepeating("Rotate", 2f, 0.03f);
     }
 
     private void Rotate()
     {
-        Vector3 deltaTheta = movuinoDataSet.GetVector("posAngY", "posAngX", "posAngZ", i) - movuinoDataSet.GetVector("posAngY", "posAngX", "posAngZ", i - 1);
+        Vector3 deltaTheta = movuinoDataSet.GetVector("posAngY", "posAngX", "posAngZ", movuinoDataSet.i) - movuinoDataSet.GetVector("posAngY", "posAngX", "posAngZ", movuinoDataSet.i - 1);
         this.gameObject.transform.Rotate(deltaTheta);
         print(movuinoDataSet.time);
         movuinoDataSet.i++;
