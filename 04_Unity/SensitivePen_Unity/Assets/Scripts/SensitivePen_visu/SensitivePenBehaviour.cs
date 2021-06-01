@@ -1,25 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Device;
 using Movuino;
 
-public class SphereBehaviour : MonoBehaviour
+public class SensitivePenBehaviour : MonoBehaviour
 {
     MovuinoBehaviour movuinoBehaviour;
-    Vector3 angle;
+    Vector3 angleAccel;
 
-    
     public void Awake()
     {
-        angle = new Vector3();
+        angleAccel = new Vector3();
         movuinoBehaviour = GetComponent<MovuinoBehaviour>();
+        
     }
 
     public void FixedUpdate()
     {
-        angle = movuinoBehaviour.angleGyrOrientation;
+        angleAccel = movuinoBehaviour.angleAccelOrientationRaw;
         this.gameObject.transform.Rotate(movuinoBehaviour.gyroscopeRaw * Time.deltaTime);
+
+
         if (Input.GetKeyDown(KeyCode.G))
         {
             this.gameObject.transform.eulerAngles = GameObject.Find("OrbitCamera").transform.eulerAngles;
@@ -36,9 +37,9 @@ public class SphereBehaviour : MonoBehaviour
     {
         float x = Input.GetAxis("Mouse X")*3;
         float y = Input.GetAxis("Mouse Y")*3;
-        print(Input.GetAxis("Mouse X"));
         this.gameObject.transform.Rotate(new Vector3(0,-y,-x));
     }
 
-}
+
 #endif
+}

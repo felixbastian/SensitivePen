@@ -36,7 +36,7 @@ public class FollowingBehaviour : MonoBehaviour
         float angle = Vector3.SignedAngle(vectCentre, orientTargetVect, vectCentre);
         if (Mathf.Abs(angle) > thetaLim)
         {
-                Vector3 omega = new Vector3(movuino.gyroscope.x, movuino.gyroscope.y, movuino.gyroscope.z);
+                Vector3 omega = new Vector3(movuino.gyroscopeRaw.x, movuino.gyroscopeRaw.y, movuino.gyroscopeRaw.z);
                 transform.Rotate(omega * Time.deltaTime*1.5f);
                 
         }
@@ -56,7 +56,7 @@ public class FollowingBehaviour : MonoBehaviour
         else if (angleVect.z > 180)
             angleVect.z -= 360;
 
-        print("angle :" + angleVect);
+        //print("angle :" + angleVect);
         transform.Rotate(angleVect/180);
     }
 }

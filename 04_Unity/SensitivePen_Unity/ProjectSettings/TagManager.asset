@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - datapoint
+  - target
+  - Graph_dot
+  - Graph_connection
   layers:
   - Default
   - TransparentFX
