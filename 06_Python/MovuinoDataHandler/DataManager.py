@@ -37,7 +37,7 @@ class MovuinoDataSet():
 
         self.velocity = [np.array([0, 0, 0])]
         self.pos = [np.array([0, 0, 0])]
-        self.posAngGyr = [np.array([0, 0, 0])]
+        self.ThetaGyr = [np.array([0, 0, 0])]
         self.posAngAcc = []
 
         self.velocity_filter = [np.array([0, 0, 0])]
@@ -76,22 +76,22 @@ class MovuinoDataSet():
             self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
 
         self.velocity = self.EulerIntegration(self.acceleration)
-        self.posAngGyr = self.EulerIntegration(self.gyroscope)
+        self.ThetaGyr = self.EulerIntegration(self.gyroscope)
         self.pos = self.EulerIntegration(self.velocity)
 
         self.acceleration = np.array(self.acceleration)
         self.gyroscope = np.array(self.gyroscope)
         self.magnetometer = np.array(self.magnetometer)
 
-        self.posAngGyr = np.array(self.posAngGyr)
+        self.ThetaGyr = np.array(self.ThetaGyr)
         self.pos = np.array(self.pos)
         self.velocity = np.array(self.velocity)
 
         self.rawData["normAccel"] = self.normAcceleration
         self.rawData["normGyr"] = self.normGyroscope
-        self.rawData["posAngX"] = self.posAngGyr[:, 0]
-        self.rawData["posAngY"] = self.posAngGyr[:, 1]
-        self.rawData["posAngZ"] = self.posAngGyr[:, 2]
+        self.rawData["ThetaGyrx"] = self.ThetaGyr[:, 0]
+        self.rawData["ThetaGyry"] = self.ThetaGyr[:, 1]
+        self.rawData["ThetaGyrz"] = self.ThetaGyr[:, 2]
 
         #--- Gravity recuperation----
         gx = LowPassFilter(self.time, self.acceleration[:, 0], self.Te, 0.0001)
@@ -204,9 +204,9 @@ class MovuinoDataSet():
         v.set_title('Velocity (m/s)')
         
         theta = plt.subplot(335)
-        theta.plot(self.time, self.posAngGyr[:, 0], color="r")
-        theta.plot(self.time, self.posAngGyr[:, 1], color="green")
-        theta.plot(self.time, self.posAngGyr[:, 2], color="blue")
+        theta.plot(self.time, self.ThetaGyr[:, 0], color="r")
+        theta.plot(self.time, self.ThetaGyr[:, 1], color="green")
+        theta.plot(self.time, self.ThetaGyr[:, 2], color="blue")
         theta.set_title('Angle (deg)')
 
         accel_pb = plt.subplot(336)

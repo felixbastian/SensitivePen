@@ -605,7 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a21445e18272e4291ebe1854bf30cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  folderPath: ..\\..\\06_Python\\Data\\4polo_2\\
+  folderPath: ..\\..\\06_Python\\Data\\test_ana\\
   filename: record_1_treated.csv
   i: 0
 --- !u!114 &1497267972
@@ -635,7 +635,9 @@ MonoBehaviour:
   oscManager: {fileID: 1330286088}
   _movuinoAdress: /movPlayer
   _nbPointFilter: 20
-  _exportIntoFile: 0
+  _exportIntoFile: 1
+  _folderPath: ..\\datagddtg\\
+  _filename: test_2_re.csv
 --- !u!1 &1526251404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,13 +1332,18 @@ PrefabInstance:
     - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
         type: 3}
       propertyPath: _yMax
-      value: 20
+      value: 819
       objectReference: {fileID: 0}
     - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
         type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
+        type: 3}
+      propertyPath: sensitivePen
+      value: 
+      objectReference: {fileID: 1497267972}
     - target: {fileID: 8168271861503743590, guid: 0f932cfbe885e7f4e98c798f12c4c8f0,
         type: 3}
       propertyPath: movuinoDataSet

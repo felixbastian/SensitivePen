@@ -8,20 +8,23 @@ import matplotlib.pyplot as plt
 from scipy import signal
 
 
-
-folderPath = "..\\Data\\4polo_2\\"
 #folderPath = "..\\Data\\Movuino-heel_50HZ_smooth15\\"
+
+############ SETTINGS #############
+
+folderPath = "..\\Data\\test_ana\\"
 fileName = "record"
 
-path = folderPath + fileName
-
-serialPort = 'COM9'
+serialPort = 'COM8'
 
 toDataManage = True
-toExtract = False
+toExtract = True
+
+###################################
 
 nb_files = 0
 nbRecord = 0
+path = folderPath + fileName
 
 # --------- Data Extraction from Movuino ----------
 if toExtract:

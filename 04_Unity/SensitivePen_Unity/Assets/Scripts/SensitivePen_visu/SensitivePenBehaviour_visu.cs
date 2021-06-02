@@ -63,7 +63,7 @@ public class SensitivePenBehaviour_visu : MonoBehaviour
 
     private void Rotate()
     {
-        Vector3 deltaTheta = _movuinoDataSet.GetVector("posAngY", "posAngX", "posAngZ", _movuinoDataSet.i) - _movuinoDataSet.GetVector("posAngY", "posAngX", "posAngZ", _movuinoDataSet.i - 1);
+        Vector3 deltaTheta = _movuinoDataSet.GetVector("posAngX", "posAngY", "posAngZ", _movuinoDataSet.i) - _movuinoDataSet.GetVector("posAngX", "posAngY", "posAngZ", _movuinoDataSet.i - 1);
         this.gameObject.transform.Rotate(deltaTheta);
         print(_movuinoDataSet.time);
         _movuinoDataSet.i++;

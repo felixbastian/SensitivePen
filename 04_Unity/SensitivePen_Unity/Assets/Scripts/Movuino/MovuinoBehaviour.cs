@@ -35,7 +35,8 @@ namespace Movuino
         /// <summary>
         /// Path of the export data file
         /// </summary>
-        private string _filePath;
+        [SerializeField] private string _folderPath;
+        [SerializeField] private string _filename;
 
         private List<Vector3> _listMeanAcc;
         private List<Vector3> _listMeanGyro;
@@ -110,7 +111,6 @@ namespace Movuino
         {
             Init();
             _addressSensorData = movuinoAdress + _OSCmovuinoSensorData.OSCAddress;
-            _filePath = ".\\_data\\";
             _movuinoExportData = new DataSessionMovuinoExtended();
         }
         void Start()
@@ -131,12 +131,12 @@ namespace Movuino
         {
             if (_exportIntoFile == true) //We export the file t the end of the session if t
             {
-                if (!Directory.Exists(_filePath))
+                if (!Directory.Exists(_folderPath))
                 {
-                    Debug.Log(_filePath + " has been created");
-                    Directory.CreateDirectory(_filePath);
+                    Debug.Log(_folderPath + " has been created");
+                    Directory.CreateDirectory(_folderPath);
                 }
-                DataManager.ToCSV(_movuinoExportData.DataTable, _filePath + "test.csv");
+                DataManager.ToCSV(_movuinoExportData.DataTable, _folderPath + _filename);
             }
         }
         #endregion
@@ -155,7 +155,7 @@ namespace Movuino
             _mag = new Vector3(0, 0, 0);
 
             _angleGyrMethod = new Vector3(0, 0, 0);
-            _angleMagMethod = new Vector3(0, 0, 0);
+            _angleAccelMethod = new Vector3(0, 0, 0);
             _angleMagMethod = new Vector3(0, 0, 0);
 
             _initAngle = new Vector3(0, 0, 0);
