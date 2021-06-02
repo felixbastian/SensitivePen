@@ -30,8 +30,7 @@ namespace Graph
         private Text angleZ;
 
         //--------- Movuino part -----
-        [SerializeField] private MovuinoBehaviour movuinoBehaviour;
-        [SerializeField] private MovuinoDataSet movuinoDataSet;
+        [SerializeField] private SensitivePenBehaviour_visu sensitivePen;
 
         //test
         private List<float> liste;
@@ -69,17 +68,17 @@ namespace Graph
             float valZ=0;
 
             //Data of differents curve
-            if (Convert.ToBoolean(movuinoBehaviour))
+            if (sensitivePen.onlineMode)
             {
-                valX = movuinoBehaviour.angleGyrOrientation.x;
-                valY = movuinoBehaviour.angleGyrOrientation.y;
-                valZ = movuinoBehaviour.angleGyrOrientation.z;
+                valX = sensitivePen.movuinoBehaviour.angleGyrOrientation.x;
+                valY = sensitivePen.movuinoBehaviour.angleGyrOrientation.y;
+                valZ = sensitivePen.movuinoBehaviour.angleGyrOrientation.z;
             }
-            else if (Convert.ToBoolean(movuinoDataSet))
+            else if (sensitivePen.offlineMode)
             {
-                valX = movuinoDataSet.acceleration.x;
-                valY = movuinoDataSet.acceleration.y;
-                valZ = movuinoDataSet.acceleration.z;
+                valX = sensitivePen.movuinoDataSet.acceleration.x;
+                valY = sensitivePen.movuinoDataSet.acceleration.y;
+                valZ = sensitivePen.movuinoDataSet.acceleration.z;
             }
             else
             {
@@ -87,6 +86,7 @@ namespace Graph
                 valY = 0;
                 valZ = 0;
             }
+           
             curveList[0].valueList.Add(valX); //movuinoBehaviour.MovingMean(movuinoBehaviour.angleAccelOrientation.x, ref movuinoBehaviour.listMeanX)
             curveList[1].valueList.Add(valY);
             curveList[2].valueList.Add(valZ);

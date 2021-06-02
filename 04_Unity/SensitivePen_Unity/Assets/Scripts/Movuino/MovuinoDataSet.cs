@@ -13,7 +13,9 @@ namespace Movuino
     /// </summary>
     public class MovuinoDataSet: MonoBehaviour
     {
-        private string dataPath;
+        [SerializeField] private string folderPath;
+        [SerializeField] private string filename;
+
         List<object[]> rawData_ = new List<object[]>();
         DataTable _rawData;
 
@@ -27,15 +29,7 @@ namespace Movuino
         {
             get { return _rawData.Rows; }
         }
-        public void Init(string dataPath)
-        {
-            Debug.Log("Reading... " + dataPath);
-            //rawData_ = ReadCSV(dataPath);
-            _rawData = ConvertCSVtoDataTable(dataPath);
-            i = 0;
-            Debug.Log(GetValue("posAngX", 25));
 
-        }
 
         public int i;
 
@@ -45,7 +39,22 @@ namespace Movuino
         public Vector3 gyroscope { get { return GetGyroscope(i); } }
         public Vector3 magnetometre { get { return GetMagnetometre(i); } }
         #endregion
+        #region Methods
 
+        public void Start()
+        {
+            Init(folderPath + filename);
+        }
+
+        public void Init(string dataPath)
+        {
+            Debug.Log("Reading... " + dataPath);
+            //rawData_ = ReadCSV(dataPath);
+            _rawData = ConvertCSVtoDataTable(dataPath);
+            i = 1;
+            Debug.Log(GetValue("posAngX", 25));
+
+        }
         public Vector3 GetVector(string columnX, string columnY, string columnZ, int i)
         {
             float x = GetValue(columnX, i);
@@ -197,7 +206,7 @@ namespace Movuino
             }
             return data;
         }
-
+        #endregion
     }
 
 
