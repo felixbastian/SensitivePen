@@ -5,8 +5,8 @@ int sensorValue = 0;  // variable to store the value coming from the sensor
 #define N 50
 int dataCollect[N];
 int index = 0;
-float curMean = 0.0;
-float oldVal = 0.0;
+float curMean = 0.0f;
+float oldMean = 0.0f;
 
 #define WINDOW 1000
 int indxWindw = 0;
@@ -18,6 +18,8 @@ float curMeanWindow = 512;
 
 long timePrint0 = 0;
 int dlyPrint = 10;
+
+boolean isPress = false;
 
 void setup() {
   Serial.begin(9600);
@@ -42,6 +44,7 @@ void loop() {
   dataCollect[index] = analogRead(sensorPin);
 
   // get moving mean
+  oldMean = curMean;
   curMean = 0.0f;
   for (int i=0; i<N;i++) {
     curMean += dataCollect[i];
@@ -71,6 +74,15 @@ void loop() {
   }
 
   // TEST THRESHOLDS
+  if(!isPress) {
+    if (oldMean <= curMaxWindow && curMean >= curMaxWindow) {
+      isPress = true;
+    }
+  } else {
+    if (oldMean >= curMeanWindow && curMean <= curMeanWindow) {
+      isPress = false;
+    }
+  }
   
   if(millis() - timePrint0 > dlyPrint) {
     Serial.print(curMean);
@@ -80,6 +92,12 @@ void loop() {
     Serial.print(curMaxWindow);
     Serial.print('\t');
     Serial.print(curMeanWindow);
+    Serial.print('\t');
+    if(isPress) {
+      Serial.print(1024);
+    } else {
+      Serial.print(0);
+    }
     Serial.println("");
     analogWrite(ledPin, curMean);
     timePrint0 = millis();
