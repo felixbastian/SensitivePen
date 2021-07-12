@@ -2,13 +2,13 @@ int sensorPin = A0;    // select the input pin for the potentiometer
 int ledPin = 13;      // select the pin for the LED
 int sensorValue = 0;  // variable to store the value coming from the sensor
 
-#define N 50
+#define N 100
 int dataCollect[N];
 int index = 0;
 float curMean = 0.0f;
 float oldMean = 0.0f;
 
-#define WINDOW 1000
+#define WINDOW 500
 int indxWindw = 0;
 float minWindw = 1024;
 float maxWindw = 0;
@@ -57,7 +57,7 @@ void loop() {
     if(curMean < minWindw) {
       minWindw = curMean;
     }
-    if(mean_ > maxWindw) {
+    if(curMean > maxWindw) {
       maxWindw = curMean;
     }
   }
@@ -87,17 +87,19 @@ void loop() {
   if(millis() - timePrint0 > dlyPrint) {
     Serial.print(curMean);
     Serial.print('\t');
-    Serial.print(curMinWindow);
-    Serial.print('\t');
+    // Serial.print(curMinWindow);
+    /*Serial.print('\t');
     Serial.print(curMaxWindow);
     Serial.print('\t');
-    Serial.print(curMeanWindow);
+    Serial.print(curMeanWindow);*/
+    /*
     Serial.print('\t');
     if(isPress) {
-      Serial.print(1024);
+      Serial.print(700);
     } else {
-      Serial.print(0);
+      Serial.print(600);
     }
+    */
     Serial.println("");
     analogWrite(ledPin, curMean);
     timePrint0 = millis();
