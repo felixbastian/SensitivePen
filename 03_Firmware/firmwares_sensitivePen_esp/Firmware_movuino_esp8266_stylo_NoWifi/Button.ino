@@ -10,13 +10,13 @@ void onButtonPress() {
 
 void onButtonRelease() {
   digitalWrite(pinLedESP, LOW);
-  buttonFlash = false;
+  buttonHold = false;
   buttonPressed = false;
   startPush = 0;
 }
 
 void onButtonHold() {
-  buttonFlash = true;
+  buttonHold = true;
 }
 
 void onButtondoubleTap(){
