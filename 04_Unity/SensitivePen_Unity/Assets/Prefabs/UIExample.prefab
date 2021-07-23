@@ -206,7 +206,7 @@ MonoBehaviour:
     type: 3}
   _yMax: 720
   nbDot: 235
-  movuinoBehaviour: {fileID: 0}
+  sensitivePen: {fileID: 0}
 --- !u!1 &8168271861586752216
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 8168271861663113042}
   - component: {fileID: 8168271861663113043}
   m_Layer: 5
-  m_Name: PenViews
+  m_Name: ObjectViews
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -513,7 +513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8168271861772664490}
   m_Layer: 0
-  m_Name: UI
+  m_Name: UIExample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

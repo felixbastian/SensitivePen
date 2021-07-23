@@ -1,30 +1,41 @@
 import serial
-import DataManager as dm
-import DisplayFunctions as disp
-import OnlyExtract as extractMovDat
+import dataSet.SensitivePenDataSet as sp
+import dataSet.SkateboardXXX3000DataSet as sk
+import dataSet.GlobalDataSet as gds
+import dataSet.MovuinoDataSet as dm
+import tools.DisplayFunctions as df
 import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 
 
-#folderPath = "..\\Data\\Movuino-heel_50HZ_smooth15\\"
 
-############ SETTINGS #############
+############   SETTINGS   #############
 
-folderPath = "..\\Data\\test_ana_firmware\\"
-fileName = "record"
+device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-serialPort = 'COM7'
+folderPath = "..\\_data\\Only_tricks_notransition\\"
+fileName = "record"  # generic name numbers will be added for duplicates
 
+serialPort = 'COM5'
+
+toExtract = False
 toDataManage = True
-toExtract = True
+toVisualize = True
+
+filter = 25
+
+##### If only data manage
+file_start = 1
+nbRecord = 10
 
 ###################################
 
 nb_files = 0
-nbRecord = 0
+
 path = folderPath + fileName
+
 
 # --------- Data Extraction from Movuino ----------
 if toExtract:
@@ -34,7 +45,7 @@ if toExtract:
     arduino = serial.Serial(serialPort, baudrate=115200, timeout=1.)
     line_byte = ''
     line_str = ''
-    datafile = []
+    datafile = ''
     nbRecord = 1
 
     while ExtractionCompleted != True:
@@ -47,31 +58,48 @@ if toExtract:
             print("End of data sheet")
 
             with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
-                file.writelines(datafile)
+                file.write(datafile)
 
-        if "NEW RECORD" in line_str and isReading == True :
+        if "XXX_newRecord" in line_str and isReading == True :
+            print("Add new file")
             with open(path + "_" + str(nbRecord) + ".csv", "w") as file:
-                file.writelines(datafile)
+                file.write(datafile)
 
-            datafile = []
+            datafile = ''
             line_str = ''
             nbRecord += 1
 
         if (isReading):
             if line_str != '':
-                datafile.append(line_str[:-1])
-                print("Add Data")
+                datafile += line_str.strip() + '\n'
 
         if ("XXX_beginning" in line_str):
             isReading = True
+            print("Record begins")
 
 
 if toDataManage:
     print(nbRecord)
-    nbRecord = 12
-    for i in range(1, nbRecord+1):
-        dataSet = dm.MovuinoDataSet(folderPath + fileName + "_"+str(i))
-        dataSet.run()
+    #nbRecord = 1
+    for i in range(file_start, file_start+nbRecord+1):
+        if (device == 'sensitivePen'):
+            print("--- Processing : " + folderPath + fileName + "_" + str(i) + " --- ")
+            dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i), filter)
+        elif (device == 'skateboardXXX3000'):
+            print("Processing : " + folderPath + fileName + "_" + str(i))
+            dataSet = sk.SkateboardXXX3000DataSet(folderPath + fileName + "_" + str(i), filter)
+        elif (device == 'globalDataSet'):
+            print("Processing : " + folderPath + fileName + "_" + str(i))
+            dataSet = gds.GlobalDataSet(folderPath + fileName + "_" + str(i), filter)
+        else:
+            print("No device matching")
+
+        dataSet.DataManage()
         Te = dataSet.Te
-        print(1/Te)
+        print("sample frequency : "+str(1/Te))
+
+        if toVisualize:
+            dataSet.VisualizeData()
+
+
 

@@ -13,13 +13,23 @@ namespace Movuino
     /// </summary>
     public class MovuinoDataSet: MonoBehaviour
     {
+        /// <summary>
+        /// Path of the file.
+        /// </summary>
+        [Tooltip("Path of the file.")]
         [SerializeField] private string folderPath;
+        /// <summary>
+        /// Name of the file.
+        /// </summary>
+        [Tooltip("Name of the file.")]
         [SerializeField] private string filename;
 
         List<object[]> rawData_ = new List<object[]>();
         DataTable _rawData;
 
-
+        /// <summary>
+        /// DataTable that contain ll the data set.
+        /// </summary>
         public DataTable rawData
         {
             get { return _rawData; }
@@ -30,31 +40,100 @@ namespace Movuino
             get { return _rawData.Rows; }
         }
 
-
+        /// <summary>
+        /// Current index in the dataTable
+        /// </summary>
         public int i;
 
         #region Properties
+        //Basic data that you should find in a movuino file
+        /// <summary>
+        /// Returns the time value at the index i.
+        /// </summary>
         public float time { get { return GetValue("time",i); } }
+        /// <summary>
+        /// Returns the vector acceleration at the index i.
+        /// </summary>
         public Vector3 acceleration { get { return GetAcceleration(i); } }
+        /// <summary>
+        /// Returns the vector gyro at the index i.
+        /// </summary>
         public Vector3 gyroscope { get { return GetGyroscope(i); } }
+        /// <summary>
+        /// Returns the vector magnetometer at the index i.
+        /// </summary>
         public Vector3 magnetometre { get { return GetMagnetometre(i); } }
+
+        /// <summary>
+        /// Returns the vector angleGyr at the index i.
+        /// </summary>
+        /// <remarks>It doesn't have to be obligatory in the file.</remarks>
+        public Vector3 angleGyrOrientation 
+        { 
+            get 
+            { 
+                if (Convert.ToBoolean(_rawData.Rows[i]["ThetaGyrx"]))
+                {
+                    return GetVector("ThetaGyrx", "ThetaGyry", "ThetaGyrz", i);
+                }
+                else
+                {
+                    return new Vector3(0, 0, 0);
+                }
+            } 
+        }
+
+        /// <summary>
+        /// Returns the vector angleAccelOrientation at the index i.
+        /// </summary>
+        /// <remarks>It doesn't have to be obligatory in the file.</remarks>
+        public Vector3 angleAccelOrientationRaw
+        {
+            get
+            {
+                if (Convert.ToBoolean(_rawData.Rows[i]["ThetaAccx"]))
+                {
+                    return GetVector("ThetaAccx", "ThetaAccy", "ThetaAccz", i);
+                }
+                else
+                {
+                    return new Vector3(0, 0, 0);
+                }
+            }
+        }
         #endregion
         #region Methods
 
-        public void Start()
+        public void Awake()
         {
             Init(folderPath + filename);
         }
 
+        public void Start()
+        {
+            
+        }
+
+        /// <summary>
+        /// Read and stock a csv in the rawData dataTable.
+        /// </summary>
+        /// <param name="dataPath">path of the file.</param>
         public void Init(string dataPath)
         {
             Debug.Log("Reading... " + dataPath);
             //rawData_ = ReadCSV(dataPath);
             _rawData = ConvertCSVtoDataTable(dataPath);
             i = 1;
-            Debug.Log(GetValue("posAngX", 25));
-
         }
+
+        /// <summary>
+        /// Get a vector from the raw data a the index i.
+        /// </summary>
+        /// <param name="columnX">column x</param>
+        /// <param name="columnY">column y</param>
+        /// <param name="columnZ">column z</param>
+        /// <param name="i">index in raw data</param>
+        /// <returns>Vector3(x,y,z)</returns>
         public Vector3 GetVector(string columnX, string columnY, string columnZ, int i)
         {
             float x = GetValue(columnX, i);
@@ -63,16 +142,31 @@ namespace Movuino
             return new Vector3(x, y, z);
         }
 
+        /// <summary>
+        /// GetVector("ax", "ay", "az")
+        /// </summary>
+        /// <param name="i">index</param>
+        /// <returns></returns>
         public Vector3 GetAcceleration(int i)
         {
             return GetVector("ax", "ay", "az", i);
         }
 
+        /// <summary>
+        /// GetVector("gx", "gy", "gz")
+        /// </summary>
+        /// <param name="i">index</param>
+        /// <returns></returns>
         public Vector3 GetGyroscope(int i)
         {
             return GetVector("gx", "gy", "gz", i);
         }
 
+        /// <summary>
+        /// GetVector("mx", "my", "mz")
+        /// </summary>
+        /// <param name="i">index</param>
+        /// <returns></returns>
         public Vector3 GetMagnetometre(int i)
         {
             return GetVector("mx", "my", "mz", i);

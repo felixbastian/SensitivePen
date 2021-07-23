@@ -79,7 +79,7 @@ namespace Device
 	/// Data of the accelerometer, the gyroscope and the magnetometer of Movuino
 	/// </summary>
 	/// <inheritdoc cref="OSCDataHandler"/>
-	public class OSCMovuinoSensorData : OSCDataHandler
+	public class OSCMovuinoSensorBasicData : OSCDataHandler
 	{
 		/// <summary>
 		/// Accelerometer data.
@@ -129,6 +129,70 @@ namespace Device
 			+ magnetometer.ToString ());
 		}
 	}
+	/// <summary>
+	/// Data of the accelerometer, the gyroscope and the magnetometer and euler angles of Movuino
+	/// </summary>
+	/// <inheritdoc cref="OSCDataHandler"/>
+	public class OSCMovuinoSensorExtendedData : OSCDataHandler
+	{
+		/// <summary>
+		/// Accelerometer data.
+		/// </summary>
+		public Vector3 accelerometer;
+		/// <summary>
+		/// Gysocope data.
+		/// </summary>
+		public Vector3 gyroscope;
+		/// <summary>
+		/// Magnetometer data.
+		/// </summary>
+		public Vector3 magnetometer;
+		/// <summary>
+		/// Euler angles data.
+		/// </summary>
+		public Vector3 eulerAngle;
+
+		public static string address = "/dataExtended";
+
+		public override void ToOSCDataHandler(OscMessage message)
+		{
+		
+			float ax = message.GetFloat(0);
+			float ay = message.GetFloat(1);
+			float az = message.GetFloat(2);
+			float gx = message.GetFloat(3);
+			float gy = message.GetFloat(4);
+			float gz = message.GetFloat(5);
+			float mx = message.GetFloat(6);
+			float my = message.GetFloat(7);
+			float mz = message.GetFloat(8);
+			float ex = message.GetFloat(9);
+			float ey = message.GetFloat(10);
+			float ez = message.GetFloat(11);
+			accelerometer = new Vector3(ax, ay, az);
+			gyroscope = new Vector3(gx, gy, gz);
+			magnetometer = new Vector3(mx, my, mz);
+			eulerAngle = new Vector3(ex, ey, ez);
+
+		}
+
+		protected override string GetAddress()
+		{
+			return address;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("[MovuinoSensorData] = "
+			+ "Accelerometer = "
+			+ accelerometer.ToString()
+			+ " Gyroscope = "
+			+ gyroscope.ToString()
+			+ " Magnetometer = "
+			+ magnetometer.ToString());
+		}
+	}
+
 
 	/// <summary>
 	/// Data of the XMM from the pathMax (normally)

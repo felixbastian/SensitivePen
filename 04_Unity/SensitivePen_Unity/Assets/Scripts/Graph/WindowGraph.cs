@@ -9,16 +9,22 @@ using UnityEngine.UI;
 namespace Graph
 {
     /// <summary>
-    /// Class that manages the graph representation
+    /// Class that manages the graph representation and his curves
     /// </summary>
     public class WindowGraph : MonoBehaviour
     {
         //---- Window part -----
+        [Tooltip("Dot representation.")]
         [SerializeField] private Sprite circleSprite;
+        [Tooltip("Graph that will contain every cuvres (must have a RectTransform components).")]
         [SerializeField] private RectTransform graphContainer;
+        [Tooltip("Curve prefab (must have a script 'Curve' as components).")]
         [SerializeField] private Curve curvePrefab;
+        [Tooltip("Vertical maximum value (from the middle of the graph.")]
         [SerializeField] private int _yMax;
+        [Tooltip("Number of dots that you wwill have in the graph.")]
         [SerializeField] private int nbDot;
+
         private List<Curve> curveList;
         private int nbCurve;
 
@@ -30,16 +36,21 @@ namespace Graph
         private Text angleZ;
 
         //--------- Movuino part -----
-        [SerializeField] private SensitivePenBehaviour_visu sensitivePen;
+        /// <summary>
+        /// Movuino object that you want to represent
+        /// </summary>
+        [Tooltip("Must have a script component that inherit from 'ObjectMovuino_visu'.")]
+        [SerializeField] private ObjectMovuino_visu objectVisu;
 
         //test
         private List<float> liste;
         private int i = 0;
 
+        /// <summary>
+        /// Initialise and instantitaes objects that you will need during the prograam.
+        /// </summary>
         private void Awake()
         {
-            //CreateCircle(new Vector2(200, 200));
-            //liste = new List<float>();
             curveList = new List<Curve>();
             nbCurve = 3;
 
@@ -61,6 +72,9 @@ namespace Graph
             angleY = rawDataText.transform.Find("AngleY").GetComponent<Text>();
             angleZ = rawDataText.transform.Find("AngleZ").GetComponent<Text>();
         }
+        /// <summary>
+        /// Update graph values
+        /// </summary>
         private void Update()
         {
             float valX=0;
@@ -68,17 +82,17 @@ namespace Graph
             float valZ=0;
 
             //Data of differents curve
-            if (sensitivePen.onlineMode)
+            if (objectVisu.onlineMode)
             {
-                valX = sensitivePen.movuinoBehaviour.angleGyrOrientation.x;
-                valY = sensitivePen.movuinoBehaviour.angleGyrOrientation.y;
-                valZ = sensitivePen.movuinoBehaviour.angleGyrOrientation.z;
+                valX = objectVisu.graphData.x;
+                valY = objectVisu.graphData.y;
+                valZ = objectVisu.graphData.z;
             }
-            else if (sensitivePen.offlineMode)
+            else if (objectVisu.offlineMode)
             {
-                valX = sensitivePen.movuinoDataSet.acceleration.x;
-                valY = sensitivePen.movuinoDataSet.acceleration.y;
-                valZ = sensitivePen.movuinoDataSet.acceleration.z;
+                valX = objectVisu.graphData.x;
+                valY = objectVisu.graphData.y;
+                valZ = objectVisu.graphData.z;
             }
             else
             {
@@ -87,7 +101,7 @@ namespace Graph
                 valZ = 0;
             }
            
-            curveList[0].valueList.Add(valX); //movuinoBehaviour.MovingMean(movuinoBehaviour.angleAccelOrientation.x, ref movuinoBehaviour.listMeanX)
+            curveList[0].valueList.Add(valX);
             curveList[1].valueList.Add(valY);
             curveList[2].valueList.Add(valZ);
 

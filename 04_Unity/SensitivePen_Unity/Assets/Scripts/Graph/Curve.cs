@@ -6,15 +6,24 @@ using UnityEngine.UI;
 namespace Graph
 {
 
+    /// <summary>
+    /// Class that represent a curve in a graph
+    /// </summary>
     [System.Serializable]
     public class Curve : MonoBehaviour
     {
-        [SerializeField] private Material material;
-        [SerializeField] private Sprite sprite;
-        [SerializeField] private RectTransform graphContainer;
+        /// <summary>
+        /// Material but not ued for the moment
+        /// </summary>
+        private Material material;
+        /// <summary>
+        /// Representation of the dot (may be not need to be serializeiField).
+        /// </summary>
+        private Sprite sprite;
+        private RectTransform graphContainer;
 
-        public int yMax;
-        public int nbDot;
+        private int _yMax;
+        private int _nbDot;
 
         public static int index;
 
@@ -43,14 +52,17 @@ namespace Graph
             index++;
             this.sprite = sprite;
             this.graphContainer = graphContainer;
-            this.yMax = yMax;
-            this.nbDot = nbDot;
+            this._yMax = yMax;
+            this._nbDot = nbDot;
             this.gameObject.transform.SetParent(this.graphContainer, false);
 
             _xSpace = graphContainer.sizeDelta.x / nbDot;
             _graphHeight = graphContainer.sizeDelta.y;
         }
 
+        /// <summary>
+        /// Refresh the curve (to call each frame)
+        /// </summary>
         public void RefreshCurve()
         {
             if (graph_points != null)
@@ -60,7 +72,7 @@ namespace Graph
                 foreach (var dot in graph_points)
                 {
                     float xpos = i * _xSpace;
-                    float ypos = (valueList[i] / yMax) * _graphHeight;
+                    float ypos = (valueList[i] / _yMax) * _graphHeight;
                     dot.GetComponent<RectTransform>().anchoredPosition = new Vector2(xpos, ypos);
 
                     if (lastDot)
@@ -77,7 +89,7 @@ namespace Graph
                 while (i < valueList.Count)
                 {
                     float xpos = i * _xSpace;
-                    float ypos = (valueList[i] / yMax) * _graphHeight;
+                    float ypos = (valueList[i] / _yMax) * _graphHeight;
                     GameObject circleGameObject = CreateDot(new Vector2(xpos, ypos));
                     if (lastDot)
                     {
@@ -88,7 +100,7 @@ namespace Graph
 
                     lastDot = circleGameObject;
                     //If listCurve.Count > Nbdot we remove objects
-                    if (i >= nbDot)
+                    if (i >= _nbDot)
                     {
                         valueList.RemoveAt(0);
                         Destroy(graph_points[0]);
@@ -102,12 +114,16 @@ namespace Graph
             }
             else
             {
-                print("ok");
-                ShowCurve(valueList, yMax, nbDot);
+                ShowCurve(valueList, _yMax, _nbDot);
             }
 
         }
 
+        /// <summary>
+        /// Create a dot in the curve
+        /// </summary>
+        /// <param name="anchoredPosition">Position of the dot (anchored position)</param>
+        /// <returns>The created dot</returns>
         public GameObject CreateDot(Vector2 anchoredPosition)
         {
             GameObject go = new GameObject("dot", typeof(Image));
@@ -126,6 +142,11 @@ namespace Graph
             return go;
         }
 
+        /// <summary>
+        /// Create connections between 2 dots.
+        /// </summary>
+        /// <param name="dotPosA">Position of the first dot</param>
+        /// <param name="dotPosB">Position of the next dot dot</param>
         public void CreateDotConnection(Vector2 dotPosA, Vector2 dotPosB)
         {
             GameObject go = new GameObject("dotConnection", typeof(Image));
@@ -146,6 +167,12 @@ namespace Graph
             go.transform.localEulerAngles = new Vector3(0, 0, Vector2.SignedAngle(Vector2.right, dir));
         }
 
+        /// <summary>
+        /// Refresh connection between dots.
+        /// </summary>
+        /// <param name="dotPosA">Position of the first dot</param>
+        /// <param name="dotPosB">Position of the next dot dot</param>
+        /// <param name="line">Connection of the dots</param>
         public void RefreshDotConnection(Vector2 dotPosA, Vector2 dotPosB, GameObject line)
         {
             RectTransform rt = line.GetComponent<RectTransform>();
@@ -159,6 +186,12 @@ namespace Graph
             rt.localRotation = Quaternion.Euler(new Vector3(0, 0, Vector2.SignedAngle(Vector2.right, dir)));
         }
 
+        /// <summary>
+        /// Display a cruve (not used anymore)
+        /// </summary>
+        /// <param name="listValue"></param>
+        /// <param name="yMax"></param>
+        /// <param name="nbDot"></param>
         public void ShowCurve(List<float> listValue, float yMax, int nbDot)
         {
             GameObject lastGameObject = null;
