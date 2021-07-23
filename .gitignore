@@ -31,7 +31,7 @@ ExportedObj/
 *.pbd
 *.dwlt
 
-0_4Unity/
+04_Unity/
 !**/Assets
 
 # Unity3D Generated File On Crash Reports
