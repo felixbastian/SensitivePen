@@ -12,10 +12,10 @@ from scipy import signal
 
 ############ SETTINGS #############
 
-folderPath = "..\\Data\\test_ana\\"
+folderPath = "..\\Data\\test_ana_firmware\\"
 fileName = "record"
 
-serialPort = 'COM8'
+serialPort = 'COM7'
 
 toDataManage = True
 toExtract = True
