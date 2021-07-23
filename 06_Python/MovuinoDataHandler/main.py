@@ -1,6 +1,5 @@
 import serial
 import dataSet.SensitivePenDataSet as sp
-import dataSet.SkateboardXXX3000DataSet as sk
 import dataSet.GlobalDataSet as gds
 import dataSet.MovuinoDataSet as dm
 import tools.DisplayFunctions as df
@@ -13,7 +12,7 @@ from scipy import signal
 
 ############   SETTINGS   #############
 
-device = 'skateboardXXX3000'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
+device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
 folderPath = "..\\_data\\Only_tricks_notransition\\"
 fileName = "record"  # generic name numbers will be added for duplicates
@@ -85,9 +84,6 @@ if toDataManage:
         if (device == 'sensitivePen'):
             print("--- Processing : " + folderPath + fileName + "_" + str(i) + " --- ")
             dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i), filter)
-        elif (device == 'skateboardXXX3000'):
-            print("Processing : " + folderPath + fileName + "_" + str(i))
-            dataSet = sk.SkateboardXXX3000DataSet(folderPath + fileName + "_" + str(i), filter)
         elif (device == 'globalDataSet'):
             print("Processing : " + folderPath + fileName + "_" + str(i))
             dataSet = gds.GlobalDataSet(folderPath + fileName + "_" + str(i), filter)
