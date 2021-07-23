@@ -11,6 +11,13 @@ namespace Movuino
 {
     /// <summary>
     /// Class that manage the movuino object in the scene when it is connected in wifi.
+    /// It allows you to do a continuous stream of the movuino data and to use different value :
+    /// - acceleration : raw, filtered, and norm (raw)
+    /// - gyroscope : raw, filtered, and norm (raw)
+    /// - magnatometer : raw, filtered , and norm (raw)
+    /// - integration of the gyroscope
+    /// - rotation matrix create with magnetometer and acceleration 
+    /// If some data that you would like to use are not available you can add it in your own script
     /// </summary>
     /// <remarks>Handle OSC conncetion too</remarks>
     public class MovuinoBehaviour : MonoBehaviour

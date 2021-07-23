@@ -100,7 +100,8 @@ namespace Graph
                 valY = 0;
                 valZ = 0;
             }
-           
+            
+
             curveList[0].valueList.Add(valX);
             curveList[1].valueList.Add(valY);
             curveList[2].valueList.Add(valZ);
