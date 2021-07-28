@@ -57,7 +57,7 @@ def rotationMatrixCreation(u, v):
     N /= np.linalg.norm(N)
 
     #matrix
-    R = np.mat([N, E, D]) #we transpose to have N, E, D in the column
+    R = np.mat([N, E, D]).T #we transpose to have N, E, D in the column
     return R
 
 
