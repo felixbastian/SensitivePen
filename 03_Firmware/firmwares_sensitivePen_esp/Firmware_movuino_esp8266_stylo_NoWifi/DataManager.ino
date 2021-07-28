@@ -22,6 +22,8 @@ void printMovuinoData()
   Serial.print(-my);
   Serial.print("\t ");
   Serial.print(-mz);
+  Serial.print("\t ");
+  Serial.print(pressure);
   Serial.println();
 }
 void writeInFileMovuinoData(File file, String sep) {
@@ -47,6 +49,8 @@ void writeInFileMovuinoData(File file, String sep) {
   file.print(-my);
   file.print(sep);
   file.print(-mz);
+  file.print(sep);
+  file.print(pressure);
   file.println();
 }
 void initialiseFileMovuinoData(File file, String sep) {
@@ -72,6 +76,8 @@ void initialiseFileMovuinoData(File file, String sep) {
   file.print("my");
   file.print(sep);
   file.print("mz");
+  file.print(sep);
+  file.print("pressure");
   file.println();
 }
 
