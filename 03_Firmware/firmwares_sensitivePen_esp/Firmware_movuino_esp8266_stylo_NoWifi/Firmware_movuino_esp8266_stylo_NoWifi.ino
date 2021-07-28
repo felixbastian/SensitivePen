@@ -37,6 +37,9 @@ float gx, gy, gz; // store gyroscope values
 float mx, my, mz; // store magneto values
 int magRange[] = {666, -666, 666, -666, 666, -666}; // magneto range values for callibration
 
+//----> Pressure
+float pressure = -1;
+
 // BUTTON
 Button button;
 const int pinBtn = 13;     // the number of the pushbutton pin
@@ -222,7 +225,7 @@ void loop() {
       if (file && SPIFFS.exists(filePath))
       {
         
-        //----- GET MPU DATA ------
+        //------- GET MPU DATA --------
         IMU.readSensor();
         get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
         currentTime = millis() - startTime;
