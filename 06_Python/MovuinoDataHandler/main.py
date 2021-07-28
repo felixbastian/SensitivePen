@@ -14,12 +14,12 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "..\\_data\\Only_tricks_notransition\\"
+folderPath = "..\\_data\\Manip_2807\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = 'COM5'
 
-toExtract = False
+toExtract = True
 toDataManage = True
 toVisualize = True
 
