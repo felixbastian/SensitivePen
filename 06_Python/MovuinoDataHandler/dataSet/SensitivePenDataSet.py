@@ -82,7 +82,9 @@ class SensitivePenDataSet(MovuinoDataSet):
         df.PlotVector(self.time, self.magnetometer_lp, 'Magnetometer filtered (LP)', 335)
 
         normMag = plt.subplot(338)
+        normMag.plot(self.time, self.normMagnetometer_lp, color="#dddddd")
         normMag.plot(self.time, self.normMagnetometer, color="black")
+
         normMag.set_title("Norm Magnetometer")
 
         normAcc = plt.subplot(337)
@@ -147,7 +149,6 @@ class SensitivePenDataSet(MovuinoDataSet):
 
         df.plotVect(timeList, accel, "Acceleration m/s2", 221)
         df.plotVect(timeList, gyr, "Gyroscope m/s", 222)
-        df.plotVect(timeList, mag, "Magnetometer unit mag", 223)
 
         plt.subplot(223)
         plt.plot(timeList, mag[0], color="red", label="x")

@@ -78,9 +78,9 @@ class MovuinoDataSet():
         self.magnetometer = []
 
         # Usefull for the filtration
-        self.listMeanAcc = [np.array([0, 0, 0])]
-        self.listMeanGyr = [np.array([0, 0, 0])]
-        self.listMeanMag = [np.array([0, 0, 0])]
+        self.listMeanAcc = []
+        self.listMeanGyr = []
+        self.listMeanMag = []
 
         # basic data filtered
         self.acceleration_lp = []
@@ -91,6 +91,10 @@ class MovuinoDataSet():
         self.normAcceleration = [0]
         self.normGyroscope = [0]
         self.normMagnetometer = [0]
+
+        self.normAcceleration_lp = []
+        self.normGyroscope_lp = []
+        self.normMagnetometer_lp = []
 
         # time list in seconds
         self.time = list(self.rawData["time"]*0.001)
@@ -129,6 +133,11 @@ class MovuinoDataSet():
             self.acceleration_lp.append(fm.MeandDat(self.acceleration[k], self.nbPointFilter, self.listMeanAcc))
             self.gyroscope_lp.append(fm.MeandDat(self.gyroscope[k], self.nbPointFilter, self.listMeanGyr))
             self.magnetometer_lp.append(fm.MeandDat(self.magnetometer[k], self.nbPointFilter, self.listMeanMag))
+
+            #Calculation of the norm
+            self.normAcceleration_lp.append(np.linalg.norm(self.acceleration_lp[k]))
+            self.normGyroscope_lp.append(np.linalg.norm(self.gyroscope_lp[k]))
+            self.normMagnetometer_lp.append(np.linalg.norm(self.magnetometer_lp[k]))
 
         self.acceleration_lp = np.array(self.acceleration_lp)
         self.gyroscope_lp = np.array(self.gyroscope_lp)
