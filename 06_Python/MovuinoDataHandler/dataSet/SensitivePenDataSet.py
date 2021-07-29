@@ -137,19 +137,25 @@ class SensitivePenDataSet(MovuinoDataSet):
         :return:
         """
 
-        data = pd.read_csv(filepath + ".csv", sep=sep, decimal=dec)
+        data = pd.read_csv(filepath + ".csv", sep=sep, decimal=dec, index_col=None)
         timeList = data["time"]
         accel = [data["ax"], list(data["ay"]), list(data["az"])]
         gyr = [list(data["gx"]), list(data["gy"]), list(data["gz"])]
         mag = [list(data["mx"]), list(data["my"]), list(data["mz"])]
         psi = list(data["psi"])
         theta = list(data["theta"])
-        print("NAAAAAAA")
-        print(accel[0])
 
         df.plotVect(timeList, accel, "Acceleration m/s2", 221)
         df.plotVect(timeList, gyr, "Gyroscope m/s", 222)
         df.plotVect(timeList, mag, "Magnetometer unit mag", 223)
+
+        plt.subplot(223)
+        plt.plot(timeList, mag[0], color="red", label="x")
+        plt.plot(timeList, mag[1], color="green", label="y")
+        plt.plot(timeList, mag[2], color="blue", label="z")
+        plt.plot(timeList, data["normMag"], color="black", label="norm")
+        plt.legend()
+        plt.title("Magnetometer unit mag")
 
         sensitivePenAngle = plt.subplot(224)
         sensitivePenAngle.plot(timeList, psi, color="red", label='psi')
