@@ -14,7 +14,7 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "..\\..\\08_DataPen\\Manip_2807\\user_case\\"
+folderPath = "/Users/phelippeau/Documents/PhD/Data/Test_Postures/Palmar_Supinate/"
 fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = 'COM7'
