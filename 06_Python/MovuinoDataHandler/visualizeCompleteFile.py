@@ -1,5 +1,4 @@
 import dataSet.SensitivePenDataSet as sp
-import dataSet.SkateboardXXX3000DataSet as sk
 import dataSet.GlobalDataSet as gds
 
 ############ SETTINGS #############
