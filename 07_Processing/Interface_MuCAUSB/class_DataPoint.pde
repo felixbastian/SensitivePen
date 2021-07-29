@@ -17,7 +17,7 @@ class DataPoint {
     // Compute center of data point coordinated based on row and column index
     float w_ = COLS * maxDiameter;
     float h_ = ROWS * maxDiameter;
-    float x0 = (width - w_)/2. + maxDiameter/2.;
+    float x0 = (width/2. - w_)/2. + maxDiameter/2.;
     float y0 = (height - h_)/2. + maxDiameter/2.;
     this.X = x0 + indCol_ * maxDiameter;
     this.Y = y0 + indRow_ * maxDiameter;

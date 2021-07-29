@@ -1,3 +1,9 @@
+#if (RAMEND < 1000)
+  #define SERIAL_BUFFER_SIZE 16
+#else
+  #define SERIAL_BUFFER_SIZE 64
+#endif
+
 #include "MuCa_firmware_raw.h"
 //MuCa
 MuCa muca;
@@ -27,20 +33,20 @@ void loop()
       Serial.print("x");
       for( int j = 0; j < ROWS; j++)
       {
-        if (muca.grid[i*12+j] > 0)
+        if (muca.grid[i*COLS+j] > 0)
         {
-          Serial.printf("%03X", muca.grid[i*12+j]);  
+          // Serial.printf("%03X", muca.grid[i*12+j]);  
+          Serial.print(muca.grid[i*COLS+j]);  
         } else {
-          Serial.printf("%03X", 0); 
+          Serial.print(0); 
         }
         
-        if (j != NUM_COLUMNS - 1) 
+        if (j < COLS + 1) 
         {
-        Serial.print("x");
+          Serial.print("x");
         }
-        
       }
-      Serial.print('q'); 
+      Serial.println('q'); 
     }
   }
   delay(1);

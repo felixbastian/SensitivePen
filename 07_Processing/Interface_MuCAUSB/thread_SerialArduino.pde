@@ -26,10 +26,10 @@ public class ArduinoSerial implements Runnable {
           switch(adr_) {
             case 'z' :
               // GET COORDINATES
-              int[] rowtouch_ = int(split(serialData_, 'x')); 
+              println(serialData_);
+              int[] rowtouch_ = int(split(serialData_, 'x'));
               if (rowtouch_.length == COLS + 1) {
                 int rowIndex_ = int(rowtouch_[0]);
-  
                 for (int i = 0; i < COLS; i++) {
                   pointGrid[rowIndex_][i].pushNewRawVal(rowtouch_[i+1]);
                 }

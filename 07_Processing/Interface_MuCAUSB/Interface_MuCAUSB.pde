@@ -18,8 +18,8 @@ int maxDiameter = 75;       // Max range to display data point
 
 // Sensors
 DataPoint[][] pointGrid;    // Array of data points from the touch surface
-int ROWS = 25;              // number of data point on X axis for touch surface
-int COLS = 25;              // number of data point on Y axis for touch surface
+int ROWS = 4;              // number of data point on X axis for touch surface
+int COLS = 6;              // number of data point on Y axis for touch surface
 int dataCounter = 0;        // count number of incoming data
 long timerDataCounter0 = 0; // timer to compute incoming data rate
 
@@ -85,7 +85,7 @@ void draw()
     for (int j = 0; j < COLS; j++) {
       pointGrid[i][j].curRemapVal = (pointGrid[i][j].curSRelativeVal - minRow_) / (maxRow_ - minRow_);
       pointGrid[i][j].curRemapVal *= sumRow_;
-      pointGrid[i][j].curRemapVal /= 1024.0; // 1024 = max analog range
+      pointGrid[i][j].curRemapVal /= 10000.0f; // 1024.0; // 1024 = max analog range
       pointGrid[i][j].curRemapVal = constrain(pointGrid[i][j].curRemapVal, 0.0, 1.0);
 
       pointGrid[i][j].display(maxDiameter); // display data point
@@ -114,6 +114,7 @@ void serialEvent(Serial myPort) {
   if (message != null)
   {
     serialData = message;
+    // println(serialData);
     //serialData = message.substring( 0, message.length()-1 ); // remove 'q' character
     myPort.clear();
   }

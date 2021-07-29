@@ -67,7 +67,7 @@ void MuCa::init(bool raw ) {
    Wire.write(byte(MODE_TEST));
    Wire.endTransmission(I2C_ADDRESS);
     
-  delay(1000);
+  delay(100);
   Serial.println("MuCa initialized");
   delay(100);
   isInit = true;
