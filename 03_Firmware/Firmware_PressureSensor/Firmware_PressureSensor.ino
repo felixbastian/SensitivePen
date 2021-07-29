@@ -4,7 +4,7 @@ int sensorValue = 0;  // variable to store the value coming from the sensor
 
 #define N 100
 int dataCollect[N];
-int index = 0;
+int curIndex = 0;
 float curMean = 0.0f;
 float oldMean = 0.0f;
 
@@ -22,7 +22,7 @@ int dlyPrint = 10;
 boolean isPress = false;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(ledPin, OUTPUT);
 
   // init data collection
@@ -33,15 +33,15 @@ void setup() {
 
 void loop() {
   // update index
-  if(index < N && index >= 0) {
-    index++;
+  if(curIndex < N && curIndex >= 0) {
+    curIndex++;
   }
   else {
-    index = 0;
+    curIndex = 0;
   }
 
   // update data collection
-  dataCollect[index] = analogRead(sensorPin);
+  dataCollect[curIndex] = analogRead(sensorPin);
 
   // get moving mean
   oldMean = curMean;
