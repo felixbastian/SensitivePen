@@ -6,8 +6,9 @@ import pandas as pd
 import MathUtilities
 import os, fnmatch
 datatype = 'accZ'
-path = r'C:\Users\CRI User\Documents\GitHub\PythonDFTMotionP3\goodata\atelle'
+path = r'C:\Users\CRI User\PycharmProjects\SensitivePen\08_DataPen\Manip_2807\atelle'
 pattern = "*good*"
+pattern2 = "*bad*"
 
 def runcode():
     # Set up empty Dataframes
@@ -50,7 +51,8 @@ def runcode():
             dfybad.columns = ['target']
             dfbad = dfbad.append(pd.concat([dfxbad,dfybad],axis=1))
 
-        else: # Purple dots
+        #else: # Purple dots
+        elif fnmatch.fnmatch(filename, pattern2):  # Yellow dots
 
             # Get Data
             df = pd.DataFrame()
