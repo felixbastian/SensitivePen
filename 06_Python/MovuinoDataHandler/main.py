@@ -14,7 +14,7 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "..\\..\\08_DataPen\\Manip_2807\\user_case\\"
+folderPath = "..\\data_usefull\\template\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = '/dev/cu.usbserial-0154D8E8'
@@ -95,6 +95,7 @@ if toDataManage:
             print("No device matching")
 
         dataSet.DataManage()
+
         Te = dataSet.Te
         print("sample frequency : "+str(1/Te))
 

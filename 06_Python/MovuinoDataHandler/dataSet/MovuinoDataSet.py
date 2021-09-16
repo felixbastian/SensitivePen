@@ -67,6 +67,7 @@ class MovuinoDataSet():
 
         self.filepath = filepath
         self.rawData = pd.read_csv(filepath + ".csv", sep=",")
+        self.processedData = pd.DataFrame()
 
         self.nbPointFilter = nbPointfilter
 
@@ -99,6 +100,7 @@ class MovuinoDataSet():
         # time list in seconds
         self.time = list(self.rawData["time"]*0.001)
         self.rawData["time"] = self.time
+        self.processedData["time"] = self.time
 
         # sample rate
         self.Te = (self.time[-1]-self.time[0])/(len(self.time))
