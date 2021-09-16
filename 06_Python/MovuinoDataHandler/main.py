@@ -94,7 +94,7 @@ if toDataManage:
         else:
             print("No device matching")
 
-        dataSet.DataManage()
+        dataSet.getDataProcess()
         Te = dataSet.Te
         print("sample frequency : "+str(1/Te))
 
