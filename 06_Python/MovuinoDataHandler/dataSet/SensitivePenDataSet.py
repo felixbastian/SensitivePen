@@ -29,6 +29,8 @@ class SensitivePenDataSet(MovuinoDataSet):
         """
         MovuinoDataSet.DataManage(self)
 
+        print(self.rawData)
+
         # --- Getting initial euler angles
         initRotationMatrix = gam.rotationMatrixCreation(self.acceleration_lp[15], self.magnetometer_lp[15])
         self.initPsi = math.atan2(initRotationMatrix[0, 1], initRotationMatrix[0,0])
@@ -103,6 +105,10 @@ class SensitivePenDataSet(MovuinoDataSet):
         sensitivePenAngle.yaxis.set_minor_locator(MultipleLocator(45))
         sensitivePenAngle.legend(loc='upper right')
         sensitivePenAngle.set_title("Relevant angle (psi, theta) (deg)")
+
+        pressure = plt.subplot(339)
+        pressure.plot(self.time, self.rawData["pressure"], color="green")
+        pressure.set_title("Pressure")
 
         """
         magCal = plt.subplot(338)

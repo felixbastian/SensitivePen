@@ -38,6 +38,7 @@ float mx, my, mz; // store magneto values
 int magRange[] = {666, -666, 666, -666, 666, -666}; // magneto range values for callibration
 
 //----> Pressure
+const int pressPin = A0;
 float pressure = -1;
 
 // BUTTON
@@ -228,7 +229,8 @@ void loop() {
         //------- GET MPU DATA --------
         IMU.readSensor();
         get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-        currentTime = millis() - startTime;
+        pressure = analogRead(pressPin);
+        currentTime = millis() - startTime; // Data time to store in csv row
 
         writeInFileMovuinoData(file, sep);
         digitalWrite(pinLedBat, HIGH);

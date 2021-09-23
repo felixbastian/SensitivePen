@@ -35,9 +35,9 @@ class MovuinoDataSet():
     * gyroscope : gyroscope list
     * magnetometer : magnetometer list
 
-    * listMeanAcc : acceleration list usefull for data filtering
-    * listMeanGyr : gyroscope list usefull for data filtering
-    * listMeanMag : magnetometer list usefull for data filtering
+    * listMeanAcc : acceleration list useful for data filtering
+    * listMeanGyr : gyroscope list useful for data filtering
+    * listMeanMag : magnetometer list useful for data filtering
 
     * acceleration_lp : acceleration filtered list
     * gyroscope_lp : gyroscope filtered list
@@ -52,9 +52,9 @@ class MovuinoDataSet():
     * DataManage : Processes the data
     * StockIntoNewFile : stock the data into a new file
     * VisualizeData : Visualize data
-    * PlotImage : Put into subplot differents variables
+    * PlotImage : Put into subplot different variables
     * AddingRawData : Add rows in the rawData
-    * PlotCompleteFile (@static) : Show a complete file whithout processing data
+    * PlotCompleteFile (@static) : Show a complete file without processing data
     """
     def __init__(self, filepath, nbPointfilter = 15):
         """

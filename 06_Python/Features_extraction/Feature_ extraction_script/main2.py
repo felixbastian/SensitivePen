@@ -6,7 +6,7 @@ import pandas as pd
 import MathUtilities
 import os, fnmatch
 datatype = 'accZ'
-path = r'C:\Users\CRI User\PycharmProjects\SensitivePen\08_DataPen\Manip_2807\atelle'
+path = r'/Users/hssnadr/Documents/GitHub/SensitivePen/08_DataPen/Manip_2807/atelle'
 pattern = "*good*"
 pattern2 = "*bad*"
 
