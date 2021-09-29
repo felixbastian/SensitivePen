@@ -1,6 +1,6 @@
 import dataSet.SensitivePenDataSet as sp
 import dataSet.GlobalDataSet as gds
-import dataSet.MovuinoDataSet as dm
+import dataSet.MovuinoDataSet as md
 import tools.DisplayFunctions as df
 import os
 import numpy as np
@@ -17,43 +17,45 @@ serialPort = 'COM4'
 
 toExtract = False
 toDataManage = True
-toVisualize = True
+toVisualize = False
 
 filter = 25
 
-
 sep = ","
 decimal = "."
-##### If no extract
-file_start = 1
-nbRecord = 10
-end = 10
 
 ###################################
 
-nb_files = 0
-
-path = folderPath + fileName
-
-
 # --------- Data Extraction from Movuino ----------
 if toExtract:
-    movExt.MovuinoExtraction(serialPort, path)
+    movExt.MovuinoExtraction(serialPort, folderPath + fileName)
 
 
+file_start = 1
+end = 2
+
+# -------- Data processing ----------------------
 if toDataManage:
-    for i in range(file_start, file_start+nbRecord+1):
-        dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i), filter)
-        dataSet.DataManage()
+    for i in range(file_start, end+1):
+        dataSet = md.MovuinoDataSet(folderPath + fileName + "_" + str(i))
         Te = dataSet.Te
         print("sample frequency : "+str(1/Te))
+        print(len(dataSet.acceleration))
 
-        if toVisualize:
-            dataSet.VisualizeData()
+        #Filtering
+        #ComputeAngles
+        #Features
+        #stock in processed.csv
 
 if toVisualize:
-    for i in range(file_start, file_start+nbRecord+1):
-        sp.SensitivePenDataSet.PlotCompleteFile(folderPath + fileName + "_" + str(i) + "_treated_" + device, sep, decimal)
+    """
+    for i in range(file_start, end+1):
+        a=0
+        #sp.SensitivePenDataSet.PlotCompleteFile(folderPath + fileName + "_" + str(i) + "_treated_" + device, sep, decimal)
+        #Plot angles
+        #plot raw && filtered processed data
+        #plot features
+    """
 
 
 
