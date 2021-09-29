@@ -15,7 +15,7 @@ fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = 'COM4'
 
-toExtract = True
+toExtract = False
 toDataManage = True
 toVisualize = True
 

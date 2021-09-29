@@ -5,13 +5,13 @@ class SensitivePenDataSet(MovuinoDataSet):
     """Class that represent a data set of the sensitiv pen.
 
     """
-    def __init__(self, filepath, nbPointfilter=25):
+    def __init__(self, filepath):
         """
         Constructor of the sensitivePen
         :param filepath: filepath of the raw data set
         :param nbPointfilter: level of filtering for the datamanage
         """
-        MovuinoDataSet.__init__(self, filepath, nbPointfilter)
+        MovuinoDataSet.__init__(self, filepath)
         self.name = "SensitivePen"
 
         # Relevant angle for the pen

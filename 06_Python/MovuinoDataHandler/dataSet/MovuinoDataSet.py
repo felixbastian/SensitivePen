@@ -56,7 +56,7 @@ class MovuinoDataSet():
     * AddingRawData : Add rows in the rawData
     * PlotCompleteFile (@static) : Show a complete file whithout processing data
     """
-    def __init__(self, filepath, nbPointfilter = 15):
+    def __init__(self, filepath):
         """
         Get the data from the file (.csv) ad initialize global variables.
 
@@ -68,8 +68,7 @@ class MovuinoDataSet():
         self.filepath = filepath
         self.rawData = pd.read_csv(filepath + ".csv", sep=",")
         self.processedData = pd.DataFrame()
-
-        self.nbPointFilter = nbPointfilter
+        self.featuredData = ''
 
         self.time = []
 
@@ -100,7 +99,7 @@ class MovuinoDataSet():
         # time list in seconds
         self.time = list(self.rawData["time"]*0.001)
         self.rawData["time"] = self.time
-        self.processedData["time"] = self.time
+        self.processedData = self.rawData.copy()
 
         # sample rate
         self.Te = (self.time[-1]-self.time[0])/(len(self.time))
@@ -108,14 +107,7 @@ class MovuinoDataSet():
         # number of row
         self.nb_row = len(self.time)
 
-    def DataManage(self):
-        """
-        Does the basic operations on data.
-        Thi is the main function of the class.
-
-        :return: -
-        """
-
+        #------ STOCK COLUMN OF DF IN VARIABLES ------
         for k in range(self.nb_row): #We stock rawData in variables
             self.acceleration.append(np.array([self.rawData["ax"][k], self.rawData["ay"][k], self.rawData["az"][k]]))
             self.gyroscope.append(np.array([self.rawData["gx"][k], self.rawData["gy"][k], self.rawData["gz"][k]])*180/np.pi)
@@ -129,77 +121,3 @@ class MovuinoDataSet():
         self.acceleration = np.array(self.acceleration)
         self.gyroscope = np.array(self.gyroscope)
         self.magnetometer = np.array(self.magnetometer)
-
-        #--------------------------- FILTER ----------------------------------
-        for k in range(self.nb_row):
-            self.acceleration_lp.append(fm.MeandDat(self.acceleration[k], self.nbPointFilter, self.listMeanAcc))
-            self.gyroscope_lp.append(fm.MeandDat(self.gyroscope[k], self.nbPointFilter, self.listMeanGyr))
-            self.magnetometer_lp.append(fm.MeandDat(self.magnetometer[k], self.nbPointFilter, self.listMeanMag))
-
-            #Calculation of the norm
-            self.normAcceleration_lp.append(np.linalg.norm(self.acceleration_lp[k]))
-            self.normGyroscope_lp.append(np.linalg.norm(self.gyroscope_lp[k]))
-            self.normMagnetometer_lp.append(np.linalg.norm(self.magnetometer_lp[k]))
-
-        self.acceleration_lp = np.array(self.acceleration_lp)
-        self.gyroscope_lp = np.array(self.gyroscope_lp)
-        self.magnetometer_lp = np.array(self.magnetometer_lp)
-
-    def StockIntoNewFile(self, filepath):
-        """
-        Function to stock all the rawdata and processed data in a new file
-        :param filepath: filepath
-        :return: -
-        """
-        self.rawData.to_csv(filepath + "_treated" + ".csv", sep=",", index=False, index_label=False)
-
-    def VisualizeData(self):
-        self.PlotImage()
-        plt.show()
-
-        return
-
-    def PlotImage(self):
-        """
-        Plot basic data of the movuino : acceleration, magnetometer, and gyroscope
-
-        :return:
-        """
-        df.PlotVector(self.time, self.acceleration, 'Acceleration (m/s2)', 331)
-        df.PlotVector(self.time, self.magnetometer, 'Magnetometer', 332)
-        df.PlotVector(self.time, self.gyroscope, 'Gyroscope (deg/s)', 333)
-
-    def AddingRawData(self):
-        """
-        Add new column to the rawdata, by default we add the norm
-        :return:
-        """
-        self.rawData["normAccel"] = self.normAcceleration
-        self.rawData["normMag"] = self.normMagnetometer
-        self.rawData["normGyr"] = self.normGyroscope
-
-    @staticmethod
-    def PlotCompleteFile(filepath, sep):
-        data = pd.read_csv(filepath + ".csv", sep=sep)
-        timeList = data["time"]
-        accel = np.array([data["ax"], data["ay"], data["az"]])
-        gyr = np.array([data["gx"], data["gy"], data["gz"]])
-        mag = np.array([data["mx"], data["my"], data["mz"]])
-
-        df.plotVect(timeList, accel, "Acceleration m/s2", 331)
-        df.plotVect(timeList, gyr, "Gyroscope m/s", 332)
-        df.plotVect(timeList, mag, "Magnetometer unit mag", 333)
-
-        plt.show()
-
-
-
-
-
-
-
-
-
-def ConvertArray(*args):
-    for arg in args:
-        arg = np.array(arg)

@@ -5,13 +5,13 @@ class GlobalDataSet(MovuinoDataSet):
     Class created mainly for debugging, it has for purpose to stock most of the data that we may need
     """
 
-    def __init__(self, filepath, nbPointfilter = 25):
+    def __init__(self, filepath):
         """
 
         :param filepath:
         :param nbPointfilter:
         """
-        MovuinoDataSet.__init__(self, filepath, nbPointfilter)
+        MovuinoDataSet.__init__(self, filepath)
 
         self.name = "globalDataSet"
 
