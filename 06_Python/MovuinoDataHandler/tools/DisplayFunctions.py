@@ -33,6 +33,8 @@ def PlotVector(t, v, title, pos):
     fig.plot(t, v[:, 2], color="blue")
     fig.set_title(title)
 
+    return fig
+
 
 def plotVect(t, v, title, pos):
     """

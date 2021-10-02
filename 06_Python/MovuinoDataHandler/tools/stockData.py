@@ -1,6 +1,13 @@
 import numpy as np
 
-def stockProcessedData(sensitivPen, folderpath):
+def stockProcessedData(sensitivPen, filepath):
+    """
+
+    :param sensitivPen:
+    :param folderpath:
+    :return:
+    """
+
     sensitivPen.processedData = sensitivPen.rawData.copy()
 
     sensitivPen.processedData["normAccel"] = sensitivPen.normAcceleration
@@ -22,4 +29,4 @@ def stockProcessedData(sensitivPen, folderpath):
     sensitivPen.processedData["psi"] = sensitivPen.sensitivePenAngles[:, 0]
     sensitivPen.processedData["theta"] = sensitivPen.sensitivePenAngles[:, 1]
 
-    sensitivPen.processedData.to_csv(sensitivPen.filepath + "_treated_" + sensitivPen.name + ".csv", sep=",", index=False, index_label=False)
+    sensitivPen.processedData.to_csv(filepath, sep=",", index=False, index_label=False)

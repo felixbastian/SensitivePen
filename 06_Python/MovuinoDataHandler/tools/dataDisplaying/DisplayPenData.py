@@ -64,9 +64,9 @@ def DispOnlyPenAngles(sensitivPen):
     df.PlotVector(timeList, sensitivPen.acceleration, "Acceleration m/s2", 221)
     df.PlotVector(timeList, sensitivPen.gyroscope, "Gyroscope m/s", 222)
 
-    df.PlotVector(timeList, sensitivPen.magnetometer, "Magnetometer unit mag", 223)
-    plt.plot(timeList, sensitivPen.normMagnetometer, color="black")
-    plt.legend()
+    mag = df.PlotVector(timeList, sensitivPen.magnetometer, "Magnetometer unit mag", 223)
+    mag.plot(timeList, sensitivPen.normMagnetometer, color="black")
+    mag.legend()
 
     sensitivePenAngle = plt.subplot(224)
     sensitivePenAngle.plot(timeList, psi, color="red", label='psi')

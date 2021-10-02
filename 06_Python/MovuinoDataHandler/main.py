@@ -58,22 +58,18 @@ if toDataManage:
 
         #Features
         #stock in processed.csv
-        sd.stockProcessedData(dataSet, folderPath)
+        sd.stockProcessedData(dataSet, dataSet.filepath + "_treated_" + dataSet.name + ".csv")
 
         #display
         dpd.DispProcessedData(sensitivPen=dataSet)
         dpd.DispRawData(sensitivPen=dataSet)
         dpd.DispOnlyPenAngles(sensitivPen=dataSet)
 
+
 if toVisualize:
     """
-    for i in range(file_start, end+1):
-        a=0
-        #sp.SensitivePenDataSet.PlotCompleteFile(folderPath + fileName + "_" + str(i) + "_treated_" + device, sep, decimal)
-        #Plot angles
-        #plot raw && filtered processed data
-        #plot features
     """
+
 
 
 
