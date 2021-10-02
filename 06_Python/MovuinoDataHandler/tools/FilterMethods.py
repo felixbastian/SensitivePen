@@ -16,6 +16,31 @@ def MeandDat(rawDat, nbPointFilter, listMean):
     meanDat /= len(listMean)
     return meanDat
 
+def MeanFilter(dat_to_filter, nbPoint):
+    """
+
+    :param dat_to_filter: rawData list to filter
+    :param nbPoint: filtering level
+    :return: list of filterd dat
+    """
+    meanDat = []
+
+    for i in range(len(dat_to_filter)):
+        meanVal = 0
+        if (i < nbPoint):
+            for k in range(i+1):
+                meanVal += dat_to_filter[k]
+            meanVal /= (i+1)
+        else :
+            for k in range(nbPoint):
+                meanVal += dat_to_filter[i-k]
+
+            meanVal /= nbPoint
+        meanDat.append(meanVal)
+    meanDat = np.array(meanDat)
+    return meanDat
+
+
 def LowPassFilter(x, y, Te, fc):
     """
 

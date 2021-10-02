@@ -60,8 +60,8 @@ class SensitivePenDataSet(MovuinoDataSet):
         self.posAngAcc = np.array(self.posAngAcc)
         self.sensitivePenAngles = np.array(self.sensitivePenAngles)
 
-        self.rawData["psi"] = self.sensitivePenAngles[:, 0]
-        self.rawData["theta"] = self.sensitivePenAngles[:, 1]
+        self.processedData["psi"] = self.sensitivePenAngles[:, 0]
+        self.processedData["theta"] = self.sensitivePenAngles[:, 1]
 
         MovuinoDataSet.AddingRawData(self)
         self.StockIntoNewFile(self.filepath)

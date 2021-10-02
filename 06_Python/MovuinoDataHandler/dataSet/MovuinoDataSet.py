@@ -30,6 +30,7 @@ class MovuinoDataSet():
 
         self.filepath = filepath
         self.rawData = pd.read_csv(filepath + ".csv", sep=",")
+        self.processedData = self.rawData.copy()
 
         self.time = []
 
@@ -38,10 +39,23 @@ class MovuinoDataSet():
         self.gyroscope = []
         self.magnetometer = []
 
+        # pressure
+        self.pressure = self.rawData["pressure"]
+
+        # norm of
+        self.normAcceleration = []
+        self.normGyroscope = []
+        self.normMagnetometer = []
+
+        # basic data filtered
+        self.acceleration_lp = []
+        self.gyroscope_lp = []
+        self.magnetometer_lp = []
+
         # time list in seconds
         self.time = list(self.rawData["time"]*0.001)
         self.rawData["time"] = self.time
-
+        self.processedData["time"] = self.time
         # sample rate
         self.Te = (self.time[-1]-self.time[0])/(len(self.time))
 
@@ -53,6 +67,11 @@ class MovuinoDataSet():
             self.acceleration.append(np.array([self.rawData["ax"][k], self.rawData["ay"][k], self.rawData["az"][k]]))
             self.gyroscope.append(np.array([self.rawData["gx"][k], self.rawData["gy"][k], self.rawData["gz"][k]])*180/np.pi)
             self.magnetometer.append(np.array([self.rawData["mx"][k], self.rawData["my"][k], self.rawData["mz"][k]]))
+
+            # Calculation of the norm
+            self.normAcceleration.append(np.linalg.norm(self.acceleration[k]))
+            self.normGyroscope.append(np.linalg.norm(self.gyroscope[k]))
+            self.normMagnetometer.append(np.linalg.norm(self.magnetometer[k]))
 
         self.acceleration = np.array(self.acceleration)
         self.gyroscope = np.array(self.gyroscope)

@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import dataSet.SensitivePenDataSet
 
 """
 Usefull mainly for the sensitiv pen, it has some methods that calculates angle of the mvunio
@@ -9,7 +10,7 @@ def getInclinaison(U):
     """
     Calculate angles between a vector and x,y,z axes
     :param U: vector
-    :return: agnles
+    :return: angles
     """
     norm = np.linalg.norm(U)
 
@@ -19,6 +20,46 @@ def getInclinaison(U):
 
     angle = np.array([alpha, beta, gamma]) * 360 / (2 * np.pi)
     return angle
+
+def computePenAngles(sentivePendataSet):
+    """
+
+    :param sentivePendataSet:
+    :return:
+    """
+    # --- Getting initial euler angles
+    initRotationMatrix = rotationMatrixCreation(sentivePendataSet.acceleration[15], sentivePendataSet.magnetometer[15])
+    sentivePendataSet.initPsi = math.atan2(initRotationMatrix[0, 1], initRotationMatrix[0, 0])
+
+    for k in range(len(sentivePendataSet.time)):
+        # --- Getting rotation matrix from filtered data
+        rotationMatrix = rotationMatrixCreation(sentivePendataSet.acceleration[k], sentivePendataSet.magnetometer[k])
+
+        # --- Get inclinaison of the pen (theta)
+        sentivePendataSet.posAngAcc.append(getInclinaison(sentivePendataSet.acceleration[k]))
+        theta = sentivePendataSet.posAngAcc[k][0] - 90
+
+        # --- getting orientation of the pen (for psi)
+        a00 = rotationMatrix[0, 0]  # N.x
+        a01 = rotationMatrix[0, 1]  # E.x
+
+        if (abs(theta) > 360):  # set the lim to 80 but not usefull now
+            psi = 0
+        else:
+            psi = (math.atan2(a01, a00) - sentivePendataSet.initPsi) * 180 / math.pi
+
+            if -180 > psi >= -360:
+                psi += 360
+            elif 180 < psi <= 360:
+                psi -= 360
+
+        sentivePendataSet.sensitivePenAngles.append(np.array([psi, theta]))
+
+    sentivePendataSet.posAngAcc = np.array(sentivePendataSet.posAngAcc)
+    sentivePendataSet.sensitivePenAngles = np.array(sentivePendataSet.sensitivePenAngles)
+
+    sentivePendataSet.processedData["psi"] = sentivePendataSet.sensitivePenAngles[:, 0]
+    sentivePendataSet.processedData["theta"] = sentivePendataSet.sensitivePenAngles[:, 1]
 
 def isRotationMatrix(R):
     """
