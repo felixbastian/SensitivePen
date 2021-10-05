@@ -36,10 +36,11 @@ if toExtract:
     movExt.MovuinoExtraction(serialPort, folderPath + fileName)
 
 
+# -------- Data processing ----------------------
+
 file_start = 1
 end = 2
 
-# -------- Data processing ----------------------
 if toDataManage:
     for i in range(file_start, end+1):
         dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i))
@@ -56,6 +57,8 @@ if toDataManage:
         dataSet.sensitivePenAngles = gam.computePenAngles(dataSet)
 
         #Features
+        # Difference between runcode et runfeatures extract
+
         #stock in processed.csv
         sd.stockProcessedData(dataSet, dataSet.filepath + "_treated_" + dataSet.name + ".csv")
 

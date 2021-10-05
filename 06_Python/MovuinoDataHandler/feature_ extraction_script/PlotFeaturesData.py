@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def plotdata(df, integral, derivate, angle):
+def plotData(df, integral, derivate, angle):
 
     fig = plt.figure(figsize=(25,10))
     ax1 = fig.add_subplot(1, 3, 1)
@@ -23,7 +23,7 @@ def plotdata(df, integral, derivate, angle):
     ax3.set_title('Angle')
     plt.show()
 
-def plotfeatures(dfinal):
+def plotFeatures(dfinal):
     fig = plt.figure(figsize=(25, 10))
     ax1 = fig.add_subplot(2, 3, 1)
     ax2 = fig.add_subplot(2, 3, 2)
@@ -78,7 +78,7 @@ def plotfeatures(dfinal):
     ax6.legend()
     plt.show()
 
-def plotfeaturesnotarget(dfinal):
+def plotFeaturesNoTarget(dfinal):
     fig = plt.figure(figsize=(25, 10))
     ax1 = fig.add_subplot(2, 3, 1)
     ax2 = fig.add_subplot(2, 3, 2)
