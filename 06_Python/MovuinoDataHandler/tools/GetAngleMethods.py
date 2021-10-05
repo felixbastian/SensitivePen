@@ -58,8 +58,7 @@ def computePenAngles(sentivePendataSet):
     sentivePendataSet.posAngAcc = np.array(sentivePendataSet.posAngAcc)
     sentivePendataSet.sensitivePenAngles = np.array(sentivePendataSet.sensitivePenAngles)
 
-    sentivePendataSet.processedData["psi"] = sentivePendataSet.sensitivePenAngles[:, 0]
-    sentivePendataSet.processedData["theta"] = sentivePendataSet.sensitivePenAngles[:, 1]
+    return sentivePendataSet.sensitivePenAngles
 
 def isRotationMatrix(R):
     """

@@ -13,7 +13,6 @@ import matplotlib.patches as mpatches
 from matplotlib.transforms import Bbox
 from matplotlib.ticker import MultipleLocator
 
-
 ############   SETTINGS   #############
 device = "sensitiPen"
 folderPath = "..\\data_usefull\\test\\"
@@ -54,7 +53,7 @@ if toDataManage:
         dataSet.magnetometer_lp = fm.MeanFilter(dataSet.magnetometer, 10)
 
         #ComputeAngles
-        gam.computePenAngles(dataSet)
+        dataSet.sensitivePenAngles = gam.computePenAngles(dataSet)
 
         #Features
         #stock in processed.csv
