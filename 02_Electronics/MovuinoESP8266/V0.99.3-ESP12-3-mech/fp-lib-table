@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name V0.99.3-ESP12-3-mech)(type KiCad)(uri "$(KIPRJMOD)/V0.99.3-ESP12-3-mech.pretty")(options "")(descr ""))
+)

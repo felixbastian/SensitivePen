@@ -14,10 +14,10 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "../../08_DataPen/Manip_2807/hssnadr/pressure/"
+folderPath = "../../08_DataPen/Manip_2807/hssnadr/06102021/"
 fileName = "record"  # generic name numbers will be added for duplicates
 
-serialPort = '/dev/cu.usbserial-0154D972'
+serialPort = '/dev/cu.usbserial-0154D97D'
 
 toExtract = False
 toDataManage = True
@@ -30,7 +30,7 @@ sep = ","
 decimal = "."
 ##### If no extract
 file_start = 1
-nbRecord = 1
+nbRecord = 2
 end = 10
 
 ###################################

@@ -229,7 +229,7 @@ void loop() {
         //------- GET MPU DATA --------
         IMU.readSensor();
         get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-        pressure = analogRead(pressPin);
+        // pressure = analogRead(pressPin);
         currentTime = millis() - startTime; // Data time to store in csv row
 
         writeInFileMovuinoData(file, sep);

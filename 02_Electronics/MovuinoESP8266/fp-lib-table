@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name V0.99.3-ESP12-3-mech)(type KiCad)(uri "$(KIPRJMOD)/V0.99.3-ESP12-3-mech.pretty")(options "")(descr ""))
+  (lib (name MovuinoESP8266)(type KiCad)(uri /Users/hssnadr/Documents/GitHub/SensitivePen/02_Electronics/MovuinoShieldPressure/MovuinoESP8266.pretty)(options "")(descr ""))
+)
