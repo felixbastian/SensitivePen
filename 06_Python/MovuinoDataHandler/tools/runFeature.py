@@ -94,7 +94,6 @@ def runcode(path):
 
     #plotlyplot.plotdatabeautyful(dfinal)
     plot.plotdata(df, integral, derivate, angle)
-    #
-    dfinal.to_csv(r'C:\Users\CRI User\Desktop\DataSets\atelle_ananorme.csv')
+    #dfinal.to_csv(r'C:\Users\CRI User\Desktop\DataSets\atelle_ananorme.csv')
 
 runcode(path)

@@ -4,6 +4,7 @@ import tools.stockData as sd
 import tools.movuinoExtraction as movExt
 import tools.FilterMethods as fm
 import tools.dataDisplaying.DisplayPenData as dpd
+from tools.runFeature import runcode
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +18,7 @@ from matplotlib.ticker import MultipleLocator
 device = "sensitiPen"
 folderPath = "..\\data_usefull\\test\\"
 fileName = "record"  # generic name numbers will be added for duplicates
-
+pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
@@ -33,7 +34,7 @@ decimal = "."
 
 # --------- Data Extraction from Movuino ----------
 if toExtract:
-    movExt.MovuinoExtraction(serialPort, folderPath + fileName)
+    sp.SensitivePenDataSet.MovuinoExtraction(serialPort, folderPath + fileName)
 
 
 # -------- Data processing ----------------------
@@ -45,7 +46,7 @@ if toDataManage:
     for i in range(file_start, end+1):
         dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i))
         Te = dataSet.Te
-        print("sample frequency : "+str(1/Te))
+        print("sample frequency : " + str(1/Te))
         print(len(dataSet.acceleration))
 
         #Filtering
@@ -56,8 +57,8 @@ if toDataManage:
         #ComputeAngles
         dataSet.sensitivePenAngles = gam.computePenAngles(dataSet)
 
-        #Features
-        # Difference between runcode et runfeatures extract
+        #FeaturesDifference between runcode et runfeatures extract
+        runcode(pathfeatures)
 
         #stock in processed.csv
         sd.stockProcessedData(dataSet, dataSet.filepath + "_treated_" + dataSet.name + ".csv")
