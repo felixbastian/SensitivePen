@@ -14,14 +14,14 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "..\\..\\08_DataPen\\Manip_2807\\user_case\\"
+folderPath = "../../08_DataPen/Manip_2807/user_case/"
 fileName = "record"  # generic name numbers will be added for duplicates
 
-serialPort = '/dev/cu.usbserial-0154D8E8'
+serialPort = '/dev/cu.usbserial-0154D972'
 
-toExtract = False
-toDataManage = True
-toVisualize = True
+toExtract = True
+toDataManage = False
+toVisualize = False
 
 filter = 25
 
@@ -50,6 +50,9 @@ if toExtract:
     line_str = ''
     datafile = ''
     nbRecord = 1
+
+    # Send read SPIFF instruction to Movuino
+    arduino.write(bytes("r", 'ascii'))
 
     while ExtractionCompleted != True:
         line_byte = arduino.readline()
@@ -94,7 +97,7 @@ if toDataManage:
         else:
             print("No device matching")
 
-        dataSet.getDataProcess()
+        dataSet.DataManage()
         Te = dataSet.Te
         print("sample frequency : "+str(1/Te))
 
