@@ -1,7 +1,6 @@
 import glob
 import os
 import numpy as np
-import getFeaturesWindows
 dataWindow = 20
 def datafromfile(file):
 

@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import GetDFT
+import tools.features_extraction_scripts.GetDFT as GetDFT
 X = []
 dataWindow = 20
 

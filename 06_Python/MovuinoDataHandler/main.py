@@ -1,18 +1,6 @@
 import dataSet.SensitivePenDataSet as sp
-import tools.GetAngleMethods as gam
-import tools.stockData as sd
-import tools.movuinoExtraction as movExt
 import tools.FilterMethods as fm
-import tools.dataDisplaying.DisplayPenData as dpd
-from tools.runFeature import runcode
-import os
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import signal
-
-import matplotlib.patches as mpatches
-from matplotlib.transforms import Bbox
-from matplotlib.ticker import MultipleLocator
+import tools.features_extraction_scripts.runFeature as ft
 
 ############   SETTINGS   #############
 device = "sensitiPen"
@@ -34,39 +22,42 @@ decimal = "."
 
 # --------- Data Extraction from Movuino ----------
 if toExtract:
+    """
+    Extract data from the serial port and stock it into a csv file
+    """
+    print("Data extraction..")
     sp.SensitivePenDataSet.MovuinoExtraction(serialPort, folderPath + fileName)
 
 
 # -------- Data processing ----------------------
 
 file_start = 1
-end = 2
+end = 3
 
 if toDataManage:
     for i in range(file_start, end+1):
-        dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i))
-        Te = dataSet.Te
+        sensitivPenDataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i))
+        Te = sensitivPenDataSet.Te
         print("sample frequency : " + str(1/Te))
-        print(len(dataSet.acceleration))
 
         #Filtering
-        dataSet.acceleration_lp = fm.MeanFilter(dataSet.acceleration, 10)
-        dataSet.gyroscope_lp = fm.MeanFilter(dataSet.gyroscope, 10)
-        dataSet.magnetometer_lp = fm.MeanFilter(dataSet.magnetometer, 10)
+        sensitivPenDataSet.acceleration_lp = fm.MeanFilter(sensitivPenDataSet.acceleration, 10)
+        sensitivPenDataSet.gyroscope_lp = fm.MeanFilter(sensitivPenDataSet.gyroscope, 10)
+        sensitivPenDataSet.magnetometer_lp = fm.MeanFilter(sensitivPenDataSet.magnetometer, 10)
 
         #ComputeAngles
-        dataSet.sensitivePenAngles = gam.computePenAngles(dataSet)
+        sensitivPenDataSet.computePenAngles()
 
         #FeaturesDifference between runcode et runfeatures extract
-        runcode(pathfeatures)
+        #ft.getDataSetFeatures(pathfeatures)
 
         #stock in processed.csv
-        sd.stockProcessedData(dataSet, dataSet.filepath + "_treated_" + dataSet.name + ".csv")
+        sensitivPenDataSet.stockProcessedData(sensitivPenDataSet.filepath + "_treated_" + sensitivPenDataSet.name + ".csv")
 
         #display
-        dpd.DispProcessedData(sensitivPen=dataSet)
-        dpd.DispRawData(sensitivPen=dataSet)
-        dpd.DispOnlyPenAngles(sensitivPen=dataSet)
+        sensitivPenDataSet.DispProcessedData()
+        sensitivPenDataSet.DispRawData()
+        sensitivPenDataSet.DispOnlyPenAngles()
 
 
 if toVisualize:

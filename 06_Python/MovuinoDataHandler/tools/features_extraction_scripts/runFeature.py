@@ -1,16 +1,14 @@
-import getFeaturesFromFile
-import getFeaturesWindows
-import plot
+import tools.features_extraction_scripts.getFeaturesFromFile as getFeaturesFromFile
+from tools.features_extraction_scripts.getFeaturesWindows import getFeaturesWindows
+import tools.features_extraction_scripts.MathUtilities as MathUtilities
+import tools.features_extraction_scripts.PlotFeaturesData as PlotFeaturesData
+
 from sklearn import preprocessing
 import pandas as pd
-import MathUtilities
 import os, fnmatch
-datatype = 'accZ'
-path = r'C:\Users\CRI User\PycharmProjects\SensitivePen\08_DataPen\Manip_2807\atelle'
-pattern = "*good*"
-pattern2 = "*bad*"
 
-def runcode(path):
+
+def getDataSetFeatures(path, datatype, pattern, pattern2):
     # Set up empty Dataframes
     dfbad = pd.DataFrame()
     dfgood = pd.DataFrame()
@@ -90,10 +88,16 @@ def runcode(path):
     print (dfinal)
     #print(dfinal)
     #plot.plotfeatures(dfinal)
-    plot.plotfeatures(dfinal)
+    PlotFeaturesData.plotfeatures(dfinal)
 
     #plotlyplot.plotdatabeautyful(dfinal)
-    plot.plotdata(df, integral, derivate, angle)
+    PlotFeaturesData.plotdata(df, integral, derivate, angle)
     #dfinal.to_csv(r'C:\Users\CRI User\Desktop\DataSets\atelle_ananorme.csv')
 
-runcode(path)
+if __name__ == "__main__":
+    datatype = 'accZ'
+    path = r'C:\Users\CRI User\PycharmProjects\SensitivePen\08_DataPen\Manip_2807\atelle'
+    pattern = "*good*"
+    pattern2 = "*bad*"
+
+    getDataSetFeatures(path, datatype, pattern, pattern2)
