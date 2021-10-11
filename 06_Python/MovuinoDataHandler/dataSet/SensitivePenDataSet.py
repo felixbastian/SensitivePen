@@ -22,7 +22,8 @@ class SensitivePenDataSet():
         self.name = "SensitivePen"
 
         self.filepath = filepath
-        self.rawData = pd.read_csv(filepath + ".csv", sep=",")
+        print("Reading : " + filepath)
+        self.rawData = pd.read_csv(filepath, sep=",")
         self.processedData = self.rawData.copy()
 
         self.time = []
@@ -123,9 +124,6 @@ class SensitivePenDataSet():
         :param folderpath:
         :return:
         """
-
-        self.processedData = self.rawData.copy()
-
         self.processedData["normAccel"] = self.normAcceleration
         self.processedData["normMag"] = self.normMagnetometer
         self.processedData["normGyr"] = self.normGyroscope
@@ -250,8 +248,8 @@ class SensitivePenDataSet():
         df.PlotVector(timeList, self.gyroscope, "Gyroscope m/s", 222)
 
         mag = df.PlotVector(timeList, self.magnetometer, "Magnetometer unit mag", 223)
-        mag.plot(timeList, self.normMagnetometer, color="black")
-        mag.legend()
+        mag.plot(timeList, self.normMagnetometer, color="black", label = "norm")
+        mag.legend(loc="upper right")
 
         sensitivePenAngle = plt.subplot(224)
         sensitivePenAngle.plot(timeList, psi, color="red", label='psi')

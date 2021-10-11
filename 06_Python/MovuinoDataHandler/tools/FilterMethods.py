@@ -1,21 +1,6 @@
 import numpy as np
 from scipy import signal
 
-def MeandDat(rawDat, nbPointFilter, listMean):
-    meanDat = np.array([0.,0.,0.])
-    listMean.append(rawDat)
-
-    if len(listMean) - nbPointFilter > 0:
-        # remove oldest data if N unchanged(i=0 removed)
-        # remove from 0 to rawdat.length - N + 1 if new N < old N
-        for i in range(len(listMean) - nbPointFilter) :
-            listMean.pop(0)
-
-    for k in range(len(listMean)):
-        meanDat += listMean[k]
-    meanDat /= len(listMean)
-    return meanDat
-
 def MeanFilter(dat_to_filter, nbPoint):
     """
 
