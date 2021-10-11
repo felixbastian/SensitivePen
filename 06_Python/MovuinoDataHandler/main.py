@@ -14,14 +14,15 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "../../08_DataPen/Manip_2807/user_case/"
+folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_0810/"
+
 fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = '/dev/cu.usbserial-0154D972'
 
 toExtract = True
-toDataManage = False
-toVisualize = False
+toDataManage = True
+toVisualize = True
 
 filter = 25
 
@@ -106,7 +107,7 @@ if toDataManage:
 
 if toVisualize:
     for i in range(file_start, file_start+nbRecord+1):
-        if (device == 'SensitivePen'):
+        if (device == 'sensitivePen'):
             sp.SensitivePenDataSet.PlotCompleteFile(folderPath + fileName + "_" + str(i) + "_treated_" + device, sep, decimal)
         elif (device == 'globalDataSet'):
             dataSet = gds.GlobalDataSet.PlotCompleteFile(folderPath + fileName, sep, decimal)

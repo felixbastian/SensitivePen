@@ -5,11 +5,11 @@ import dataSet.GlobalDataSet as gds
 
 device = 'SensitivePen'  # devices available : skateboardXXX3000 / sensitivePen / globalDataSet
 
-folderPath = "/Users/phelippeau/Documents/PhD/Data/Test_Postures/Palmar_Supinate/"
+folderPath = "/Users/phelippeau/Documents/PhD/Data/Test_Postures/Cross_Thumb/"
 fileName = "record"
 
 start = 1
-end = 5
+end = 6
 
 sep = ","
 decimal = "."

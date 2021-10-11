@@ -91,6 +91,7 @@ class SensitivePenDataSet(MovuinoDataSet):
         normAcc.plot(self.time, self.normAcceleration, color="black")
         normAcc.set_title("Norm Acceleration")
 
+
         sensitivePenAngle = plt.subplot(336)
         sensitivePenAngle.plot(self.time, self.sensitivePenAngles[:, 0], color="red", label= 'psi')
         sensitivePenAngle.plot(self.time, self.sensitivePenAngles[:, 1], color="blue", label= 'theta')
@@ -119,7 +120,7 @@ class SensitivePenDataSet(MovuinoDataSet):
         patchX = mpatches.Patch(color='red', label='x')
         patchY = mpatches.Patch(color='green', label='y')
         patchZ = mpatches.Patch(color='blue', label='z')
-        plt.legend(handles=[patchX, patchY, patchZ], loc="upper right", bbox_to_anchor=(2.5,3.6),ncol=1)
+        plt.legend(handles=[patchX, patchY, patchZ], loc="lower center", bbox_to_anchor=(2.5,3.6),ncol=1)
 
     def VisualizeData(self):
         """
