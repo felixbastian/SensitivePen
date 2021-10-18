@@ -218,7 +218,7 @@ void loop() {
         //------- GET MPU DATA --------
         IMU.readSensor();
         get9axesDataMPU(IMU, &ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);
-        currentTime = millis() - startTime;
+        currentTime = (millis() - startTime)*0.001;
 
         writeInFileMovuinoData(file, sep);
         digitalWrite(pinLedBat, HIGH);

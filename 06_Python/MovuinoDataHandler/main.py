@@ -5,16 +5,16 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Postures\\"
+folderPath = "..\\..\\08_DataPen\\Data_Postures\\treated_data\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
-toDataManage = True
-toVisualize = False
+toDataManage = False
+toVisualize = True
 
-filter = 1
+filter = 20
 
 sep = ","
 decimal = "."
@@ -35,35 +35,45 @@ if toExtract:
 file_start = 1
 end = 3
 
-if toDataManage:
-    for filename in os.listdir(folderPath):
+
+for filename in os.listdir(folderPath):
+    if os.path.basename(filename).endswith("csv"):
         sensitivPenDataSet = sp.SensitivePenDataSet(folderPath + filename)
         Te = sensitivPenDataSet.Te
         print("sample frequency : " + str(1/Te))
 
-        #Filtering
-        sensitivPenDataSet.acceleration_lp = fm.MeanFilter(sensitivPenDataSet.acceleration, 10)
-        sensitivPenDataSet.gyroscope_lp = fm.MeanFilter(sensitivPenDataSet.gyroscope, 10)
-        sensitivPenDataSet.magnetometer_lp = fm.MeanFilter(sensitivPenDataSet.magnetometer, 10)
+        if toDataManage:
+            #Filtering
+            sensitivPenDataSet.acceleration_lp = fm.MeanFilter(sensitivPenDataSet.acceleration, filter)
+            sensitivPenDataSet.gyroscope_lp = fm.MeanFilter(sensitivPenDataSet.gyroscope, filter)
+            sensitivPenDataSet.magnetometer_lp = fm.MeanFilter(sensitivPenDataSet.magnetometer, filter)
 
-        #ComputeAngles
-        sensitivPenDataSet.computePenAngles()
+            #ComputeAngles
+            sensitivPenDataSet.computePenAngles()
 
-        #FeaturesDifference between runcode et runfeatures extract
-        #ft.getDataSetFeatures(pathfeatures)
+            #FeaturesDifference between runcode et runfeatures extract
+            #ft.getDataSetFeatures(pathfeatures)
 
-        #stock in processed.csv
-        #sensitivPenDataSet.stockProcessedData(sensitivPenDataSet.filepath + "_treated_" + sensitivPenDataSet.name + ".csv")
+            #stock in processed.csv
+            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
+            sensitivPenDataSet.stockProcessedData(treated_filepath)
 
-        #display
-        #sensitivPenDataSet.DispProcessedData()
-        #sensitivPenDataSet.DispRawData()
-        sensitivPenDataSet.DispOnlyPenAngles()
+            if toVisualize:
+                # display
+                # sensitivPenDataSet.DispProcessedData()
+                # sensitivPenDataSet.DispRawData()
+                if "treated" in filename:
+                    sensitivPenDataSet.DispOnlyPenAngles()
 
 
-if toVisualize:
-    """
-    """
+        if toVisualize and not toDataManage:
+            # display
+            # sensitivPenDataSet.DispProcessedData()
+            # sensitivPenDataSet.DispRawData()
+            if "treated" in filename:
+                sensitivPenDataSet.DispOnlyPenAngles()
+
+
 
 
 
