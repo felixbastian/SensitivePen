@@ -11,6 +11,7 @@ filename = "B4_sentence_en_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
+
 stationnarity_int = (5, 21)
 
 ###################################
