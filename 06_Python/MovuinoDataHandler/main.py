@@ -14,15 +14,15 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_0810/"
+folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_2010/"
 
 fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = '/dev/cu.usbserial-0154D972'
 
 toExtract = True
-toDataManage = True
-toVisualize = True
+toDataManage = False
+toVisualize = False
 
 filter = 25
 
