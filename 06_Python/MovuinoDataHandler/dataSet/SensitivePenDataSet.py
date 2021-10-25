@@ -11,7 +11,8 @@ import os
 import math
 
 class SensitivePenDataSet():
-    """Class that represent a data set of the sensitiv pen.
+    """
+    Class that represent a data set of the sensitiv pen.
 
     """
     def __init__(self, filepath):
@@ -25,6 +26,7 @@ class SensitivePenDataSet():
         self.filepath = filepath
         self.filename = os.path.basename(self.filepath)
         print("Reading : " + filepath)
+
         self.rawData = pd.read_csv(filepath, sep=",")
         self.processedData = self.rawData.copy()
 
@@ -150,6 +152,7 @@ class SensitivePenDataSet():
 
         return self.sensitivePenAngles
 
+    #--------- FILE MANAGE Functions -------------------
     def stockProcessedData(self, filepath):
         """
 
@@ -187,6 +190,9 @@ class SensitivePenDataSet():
         ExtractionCompleted = False
         print("-> Opening serial port {}".format(serialPort))
         arduino = serial.Serial(serialPort, baudrate=115200, timeout=1.)
+        # Send read SPIFF instruction to Movuino
+        arduino.write(bytes("r", 'ascii'))
+
         line_byte = ''
         line_str = ''
         datafile = ''
@@ -223,6 +229,8 @@ class SensitivePenDataSet():
                 isReading = True
                 print("Record begins")
 
+
+    #--------- DISPLAY Functions -----------------------
     def DispRawData(self):
         time_list = self.time
         df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)

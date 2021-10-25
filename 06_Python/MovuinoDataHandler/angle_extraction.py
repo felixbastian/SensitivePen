@@ -1,18 +1,15 @@
 import dataSet.SensitivePenDataSet as sp
-import tools.FilterMethods as fm
-import tools.features_extraction_scripts.runFeature as ft
-import os
 import numpy as np
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Postures\\treated_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_Postures\\02_treated_data\\"
 filename = "B4_sentence_en_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
 
-stationnarity_int = (5, 21)
+stationnarity_interval = (5, 21)  #Intervalle en sec
 
 ###################################
 
@@ -22,8 +19,8 @@ sensitivPenDataSet = sp.SensitivePenDataSet(folderPath + filename)
 Te = sensitivPenDataSet.Te
 print("sample frequency : " + str(1 / Te))
 
-index_init = int(stationnarity_int[0] * 1/Te)
-index_end = int(stationnarity_int[1]*1/Te)
+index_init = int(stationnarity_interval[0] * 1/Te)
+index_end = int(stationnarity_interval[1]*1/Te)
 
 stationary_psi = sensitivPenDataSet.sensitivePenAngles[index_init:index_end, 0]
 stationary_theta = sensitivPenDataSet.sensitivePenAngles[index_init:index_end, 1]

@@ -5,7 +5,7 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Postures\\treated_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_Postures\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
@@ -19,6 +19,11 @@ filter = 20
 sep = ","
 decimal = "."
 
+"""
+# Send read SPIFF instruction to Movuino
+    arduino.write(bytes("r", 'ascii'))
+
+"""
 ###################################
 
 # --------- Data Extraction from Movuino ----------
