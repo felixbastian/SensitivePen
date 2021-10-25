@@ -3,13 +3,13 @@ import numpy as np
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Postures\\02_treated_data\\"
-filename = "B4_sentence_en_treated_SensitivePen.csv"
+folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
+filename = "M20F_sentence_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
 
-stationnarity_interval = (5, 21)  #Intervalle en sec
+stationnarity_interval = (8, 36)  #Intervalle en sec
 
 ###################################
 
