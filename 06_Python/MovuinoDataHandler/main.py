@@ -14,11 +14,11 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_2010/"
+folderPath = "../../08_DataPen/testESP32/"
 
 fileName = "record"  # generic name numbers will be added for duplicates
 
-serialPort = '/dev/cu.usbserial-0154D972'
+serialPort = '/dev/cu.usbserial-0154D97B'
 
 toExtract = True
 toDataManage = False
