@@ -5,55 +5,99 @@
 
 #define PIN_BUTTON 13
 
+unsigned long timerPress0;
+bool _isPressed = false;
+bool _isHold = false;
+bool _isDoubleTap = false;
+
 class MovuinoButton
 {
 private:
-    Button button;
-    bool buttonHold = false;
-    bool buttonPressed = false;
-    bool doubleTap = false;
-    float startPush;
+  Button button;
+
 public:
-    MovuinoButton(/* args */);
-    ~MovuinoButton();
+  MovuinoButton(/* args */);
+  ~MovuinoButton();
 
-    #define PIN_BUTTON 13
+  void begin();
+  void update();
 
+  static void onPress();
+  static void onRelease();
+  static void onHold();
+  static void onDoubleTap();
+
+  bool isPressed();
+  bool isDoubleTap();
+  unsigned int timeHold();
 };
 
 MovuinoButton::MovuinoButton(/* args */)
 {
-    this->button.attach(PIN_BUTTON, INPUT_PULLUP); // pin configured to pull-up mode
-
-    this->button.callback(this->onButtonPress, PRESS);
-    this->button.callback(this->onButtonRelease, RELEASE);
-    this->button.callback(this->onButtonHold, HOLD);
-    this->button.callback(this->onButtondoubleTap, DOUBLE_TAP);
 }
 
 MovuinoButton::~MovuinoButton()
 {
 }
 
-void MovuinoButton::onButtonPress() {
-//   digitalWrite(pinLedESP, HIGH);
-  this->buttonPressed = true;
-  this->startPush = millis();
+void MovuinoButton::begin()
+{
+  this->button.attach(PIN_BUTTON, INPUT_PULLUP); // pin configured to pull-up mode
+
+  this->button.callback(this->onPress, PRESS);
+  this->button.callback(this->onRelease, RELEASE);
+  this->button.callback(this->onHold, HOLD);
+  this->button.callback(this->onDoubleTap, DOUBLE_TAP);
 }
 
-void MovuinoButton::onButtonRelease() {
-  //digitalWrite(pinLedESP, LOW);
-  this->buttonHold = false;
-  this->buttonPressed = false;
-  this->startPush = 0;
+void MovuinoButton::update()
+{
+  _isPressed = false;
+  _isDoubleTap = false;
+
+  this->button.update();
 }
 
-void MovuinoButton::onButtonHold() {
-  this->buttonHold = true;
+void MovuinoButton::onPress()
+{
+  _isPressed = true;
+  timerPress0 = millis();
 }
 
-void MovuinoButton::onButtonthis->doubleTap(){
-  this->doubleTap = true;
+void MovuinoButton::onRelease()
+{
+  _isHold = false;
+  timerPress0 = 0;
+}
+
+void MovuinoButton::onHold()
+{
+  _isHold = true;
+}
+
+void MovuinoButton::onDoubleTap()
+{
+  _isDoubleTap = true;
+}
+
+bool MovuinoButton::isPressed()
+{
+  return _isPressed;
+}
+
+bool MovuinoButton::isDoubleTap()
+{
+  return _isDoubleTap;
+}
+
+unsigned int MovuinoButton::timeHold()
+{
+  unsigned int time_ = 0;
+  if (_isHold)
+  {
+    time_ = millis() - timerPress0;
+  }
+  return time_;
 }
 
 #endif // _MOVUINOESP32_BUTTON_

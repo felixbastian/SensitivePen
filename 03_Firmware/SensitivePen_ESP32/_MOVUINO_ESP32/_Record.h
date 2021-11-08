@@ -2,72 +2,117 @@
 #define _MOVUINO_RECORD_MANAGER_
 
 #include <Arduino.h>
+#include <SPIFFS.h>
 
 class MovuinoRecord
 {
 private:
-    String fileName;
-    String filePath;
+  String dirPath = "/data";
+  String fileName;
+  String filePath;
 
-    File file;
-    char sep = ',';
-    
-    bool isEditable = false;
-    bool isReadable = false;
-    bool formatted;
+  File file;
+  char sep = ',';
 
-    void initRecordFile();
-    void addNewRecord();
-    void readFile();
-    void writeData();
+  long unsigned timeRecord0;
+  bool isRecording = false;
+
+  bool isEditable = false;
+  bool isReadable = false;
+  bool formatted;
+
+  void initRecordFile();
 
 public:
-    MovuinoRecord(String fileName_);
-    ~MovuinoRecord();
+  MovuinoRecord();
+  ~MovuinoRecord();
 
-    void createFile();
-    void writeInFile();
+  void begin();
+
+  void newRecord(String fileName_);
+  void setColumuns();
+  void newRow();
+  template <typename DataType>
+  void pushData(DataType data_);
+  void stop();
+
+  int getFileNumber();
+
+  void addNewRecord();
+  void readFile();
+  void writeData();
+
+  void formatSPIFFS();
+  void printStateSPIFFS();
+  void listDirectory();
 };
 
-MovuinoRecord::MovuinoRecord(String fileName_)
+MovuinoRecord::MovuinoRecord()
 {
-    this->fileName = fileName_;
-    this->filePath = "/data/" + this->fileName + ".txt";
 }
 
 MovuinoRecord::~MovuinoRecord()
 {
 }
 
-void MovuinoRecord::createFile()
+void MovuinoRecord::begin()
+{
+  if (!SPIFFS.begin())
+  {
+    Serial.println("An Error has occurred while mounting SPIFFS");
+  }
+}
+
+void MovuinoRecord::newRecord(String fileName_)
 {
   /*
-   * Create the file for the movuino with the filepath "filepath"
+   * Create the file for the movuino
    */
+  this->fileName = String(this->getFileNumber()) + "_" + fileName_;
+  this->filePath = this->dirPath + "/" + this->fileName + ".txt";
+  Serial.println(this->filePath);
   this->file = SPIFFS.open(this->filePath, "w");
- 
-  if (!this->file) {
+
+  if (!this->file)
+  {
     Serial.println("Error opening file for writing");
     return;
   }
-  initRecordFile();
+
+  this->isRecording = true;
+  this->timeRecord0 = millis();
 }
 
-void MovuinoRecord::addNewRecord()
+void MovuinoRecord::stop()
 {
-  /*
-   * Add a new record in the file ine the location filepath
-   * The separation between the 2 file is the lign "XXX_newRecord"
-   */
-    this->file = SPIFFS.open(this->filePath, "a");     
-    if (!this->file) 
-    {
-      Serial.println("Error opening file for writing");
-      return;
-    }
-    this->file.println("XXX_newRecord");
-    initRecordFile();
+  if (isRecording)
+  {
+    this->file.close();
+    this->isRecording = false;
+  }
 }
+
+void MovuinoRecord::newRow()
+{
+  this->file.println();
+  this->file.print(millis() - this->timeRecord0);
+}
+
+// void MovuinoRecord::addNewRecord()
+// {
+//   /*
+//    * Add a new record in the file ine the location filepath
+//    * The separation between the 2 file is the lign "XXX_newRecord"
+//    */
+//   this->file = SPIFFS.open(this->filePath, "a");
+//   if (!this->file)
+//   {
+//     Serial.println("Error opening file for writing");
+//     return;
+//   }
+//   this->file.println("XXX_newRecord");
+//   initRecordFile();
+// }
 
 void MovuinoRecord::readFile()
 {
@@ -75,28 +120,28 @@ void MovuinoRecord::readFile()
    * Read the file in the position "filepath"
    * Print a line "XXX_beginning" at the beginning and a line "XXX_end" at the end of the this->file.
    */
-  this->file = SPIFFS.open(this->filepath, "r");
-  
-  if (!this->file) {
+  this->file = SPIFFS.open(this->filePath, "r");
+
+  if (!this->file)
+  {
     Serial.println("Error opening file for reading");
     return;
   }
-  
+
   Serial.println("XXX_beginning");
   String l_ = "";
-  while(this->file.available())
+  while (this->file.available())
   {
     char c_ = this->file.read();
-    if(c_ != '\n') 
+    if (c_ != '\n')
     {
-        l_ += c_;
+      l_ += c_;
     }
-    else 
+    else
     {
-
       if (l_.startsWith("XXX_newRecord"))
       {
-          this->file.flush();
+        this->file.flush();
       }
       Serial.println(l_);
       l_ = "";
@@ -106,49 +151,26 @@ void MovuinoRecord::readFile()
   Serial.println("XXX_end");
 }
 
-void MovuinoRecord::writeData()
+// void MovuinoRecord::writeData()
+// {
+//   /*
+//    * Write in the file in the position "filepath"
+//    */
+//   this->file = SPIFFS.open(this->filePath, "a");
+
+//   if (!this->file)
+//   {
+//     //   digitalWrite(pinLedBat, HIGH);
+//     // this->pushData();
+//     Serial.println("Error opening file for writing");
+//     return;
+//   }
+
+//   this->file.close();
+// }
+
+void MovuinoRecord::initRecordFile()
 {
-  /*
-   * Write in the file in the position "filepath"
-   */
-  this->file = SPIFFS.open(this->filePath, "a");
-  
-  if (!this->file) 
-  {
-    Serial.println();
-    Serial.println("Error opening file for writing");
-    return;
-  }
-  
-//   digitalWrite(pinLedBat, HIGH);
-  this->writeInFile()
-  this->file.close();
-}
-
-void listingDir(String dirPath)
-{
-  /*
-   * Print the directory of the spiffs and the size of each file
-   */
-  Serial.println("Listing dir :");
-  File dir = SPIFFS.open(dirPath);
-  File file = dir.openNextFile();
-  while (file) 
-  {
-    Serial.print(file.name());
-    // File f = dir.openFile("r");
-    Serial.print(" ");
-    Serial.println(file.size());
-    
-    //Serial.println(f.size());
-    // f.close();
-
-    file = dir.openNextFile();
-  }
-  Serial.println("End of listing");
-}
-
-void MovuinoRecord::initRecordFile() {
   this->file.print("time");
   this->file.print(this->sep);
   this->file.print("ax");
@@ -173,32 +195,84 @@ void MovuinoRecord::initRecordFile() {
   this->file.println();
 }
 
-void MovuinoRecord::writeInFile() {
+template <typename DataType>
+void MovuinoRecord::pushData(DataType data_)
+{
+  Serial.println(data_);
+  if (this->isRecording)
+  {
+    Serial.println("writting...");
+    this->file.print(this->sep);
+    this->file.print(data_);
+    Serial.println("writted.");
+  }
+}
+
+void MovuinoRecord::formatSPIFFS()
+{
   /*
-   * Write in the File "file" all 9 axes data from the movuino separate by the String sep
+   * Formate the spiffs
    */
-  this->file.print(1);
-  this->file.print(this->sep);
-  this->file.print(2);
-  this->file.print(this->sep);
-  this->file.print(3);
-  this->file.print(this->sep);
-  this->file.print(4);
-  this->file.print(this->sep);
-  this->file.print(5);
-  this->file.print(this->sep);
-  this->file.print(6);
-  this->file.print(this->sep);
-  this->file.print(7);
-  this->file.print(this->sep);
-  this->file.print(8);
-  this->file.print(this->sep);
-  this->file.print(9);
-  this->file.print(this->sep);
-  this->file.print(10);
-  this->file.print(this->sep);
-  this->file.print(11);
-  this->file.println();
+  bool formatted = SPIFFS.format();
+  if (formatted)
+  {
+    Serial.println("\nSuccess formatting");
+  }
+  else
+  {
+    Serial.println("\nError formatting");
+  }
+}
+
+void MovuinoRecord::printStateSPIFFS()
+{
+  /*
+    * Get all information about SPIFFS
+  */
+
+  Serial.println("File system info");
+
+  // Taille de la zone de fichier
+  Serial.print("Total space:      ");
+  Serial.print(SPIFFS.totalBytes());
+  Serial.println("byte");
+
+  // Espace total utilise
+  Serial.print("Total space used: ");
+  Serial.print(SPIFFS.usedBytes());
+  Serial.println("byte");
+  Serial.println();
+}
+
+void MovuinoRecord::listDirectory()
+{
+  /*
+   * Print the directory of the spiffs and the size of each file
+   */
+  Serial.println("Listing dir :");
+  File dir = SPIFFS.open(this->dirPath);
+  this->file = dir.openNextFile();
+  while (this->file)
+  {
+    Serial.print(this->file.name());
+    Serial.print(" ");
+    Serial.println(this->file.size());
+    this->file = dir.openNextFile();
+  }
+  Serial.println("End of listing");
+}
+
+int MovuinoRecord::getFileNumber()
+{
+  int nFile_ = 0;
+  File dir = SPIFFS.open(this->dirPath);
+  this->file = dir.openNextFile();
+  while (this->file)
+  {
+    nFile_++;
+    this->file = dir.openNextFile();
+  }
+  return nFile_;
 }
 
 #endif // _MOVUINO_RECORD_MANAGER_
