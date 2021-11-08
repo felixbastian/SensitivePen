@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 117)
+    (drawings 119)
     (tracks 8)
     (zones 0)
     (modules 1)
@@ -146,6 +146,8 @@
     )
   )
 
+  (gr_poly (pts (xy 181.6 115.2) (xy 182.3 115.2) (xy 182.3 119.7) (xy 181.9 119.7) (xy 181.9 117.5) (xy 180.1 117.5) (xy 180.1 116) (xy 181 116) (xy 181 112.7) (xy 181.6 112.7)) (layer F.Cu) (width 0.01))
+  (gr_circle (center 179.800234 112.717223) (end 180.600234 112.717223) (layer Dwgs.User) (width 0.15))
   (gr_curve (pts (xy 181.599877 113.489065) (xy 181.664149 113.505773) (xy 181.730381 113.517444) (xy 181.7998 113.517444)) (layer Edge.Cuts) (width 0.05) (tstamp 616441A4))
   (gr_curve (pts (xy 181.599877 115.219026) (xy 181.599877 115.219026) (xy 181.599877 113.489065) (xy 181.599877 113.489065)) (layer Edge.Cuts) (width 0.05) (tstamp 616441A7))
   (gr_curve (pts (xy 182.29992 115.219026) (xy 182.29992 115.219026) (xy 181.599877 115.219026) (xy 181.599877 115.219026)) (layer Edge.Cuts) (width 0.05) (tstamp 616441AA))
@@ -172,8 +174,8 @@
   (gr_curve (pts (xy 181.499861 119.699889) (xy 181.499861 119.699889) (xy 181.499861 117.943235) (xy 181.499861 117.943235)) (layer Edge.Cuts) (width 0.05) (tstamp 61644180))
   (gr_curve (pts (xy 179.300103 119.699889) (xy 179.300103 119.699889) (xy 181.499861 119.699889) (xy 181.499861 119.699889)) (layer Edge.Cuts) (width 0.05) (tstamp 61644183))
   (gr_curve (pts (xy 179.300103 115.219026) (xy 179.300103 115.219026) (xy 179.300103 119.699889) (xy 179.300103 119.699889)) (layer Edge.Cuts) (width 0.05) (tstamp 61644186))
-  (gr_circle (center 181.800306 112.717223) (end 182.250106 112.717223) (layer Edge.Cuts) (width 0.05) (tstamp 61644189))
-  (gr_circle (center 179.800234 112.717223) (end 180.250035 112.717223) (layer Edge.Cuts) (width 0.05) (tstamp 6164418C))
+  (gr_circle (center 181.800306 112.717223) (end 182.250106 112.717223) (layer Cmts.User) (width 0.05) (tstamp 61644189))
+  (gr_circle (center 179.800234 112.717223) (end 180.250035 112.717223) (layer Cmts.User) (width 0.05) (tstamp 6164418C))
   (gr_curve (pts (xy 183.300256 112.717284) (xy 183.300256 111.888892) (xy 182.628708 111.217308) (xy 181.800244 111.217308)) (layer Edge.Cuts) (width 0.05) (tstamp 6164418F))
   (gr_curve (pts (xy 183.300256 112.71732) (xy 183.300256 112.71732) (xy 183.300256 112.717284) (xy 183.300256 112.717284)) (layer Edge.Cuts) (width 0.05) (tstamp 61644192))
   (gr_curve (pts (xy 181.899975 114.207277) (xy 182.681025 114.154995) (xy 183.300256 113.511563) (xy 183.300256 112.71732)) (layer Edge.Cuts) (width 0.05) (tstamp 6164419E))
@@ -339,4 +341,15 @@
   (segment (start 110.3 93.9) (end 111.2 93.9) (width 0.25) (layer F.Cu) (net 2))
   (segment (start 111.2 93.9) (end 111.2 98) (width 0.25) (layer F.Cu) (net 2))
 
+  (zone (net 1) (net_name "Net-(J1-Pad1)") (layer F.Cu) (tstamp 0) (hatch edge 0.508)
+    (connect_pads (clearance 0.508))
+    (min_thickness 0.254)
+    (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (polygon
+      (pts
+        (xy 180.6 115.6) (xy 179.7 115.6) (xy 179.7 118) (xy 181.5 118) (xy 181.5 119.7)
+        (xy 179.3 119.7) (xy 179.3 115.2) (xy 180 115.2) (xy 180 113.5) (xy 180.6 112.7)
+      )
+    )
+  )
 )
