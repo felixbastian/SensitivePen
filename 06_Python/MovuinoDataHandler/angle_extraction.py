@@ -4,12 +4,12 @@ import numpy as np
 ############   SETTINGS   #############
 device = "sensitiPen"
 folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
-filename = "M20F_sentence_treated_SensitivePen.csv"
+filename = "F20D_sentence_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
 
-stationnarity_interval = (8, 36)  #Intervalle en sec
+stationnarity_interval = (7, 38)  #Intervalle en sec
 
 ###################################
 
@@ -25,6 +25,7 @@ index_end = int(stationnarity_interval[1]*1/Te)
 stationary_psi = sensitivPenDataSet.sensitivePenAngles[index_init:index_end, 0]
 stationary_theta = sensitivPenDataSet.sensitivePenAngles[index_init:index_end, 1]
 
+#Statistics calcul for psi and theta
 mean_psi = np.mean(stationary_psi)
 mean_theta = np.mean(stationary_theta)
 

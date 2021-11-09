@@ -2,6 +2,7 @@ import glob
 import os
 import numpy as np
 dataWindow = 20
+
 def datafromfile(file):
 
     # Open File

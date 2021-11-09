@@ -5,7 +5,7 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_colloc\\02_treated_data\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'

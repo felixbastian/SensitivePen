@@ -9,9 +9,7 @@
 */
 
 #include "Wire.h"
-#include "I2Cdev.h"
-#include "MPU9250.h"
-#include "FS.h"
+#include "I2Cdev.h
 #include <Yabl.h>
 
 //Command for serial messages
@@ -23,6 +21,9 @@
 #define  CMD_LISTING_DIR   'l' //List files in the directory
 #define  CMD_PRINT_DAT     'p' //print one line of data
 #define  CMD_SPIFF_INFO    'i' //get informations about the spiff
+"
+#include "MPU9250.h"
+#include "FS.h"
 
 #define MPU_I2C_ADDRESS 0x69
 

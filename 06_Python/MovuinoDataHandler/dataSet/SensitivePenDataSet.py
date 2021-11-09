@@ -60,7 +60,7 @@ class SensitivePenDataSet():
         if "treated" in self.filename:
             self.time = list(self.rawData["time"])
         else:
-            self.time = list(self.rawData["time"] * 0.001)
+            self.time = list(self.rawData["time"])
         self.rawData["time"] = self.time
         self.processedData["time"] = self.time
         # sample rate
@@ -120,7 +120,7 @@ class SensitivePenDataSet():
         :return:
         """
         # --- Getting initial euler angles
-        initRotationMatrix = gam.rotationMatrixCreation(self.acceleration_lp[15], self.magnetometer[15])
+        initRotationMatrix = gam.rotationMatrixCreation(self.acceleration_lp[0], self.magnetometer[0])
         self.initPsi = math.atan2(initRotationMatrix[0, 1], initRotationMatrix[0, 0])
 
         for k in range(len(self.time)):
