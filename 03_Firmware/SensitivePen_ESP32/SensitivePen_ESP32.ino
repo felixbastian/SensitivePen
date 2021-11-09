@@ -3,10 +3,19 @@
 #include "_MOVUINO_ESP32/_MPU9250.h"
 #include "_MOVUINO_ESP32/_Button.h"
 #include "_MOVUINO_ESP32/_Recorder.h"
+#include "_MOVUINO_ESP32/_Neopixel.h"
+
+#define WHITE255 ((255 << 16) | (255 << 8) | 255)
+#define RED ((255 << 16) | (5 << 8) | 5)
+#define GREEN ((0 << 16) | (250 << 8) | 30)
+#define YELLOW ((200 << 16) | (175 << 8) | 0)
+#define BLUE ((0 << 16) | (0 << 8) | 255)
+#define MAGENTA ((220 << 16) | (0 << 8) | 220)
 
 MovuinoMPU9250 mpu = MovuinoMPU9250();
 MovuinoButton button = MovuinoButton();
 MovuinoRecorder recorder = MovuinoRecorder();
+MovuinoNeopixel neopix = MovuinoNeopixel();
 
 //Command for serial messages
 #define CMD_FORMAT_SPIFF 'f' //Format the SPIFF
@@ -19,6 +28,7 @@ MovuinoRecorder recorder = MovuinoRecorder();
 #define CMD_SPIFF_INFO 'i'   //get informations about the spiff
 
 bool isBtnHold = false;
+bool isCallibrating = false;
 elapsedMillis dlyRec;
 
 void setup()
@@ -27,6 +37,11 @@ void setup()
   mpu.begin();
   button.begin();
   recorder.begin();
+  neopix.begin();
+  neopix.setBrightness(25);
+  neopix.setColor(WHITE255);
+  neopix.breathOn(500);
+  neopix.blinkOn(200);
 }
 
 void loop()
@@ -81,6 +96,7 @@ void loop()
     }
   }
 
+  neopix.update();
   button.update();
   if (button.isReleased())
   {
@@ -91,27 +107,41 @@ void loop()
       {
         recorder.newRecord("SensitivePen");
         recorder.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
+        neopix.setColor(RED);
       }
-      else
+      else {
         recorder.stop();
+        neopix.setColor(WHITE255);
+      }
     }
     isBtnHold = false;
   }
+
   if (button.isDoubleTap())
   {
     Serial.println("\t isDoubleTap");
   }
+
   if (button.timeHold())
   {
     Serial.print("\t\t");
     Serial.println(button.timeHold());
 
+    neopix.setColor(GREEN);
+
     if (button.timeHold() > 1000)
     {
-      isBtnHold = true;
-      if (!recorder.isRecording())
+      neopix.setColor(0, 0, 100);
+      if (button.timeHold() > 1020)
       {
-        mpu.magnometerCalibration();
+        isBtnHold = true;
+        if (!recorder.isRecording() && !isCallibrating)
+        {
+          isCallibrating = true;
+          mpu.magnometerCalibration();
+          isCallibrating = false;
+          neopix.setColor(WHITE255);
+        }
       }
     }
   }

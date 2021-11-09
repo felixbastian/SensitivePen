@@ -21,6 +21,7 @@
         "random": "cpp",
         "stack": "cpp",
         "utility": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "chrono": "cpp"
     }
 }

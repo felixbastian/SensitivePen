@@ -73,17 +73,17 @@ void MovuinoMPU9250::update(){
   // Update
   this->_imu.readSensor();
   // Accel
-  this->ax = this->_imu.getAccelX_mss();
+  this->ax = -this->_imu.getAccelX_mss();
   this->ay = this->_imu.getAccelY_mss();
   this->az = this->_imu.getAccelZ_mss();
   // Gyro
   this->gx = this->_imu.getGyroX_rads();
-  this->gy = this->_imu.getGyroY_rads();
-  this->gz = this->_imu.getGyroZ_rads();
+  this->gy = -this->_imu.getGyroY_rads();
+  this->gz = -this->_imu.getGyroZ_rads();
   // Mag
   this->mx = this->_imu.getMagX_uT();
-  this->my = this->_imu.getMagY_uT();
-  this->mz = this->_imu.getMagZ_uT();
+  this->my = -this->_imu.getMagY_uT();
+  this->mz = -this->_imu.getMagZ_uT();
 }
 
 void MovuinoMPU9250::magnometerCalibration()
