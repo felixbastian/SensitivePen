@@ -16,36 +16,20 @@ MovuinoRecord record = MovuinoRecord();
 #define CMD_PRINT_DAT 'p'    //print one line of data
 #define CMD_SPIFF_INFO 'i'   //get informations about the spiff
 
+bool isLock = true;
+long timeRecord0 = -999999;
+
 void setup()
 {
   Serial.begin(115200);
-  // mpu.begin();
+  mpu.begin();
   button.begin();
   record.begin();
+  // record.newRecord();
 }
 
 void loop()
 {
-  mpu.update();
-  // mpu.printData();
-
-  button.update();
-  if (button.isPressed())
-  {
-    Serial.println("isPressed");
-  }
-  if (button.isDoubleTap())
-  {
-    Serial.println("\t isDoubleTap");
-  }
-  if (button.timeHold())
-  {
-    Serial.print("\t\t");
-    Serial.println(button.timeHold());
-
-    // record.writeInFile();
-  }
-
   if (Serial.available() > 0)
   {
     char serialMessage = Serial.read();
@@ -77,7 +61,7 @@ void loop()
       record.printStateSPIFFS();
       break;
     case 'u':
-      record.pushData<String>("SIXSIXSIX");
+      Serial.println("Pressed u");
       break;
     case 'g':
       record.pushData<float>(666.666);
@@ -89,9 +73,56 @@ void loop()
       record.newRow();
       break;
     case 'z':
-      record.stop();
+      record.newRecord();
+      record.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
+      timeRecord0 = millis();
+      isLock = false;
     default:
       break;
     }
+  }
+
+  mpu.update();
+  // mpu.printData();
+
+  if (millis() - timeRecord0 < 3000)
+  {
+    record.newRow();
+    record.pushData<float>(mpu.ax);
+    record.pushData<float>(mpu.ay);
+    record.pushData<float>(mpu.az);
+    record.pushData<float>(mpu.gx);
+    record.pushData<float>(mpu.gy);
+    record.pushData<float>(mpu.gz);
+    record.pushData<float>(mpu.mx);
+    record.pushData<float>(mpu.my);
+    record.pushData<float>(mpu.mz);
+  }
+  else
+  {
+    if (!isLock)
+    {
+      isLock = true;
+      record.stop();
+      Serial.print("stop record with nRow = ");
+      Serial.println(record.nRow);
+    }
+  }
+
+  button.update();
+  if (button.isPressed())
+  {
+    Serial.println("isPressed");
+  }
+  if (button.isDoubleTap())
+  {
+    Serial.println("\t isDoubleTap");
+  }
+  if (button.timeHold())
+  {
+    Serial.print("\t\t");
+    Serial.println(button.timeHold());
+
+    // record.writeInFile();
   }
 }

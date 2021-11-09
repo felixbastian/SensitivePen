@@ -13,6 +13,7 @@ private:
 
   File file;
   char sep = ',';
+  bool initRow = false; // avoid pushdata on same row as columns definition
 
   long unsigned timeRecord0;
   bool isRecording = false;
@@ -30,8 +31,10 @@ public:
   void begin();
 
   void newRecord(String fileName_);
-  void setColumuns();
+  void defineColumns(String cols_);
   void newRow();
+  int nRow = 0;
+
   template <typename DataType>
   void pushData(DataType data_);
   void stop();
@@ -63,14 +66,22 @@ void MovuinoRecord::begin()
   }
 }
 
-void MovuinoRecord::newRecord(String fileName_)
+void MovuinoRecord::newRecord(String fileName_ = "untitled")
 {
   /*
    * Create the file for the movuino
    */
-  this->fileName = String(this->getFileNumber()) + "_" + fileName_;
+  // add current file index
+  int indx_ = this->getFileNumber();
+  char indxChar_[3];
+  sprintf(indxChar_, "%03d", indx_);
+  this->fileName = indxChar_[0];
+  this->fileName += indxChar_[1];
+  this->fileName += indxChar_[2];
+
+  // add file name
+  this->fileName += "_" + fileName_;
   this->filePath = this->dirPath + "/" + this->fileName + ".txt";
-  Serial.println(this->filePath);
   this->file = SPIFFS.open(this->filePath, "w");
 
   if (!this->file)
@@ -79,8 +90,19 @@ void MovuinoRecord::newRecord(String fileName_)
     return;
   }
 
+  Serial.print("Success creating ");
+  Serial.println(this->filePath);
   this->isRecording = true;
   this->timeRecord0 = millis();
+  this->initRow = true;
+  this->nRow = 0;
+}
+
+void MovuinoRecord::defineColumns(String cols_)
+{
+  this->file.print("time,");
+  this->file.print(cols_);
+  this->initRow = false;
 }
 
 void MovuinoRecord::stop()
@@ -96,6 +118,9 @@ void MovuinoRecord::newRow()
 {
   this->file.println();
   this->file.print(millis() - this->timeRecord0);
+  if(!this->initRow)
+    this->initRow = true;
+  this->nRow++;
 }
 
 // void MovuinoRecord::addNewRecord()
@@ -198,13 +223,15 @@ void MovuinoRecord::initRecordFile()
 template <typename DataType>
 void MovuinoRecord::pushData(DataType data_)
 {
-  Serial.println(data_);
+  // Serial.println(data_);
   if (this->isRecording)
   {
-    Serial.println("writting...");
+    if(!this->initRow)
+      this->newRow();
+    // Serial.println("writting...");
     this->file.print(this->sep);
     this->file.print(data_);
-    Serial.println("writted.");
+    // Serial.println("writted.");
   }
 }
 
