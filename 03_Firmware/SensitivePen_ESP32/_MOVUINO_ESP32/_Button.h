@@ -5,15 +5,16 @@
 
 #define PIN_BUTTON 13
 
-unsigned long timerPress0;
-bool _isPressed = false;
-bool _isHold = false;
-bool _isDoubleTap = false;
+unsigned long __timerPress0;
+bool __isPressed = false;
+bool __isReleased = false;
+bool __isHold = false;
+bool __isDoubleTap = false;
 
 class MovuinoButton
 {
 private:
-  Button button;
+  Button _button;
 
 public:
   MovuinoButton(/* args */);
@@ -28,6 +29,7 @@ public:
   static void onDoubleTap();
 
   bool isPressed();
+  bool isReleased();
   bool isDoubleTap();
   unsigned int timeHold();
 };
@@ -42,60 +44,66 @@ MovuinoButton::~MovuinoButton()
 
 void MovuinoButton::begin()
 {
-  this->button.attach(PIN_BUTTON, INPUT_PULLUP); // pin configured to pull-up mode
+  this->_button.attach(PIN_BUTTON, INPUT_PULLUP); // pin configured to pull-up mode
 
-  this->button.callback(this->onPress, PRESS);
-  this->button.callback(this->onRelease, RELEASE);
-  this->button.callback(this->onHold, HOLD);
-  this->button.callback(this->onDoubleTap, DOUBLE_TAP);
+  this->_button.callback(this->onPress, PRESS);
+  this->_button.callback(this->onRelease, RELEASE);
+  this->_button.callback(this->onHold, HOLD);
+  this->_button.callback(this->onDoubleTap, DOUBLE_TAP);
 }
 
 void MovuinoButton::update()
 {
-  _isPressed = false;
-  _isDoubleTap = false;
+  __isPressed = false;
+  __isReleased = false;
+  __isDoubleTap = false;
 
-  this->button.update();
+  this->_button.update();
 }
 
 void MovuinoButton::onPress()
 {
-  _isPressed = true;
-  timerPress0 = millis();
+  __isPressed = true;
+  __timerPress0 = millis();
 }
 
 void MovuinoButton::onRelease()
 {
-  _isHold = false;
-  timerPress0 = 0;
+  __isReleased = true;
+  __isHold = false;
 }
 
 void MovuinoButton::onHold()
 {
-  _isHold = true;
+  __isHold = true;
 }
 
 void MovuinoButton::onDoubleTap()
 {
-  _isDoubleTap = true;
+  __isDoubleTap = true;
 }
 
 bool MovuinoButton::isPressed()
 {
-  return _isPressed;
+  return __isPressed;
+}
+
+bool MovuinoButton::isReleased()
+{
+  return __isReleased;
 }
 
 bool MovuinoButton::isDoubleTap()
 {
-  return _isDoubleTap;
+  return __isDoubleTap;
 }
 
 unsigned int MovuinoButton::timeHold()
 {
   unsigned int time_ = 0;
-  if (_isHold)
+  if (__isHold)
   {
-    time_ = millis() - timerPress0;
+    time_ = millis() - __timerPress0;
   }
   return time_;
 }

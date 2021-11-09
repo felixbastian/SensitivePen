@@ -18,7 +18,7 @@ folderPath = "../../08_DataPen/testESP32/"
 
 fileName = "record"  # generic name numbers will be added for duplicates
 
-serialPort = '/dev/cu.usbserial-0154D97B'
+serialPort = '/dev/cu.usbserial-0154D8DD'
 
 toExtract = True
 toDataManage = False

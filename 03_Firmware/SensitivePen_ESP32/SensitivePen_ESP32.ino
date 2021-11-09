@@ -1,10 +1,12 @@
+#include <elapsedMillis.h>
+
 #include "_MOVUINO_ESP32/_MPU9250.h"
 #include "_MOVUINO_ESP32/_Button.h"
-#include "_MOVUINO_ESP32/_Record.h"
+#include "_MOVUINO_ESP32/_Recorder.h"
 
 MovuinoMPU9250 mpu = MovuinoMPU9250();
 MovuinoButton button = MovuinoButton();
-MovuinoRecord record = MovuinoRecord();
+MovuinoRecorder recorder = MovuinoRecorder();
 
 //Command for serial messages
 #define CMD_FORMAT_SPIFF 'f' //Format the SPIFF
@@ -16,16 +18,15 @@ MovuinoRecord record = MovuinoRecord();
 #define CMD_PRINT_DAT 'p'    //print one line of data
 #define CMD_SPIFF_INFO 'i'   //get informations about the spiff
 
-bool isLock = true;
-long timeRecord0 = -999999;
+bool isBtnHold = false;
+elapsedMillis dlyRec;
 
 void setup()
 {
   Serial.begin(115200);
   mpu.begin();
   button.begin();
-  record.begin();
-  // record.newRecord();
+  recorder.begin();
 }
 
 void loop()
@@ -42,77 +43,59 @@ void loop()
     {
     case CMD_CREATE_FILE: //Create a new file and replace the previous one
       Serial.println("Creation of ");
-      record.newRecord("SensitivePen");
+      recorder.newRecord("SensitivePen");
       break;
     case CMD_READ_FILE: //Reading File
       Serial.println("reading ");
-      record.readFile();
+      recorder.readAllRecords();
       break;
     case CMD_FORMAT_SPIFF:
       Serial.println("Formating the SPIFFS (data files)...");
-      record.formatSPIFFS();
+      recorder.formatSPIFFS();
       break;
     case CMD_LISTING_DIR:
       Serial.println("Listing directory");
-      record.listDirectory();
+      recorder.listDirectory();
       break;
     case CMD_SPIFF_INFO:
       Serial.println("Print info SPIFFS");
-      record.printStateSPIFFS();
+      recorder.printStateSPIFFS();
       break;
     case 'u':
       Serial.println("Pressed u");
       break;
     case 'g':
-      record.pushData<float>(666.666);
+      Serial.println("Pressed g");
       break;
     case 'h':
-      record.pushData<int>(666);
+      Serial.println("Pressed h");
       break;
     case 'e':
-      record.newRow();
+      Serial.println("Pressed e");
       break;
     case 'z':
-      record.newRecord();
-      record.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
-      timeRecord0 = millis();
-      isLock = false;
+      recorder.newRecord();
+      recorder.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
     default:
       break;
     }
   }
 
-  mpu.update();
-  // mpu.printData();
-
-  if (millis() - timeRecord0 < 3000)
-  {
-    record.newRow();
-    record.pushData<float>(mpu.ax);
-    record.pushData<float>(mpu.ay);
-    record.pushData<float>(mpu.az);
-    record.pushData<float>(mpu.gx);
-    record.pushData<float>(mpu.gy);
-    record.pushData<float>(mpu.gz);
-    record.pushData<float>(mpu.mx);
-    record.pushData<float>(mpu.my);
-    record.pushData<float>(mpu.mz);
-  }
-  else
-  {
-    if (!isLock)
-    {
-      isLock = true;
-      record.stop();
-      Serial.print("stop record with nRow = ");
-      Serial.println(record.nRow);
-    }
-  }
-
   button.update();
-  if (button.isPressed())
+  if (button.isReleased())
   {
-    Serial.println("isPressed");
+    if (!isBtnHold)
+    {
+      Serial.println("isReleased");
+      if (!recorder.isRecording())
+      {
+        recorder.newRecord("SensitivePen");
+        recorder.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
+      }
+      else
+        recorder.stop();
+    }
+    isBtnHold = false;
   }
   if (button.isDoubleTap())
   {
@@ -123,6 +106,33 @@ void loop()
     Serial.print("\t\t");
     Serial.println(button.timeHold());
 
-    // record.writeInFile();
+    if (button.timeHold() > 1000)
+    {
+      isBtnHold = true;
+      if (!recorder.isRecording())
+      {
+        mpu.magnometerCalibration();
+      }
+    }
+  }
+
+  if (recorder.isRecording())
+  {
+    if (dlyRec > 10)
+    {
+      dlyRec = 0;
+      mpu.update();
+
+      recorder.addRow();
+      recorder.pushData<float>(mpu.ax);
+      recorder.pushData<float>(mpu.ay);
+      recorder.pushData<float>(mpu.az);
+      recorder.pushData<float>(mpu.gx);
+      recorder.pushData<float>(mpu.gy);
+      recorder.pushData<float>(mpu.gz);
+      recorder.pushData<float>(mpu.mx);
+      recorder.pushData<float>(mpu.my);
+      recorder.pushData<float>(mpu.mz);
+    }
   }
 }

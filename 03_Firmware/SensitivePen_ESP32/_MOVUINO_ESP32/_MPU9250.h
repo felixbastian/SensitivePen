@@ -10,11 +10,7 @@
 class MovuinoMPU9250
 {
 private:
-  MPU9250 imu;
-
-  void magnometerCalibration();
-  void accelerometerCalibration();
-  void gyroscopeCalibration();
+  MPU9250 _imu;
 
 public:
   float ax, ay, az; // store accelerometre values
@@ -27,9 +23,13 @@ public:
   void begin();
   void update();
   void printData();
+
+  void magnometerCalibration();
+  void accelerometerCalibration();
+  void gyroscopeCalibration();
 };
 
-MovuinoMPU9250::MovuinoMPU9250(/* args */) : imu(Wire, MPU_I2C_ADDRESS)
+MovuinoMPU9250::MovuinoMPU9250(/* args */) : _imu(Wire, MPU_I2C_ADDRESS)
 {
 }
 
@@ -41,7 +41,7 @@ void MovuinoMPU9250::begin()
 {
   Wire.begin();
 
-  int status = this->imu.begin();
+  int status = this->_imu.begin();
 
   if (status < 0)
   {
@@ -54,10 +54,8 @@ void MovuinoMPU9250::begin()
     }
   }
 
-  // this->magnometerCalibration();
-
-  int statusGyro = this->imu.setGyroRange(MPU9250::GYRO_RANGE_1000DPS);
-  int statusAccel = this->imu.setAccelRange(MPU9250::ACCEL_RANGE_8G);
+  int statusGyro = this->_imu.setGyroRange(MPU9250::GYRO_RANGE_1000DPS);
+  int statusAccel = this->_imu.setAccelRange(MPU9250::ACCEL_RANGE_8G);
 
   if (statusGyro < 0 || statusAccel < 0)
   {
@@ -73,19 +71,19 @@ void MovuinoMPU9250::begin()
 
 void MovuinoMPU9250::update(){
   // Update
-  this->imu.readSensor();
+  this->_imu.readSensor();
   // Accel
-  this->ax = this->imu.getAccelX_mss();
-  this->ay = this->imu.getAccelY_mss();
-  this->az = this->imu.getAccelZ_mss();
+  this->ax = this->_imu.getAccelX_mss();
+  this->ay = this->_imu.getAccelY_mss();
+  this->az = this->_imu.getAccelZ_mss();
   // Gyro
-  this->gx = this->imu.getGyroX_rads();
-  this->gy = this->imu.getGyroY_rads();
-  this->gz = this->imu.getGyroZ_rads();
+  this->gx = this->_imu.getGyroX_rads();
+  this->gy = this->_imu.getGyroY_rads();
+  this->gz = this->_imu.getGyroZ_rads();
   // Mag
-  this->mx = this->imu.getMagX_uT();
-  this->my = this->imu.getMagY_uT();
-  this->mz = this->imu.getMagZ_uT();
+  this->mx = this->_imu.getMagX_uT();
+  this->my = this->_imu.getMagY_uT();
+  this->mz = this->_imu.getMagZ_uT();
 }
 
 void MovuinoMPU9250::magnometerCalibration()
@@ -96,7 +94,7 @@ void MovuinoMPU9250::magnometerCalibration()
   Serial.println("Calibrating Magnetometer : ");
   Serial.println("Please continuously and slowly move the sensor in a figure 8 while the function is running");
 
-  int statusMagCal = this->imu.calibrateMag();
+  int statusMagCal = this->_imu.calibrateMag();
   if (statusMagCal < 0)
   {
     Serial.println("ERROR while calibrating");
@@ -114,7 +112,7 @@ void MovuinoMPU9250::accelerometerCalibration()
    */
   Serial.println("Calibrating accelerometer : ");
 
-  int statusAccelCal = this->imu.calibrateAccel();
+  int statusAccelCal = this->_imu.calibrateAccel();
   if (statusAccelCal < 0)
   {
     Serial.println("ERROR while calibrating");
@@ -132,7 +130,7 @@ void MovuinoMPU9250::gyroscopeCalibration()
    */
   Serial.println("Calibrating Gyro : ");
 
-  int statusGyrCal = this->imu.calibrateGyro();
+  int statusGyrCal = this->_imu.calibrateGyro();
   if (statusGyrCal < 0)
   {
     Serial.println("ERROR while calibrating");
@@ -148,23 +146,23 @@ void MovuinoMPU9250::printData()
   /* 
    * display the data of IMU 
    */
-  Serial.print(this->imu.getAccelX_mss(), 6);
+  Serial.print(this->_imu.getAccelX_mss(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getAccelY_mss(), 6);
+  Serial.print(this->_imu.getAccelY_mss(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getAccelZ_mss(), 6);
+  Serial.print(this->_imu.getAccelZ_mss(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getGyroX_rads(), 6);
+  Serial.print(this->_imu.getGyroX_rads(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getGyroY_rads(), 6);
+  Serial.print(this->_imu.getGyroY_rads(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getGyroZ_rads(), 6);
+  Serial.print(this->_imu.getGyroZ_rads(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getMagX_uT(), 6);
+  Serial.print(this->_imu.getMagX_uT(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getMagY_uT(), 6);
+  Serial.print(this->_imu.getMagY_uT(), 6);
   Serial.print("\t");
-  Serial.print(this->imu.getMagZ_uT(), 6);
+  Serial.print(this->_imu.getMagZ_uT(), 6);
   Serial.println();
 }
 
