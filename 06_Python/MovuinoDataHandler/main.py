@@ -5,13 +5,13 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_colloc\\02_treated_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
-toDataManage = False
+toDataManage =False
 toVisualize = True
 
 filter = 20
@@ -60,7 +60,7 @@ for filename in os.listdir(folderPath):
             #ft.getDataSetFeatures(pathfeatures)
 
             #stock in processed.csv
-            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
+            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\..\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
             sensitivPenDataSet.stockProcessedData(treated_filepath)
 
             if toVisualize:
