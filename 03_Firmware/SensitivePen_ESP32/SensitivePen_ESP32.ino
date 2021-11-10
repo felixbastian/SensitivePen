@@ -5,6 +5,7 @@
 #include "_MOVUINO_ESP32/_Recorder.h"
 #include "_MOVUINO_ESP32/_Neopixel.h"
 
+// Color swap
 #define WHITE255 ((255 << 16) | (255 << 8) | 255)
 #define RED ((255 << 16) | (5 << 8) | 5)
 #define GREEN ((0 << 16) | (250 << 8) | 30)
@@ -12,7 +13,7 @@
 #define BLUE ((0 << 16) | (0 << 8) | 255)
 #define MAGENTA ((220 << 16) | (0 << 8) | 220)
 
-//Command for serial messages
+// Command for serial messages
 #define CMD_FORMAT_SPIFF 'f' //Format the SPIFF
 #define CMD_CREATE_FILE 'c'  //Create a new file in the SPIFF
 #define CMD_READ_FILE 'r'    //Read the file
@@ -43,24 +44,12 @@ void setup()
   neopix.setBrightness(10);
   neopix.setColor(WHITE255);
   neopix.breathOn(1000, 0.9);
-  // neopix.asyncBlinkOn(1000, 200, 4);
+  neopix.asyncBlinkOn(400, 200);
+  neopix.rainbowOn();
 }
 
 void loop()
 {
-  neopix.setColor(RED);
-  neopix.forceUpdate();
-  delay(500);
-  neopix.setColor(GREEN);
-  neopix.forceUpdate();
-  delay(500);
-  neopix.setColor(BLUE);
-  neopix.forceUpdate();
-  delay(500);
-  neopix.turnOff();
-  neopix.forceUpdate();
-  delay(800);
-
   neopix.update();
   button.update();
 

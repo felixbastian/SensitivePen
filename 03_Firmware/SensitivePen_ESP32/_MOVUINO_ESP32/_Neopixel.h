@@ -13,16 +13,21 @@ private:
     int _brightness = 255;
     int _color;
 
+    // Blink animation
     bool _isBlinking = false;
-    bool _isBlinkOn = false;
     unsigned long _timeBlink0;
     int _timeBlinkOn;
     int _timeBlinkOff;
     int _nBlink;
 
+    // Breath animation
     bool _isBreathing = false;
     float _breathIntens = 1.0f;
     int _timeBreath;
+
+    // Rainbow animation
+    bool _isRainbow = false;
+    long _rainbowHue = 0;
 
 public:
     MovuinoNeopixel();
@@ -48,6 +53,8 @@ public:
     void asyncBlinkOn(int timeOn_, int timeOff_);
     void asyncBlinkOn(int timeOn_, int timeOff_, int nBlink_);
     void blinkOff();
+    void rainbowOn();
+    void rainbowOff();
 
     // Getters
     int getColor();
@@ -74,6 +81,14 @@ void MovuinoNeopixel::update()
 {
     if (millis() - this->_timeShow0 > 20)
     {
+        if (this->_isRainbow)
+        {
+            this->_rainbowHue += 256;
+            if (this->_rainbowHue >= 5 * 65536)
+                this->_rainbowHue = 0;
+            this->setColor(this->_pix.gamma32(this->_pix.ColorHSV(this->_rainbowHue)));
+        }
+
         if (this->_isBreathing)
         {
             float r_ = 0.5 * (1 + sin(PI * (millis() / (float)(this->_timeBreath))));
@@ -89,26 +104,11 @@ void MovuinoNeopixel::update()
             unsigned long blkTime_ = millis() - this->_timeBlink0;
             int tCycle_ = blkTime_ % period_;
             if (tCycle_ < this->_timeBlinkOn)
-            {
-                if (!this->_isBlinkOn)
-                {
-                    this->_isBlinkOn = true;
-                    this->turnOn();
-                }
-            }
-            else
-            {
-                if (this->_isBlinkOn)
-                {
-                    this->_isBlinkOn = false;
-                    this->turnOff();
-                }
-            }
+                this->turnOn();
+            else this->turnOff();
 
             if (this->_nBlink != -1 && (blkTime_ > this->_nBlink * period_))
-            {
                 this->blinkOff(); // stop blinking after _nBlink cycles
-            }
         }
 
         this->_timeShow0 = millis();
@@ -173,7 +173,6 @@ void MovuinoNeopixel::asyncBlinkOn(int timeOn_, int timeOff_, int nBlink_)
         this->_timeBlinkOn = timeOn_;
         this->_timeBlinkOff = timeOff_;
         this->_nBlink = nBlink_;
-        this->_isBlinkOn = false;
         this->_timeBlink0 = millis();
         this->_isBlinking = true;
     }
@@ -200,6 +199,15 @@ void MovuinoNeopixel::breathOff()
 {
     this->_isBreathing = false;
     this->_pix.setBrightness(this->_brightness);
+}
+void MovuinoNeopixel::rainbowOn()
+{
+    // Based on Adafruit Neopixel strandtest example
+    this->_isRainbow = true;
+}
+void MovuinoNeopixel::rainbowOff()
+{
+    this->_isRainbow = false;
 }
 
 // -----------------------------------------
