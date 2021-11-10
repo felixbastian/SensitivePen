@@ -13,6 +13,10 @@ private:
     int _brightness = 255;
     int _color;
 
+    uint8_t getRed(uint32_t color_);
+    uint8_t getGreen(uint32_t color_);
+    uint8_t getBlue(uint32_t color_);
+
     // Blink animation
     bool _isBlinking = false;
     unsigned long _timeBlink0;
@@ -43,6 +47,7 @@ public:
     void setColor(int color_);
     void setColor(int red_, int green_, int blue_);
     void setBrightness(int bright_);
+    void lerpTo(int toColor_, float intensity_);
 
     // Animations
     void breathOn(int periodMs_);
@@ -148,6 +153,12 @@ void MovuinoNeopixel::setBrightness(int bright_)
     this->_brightness = bright_;
     this->_pix.setBrightness(bright_);
 }
+void MovuinoNeopixel::lerpTo(int toColor_, float intensity_) {
+  uint8_t red_ = this->getRed(this->_color) * (1 - intensity_) + this->getRed(toColor_) * intensity_;
+  uint8_t green_ = this->getGreen(this->_color) * (1 - intensity_) + this->getGreen(toColor_) * intensity_;
+  uint8_t blue_ = this->getBlue(this->_color) * (1 - intensity_) + this->getBlue(toColor_) * intensity_;
+  this->_pix.setPixelColor(0, this->_pix.Color(red_, green_, blue_));
+}
 
 // -----------------------------------------
 //                ANIMATIONS
@@ -217,5 +228,18 @@ int MovuinoNeopixel::getColor()
 {
     return this->_pix.getPixelColor(0);
 }
+uint8_t MovuinoNeopixel::getRed(uint32_t color_)
+{
+  return (color_ >> 16) & 0xFF;
+}
+uint8_t MovuinoNeopixel::getGreen(uint32_t color_)
+{
+  return (color_ >> 8) & 0xFF;
+}
+uint8_t MovuinoNeopixel::getBlue(uint32_t color_)
+{
+  return color_ & 0xFF;
+}
+
 
 #endif // _MOVUINO_NEOPIXEL_

@@ -42,14 +42,20 @@ void setup()
   // Neopixel
   neopix.begin();
   neopix.setBrightness(10);
-  neopix.setColor(WHITE255);
-  neopix.breathOn(1000, 0.9);
-  neopix.asyncBlinkOn(400, 200);
-  neopix.rainbowOn();
+  // neopix.setColor(WHITE255);
+  // neopix.breathOn(1000, 0.9);
+  // neopix.asyncBlinkOn(400, 200);
+  // neopix.rainbowOn();
+
+  // test lerp
+  neopix.setColor(RED);
 }
 
 void loop()
 {
+  float r_ = 0.5 * (1 + sin(PI * (millis() / 500.)));
+  neopix.lerpTo(BLUE, r_);
+
   neopix.update();
   button.update();
 
