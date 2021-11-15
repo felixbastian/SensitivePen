@@ -44,10 +44,10 @@ public:
     // Setters
     void turnOff();
     void turnOn();
-    void setColor(int color_);
-    void setColor(int red_, int green_, int blue_);
+    void setColor(uint32_t color_);
+    void setColor(uint8_t red_, uint8_t green_, uint8_t blue_);
     void setBrightness(int bright_);
-    void lerpTo(int toColor_, float intensity_);
+    void lerpTo(uint32_t toColor_, float intensity_);
 
     // Animations
     void breathOn(int periodMs_);
@@ -62,7 +62,7 @@ public:
     void rainbowOff();
 
     // Getters
-    int getColor();
+    uint32_t getColor();
 };
 
 MovuinoNeopixel::MovuinoNeopixel() : _pix(1, PIN_NEOPIX, NEO_GRB + NEO_KHZ800)
@@ -78,7 +78,6 @@ void MovuinoNeopixel::begin()
     this->_pix.begin();
     this->_pix.show();
     this->_color = this->getColor();
-    ;
     this->_timeShow0 = millis();
 }
 
@@ -110,7 +109,8 @@ void MovuinoNeopixel::update()
             int tCycle_ = blkTime_ % period_;
             if (tCycle_ < this->_timeBlinkOn)
                 this->turnOn();
-            else this->turnOff();
+            else
+                this->turnOff();
 
             if (this->_nBlink != -1 && (blkTime_ > this->_nBlink * period_))
                 this->blinkOff(); // stop blinking after _nBlink cycles
@@ -138,14 +138,14 @@ void MovuinoNeopixel::turnOn()
     this->_pix.setBrightness(this->_brightness);
     this->_pix.setPixelColor(0, this->_color);
 }
-void MovuinoNeopixel::setColor(int color_)
+void MovuinoNeopixel::setColor(uint32_t color_)
 {
     this->_color = color_;
     this->_pix.setPixelColor(0, color_);
 }
-void MovuinoNeopixel::setColor(int red_, int green_, int blue_)
+void MovuinoNeopixel::setColor(uint8_t red_, uint8_t green_, uint8_t blue_)
 {
-    int col_ = _pix.Color(red_, green_, blue_);
+    uint32_t col_ = _pix.Color(red_, green_, blue_);
     this->setColor(col_);
 }
 void MovuinoNeopixel::setBrightness(int bright_)
@@ -153,11 +153,16 @@ void MovuinoNeopixel::setBrightness(int bright_)
     this->_brightness = bright_;
     this->_pix.setBrightness(bright_);
 }
-void MovuinoNeopixel::lerpTo(int toColor_, float intensity_) {
-  uint8_t red_ = this->getRed(this->_color) * (1 - intensity_) + this->getRed(toColor_) * intensity_;
-  uint8_t green_ = this->getGreen(this->_color) * (1 - intensity_) + this->getGreen(toColor_) * intensity_;
-  uint8_t blue_ = this->getBlue(this->_color) * (1 - intensity_) + this->getBlue(toColor_) * intensity_;
-  this->_pix.setPixelColor(0, this->_pix.Color(red_, green_, blue_));
+void MovuinoNeopixel::lerpTo(uint32_t toColor_, float intensity_)
+{
+    if (intensity_ > 1)
+        intensity_ = 1;
+    intensity_ = abs(intensity_);
+
+    uint8_t red_ = this->getRed(this->_color) * (1 - intensity_) + this->getRed(toColor_) * intensity_;
+    uint8_t green_ = this->getGreen(this->_color) * (1 - intensity_) + this->getGreen(toColor_) * intensity_;
+    uint8_t blue_ = this->getBlue(this->_color) * (1 - intensity_) + this->getBlue(toColor_) * intensity_;
+    this->_pix.setPixelColor(0, this->_pix.Color(red_, green_, blue_));
 }
 
 // -----------------------------------------
@@ -224,22 +229,21 @@ void MovuinoNeopixel::rainbowOff()
 // -----------------------------------------
 //                GETTERS
 // -----------------------------------------
-int MovuinoNeopixel::getColor()
+uint32_t MovuinoNeopixel::getColor()
 {
     return this->_pix.getPixelColor(0);
 }
 uint8_t MovuinoNeopixel::getRed(uint32_t color_)
 {
-  return (color_ >> 16) & 0xFF;
+    return (color_ >> 16) & 0xFF;
 }
 uint8_t MovuinoNeopixel::getGreen(uint32_t color_)
 {
-  return (color_ >> 8) & 0xFF;
+    return (color_ >> 8) & 0xFF;
 }
 uint8_t MovuinoNeopixel::getBlue(uint32_t color_)
 {
-  return color_ & 0xFF;
+    return color_ & 0xFF;
 }
-
 
 #endif // _MOVUINO_NEOPIXEL_

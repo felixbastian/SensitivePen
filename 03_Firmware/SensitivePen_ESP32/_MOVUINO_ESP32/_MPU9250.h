@@ -17,7 +17,7 @@ public:
   float gx, gy, gz; // store gyroscope values
   float mx, my, mz; // store magneto values
 
-  MovuinoMPU9250(/* args */);
+  MovuinoMPU9250();
   ~MovuinoMPU9250();
 
   void begin();
@@ -29,7 +29,7 @@ public:
   void gyroscopeCalibration();
 };
 
-MovuinoMPU9250::MovuinoMPU9250(/* args */) : _imu(Wire, MPU_I2C_ADDRESS)
+MovuinoMPU9250::MovuinoMPU9250() : _imu(Wire, MPU_I2C_ADDRESS)
 {
 }
 

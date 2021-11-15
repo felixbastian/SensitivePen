@@ -20,9 +20,9 @@ fileName = "record"  # generic name numbers will be added for duplicates
 
 serialPort = '/dev/cu.usbserial-0154D8DD'
 
-toExtract = True
-toDataManage = False
-toVisualize = False
+toExtract = False
+toDataManage = True
+toVisualize = True
 
 filter = 25
 

@@ -7,21 +7,20 @@
 
 // Color swap
 #define WHITE255 ((255 << 16) | (255 << 8) | 255)
-#define RED ((255 << 16) | (5 << 8) | 5)
-#define GREEN ((0 << 16) | (250 << 8) | 30)
+#define RED ((255 << 16) | (0 << 8) | 0)
+#define GREEN ((0 << 16) | (250 << 8) | 0)
 #define YELLOW ((200 << 16) | (175 << 8) | 0)
 #define BLUE ((0 << 16) | (0 << 8) | 255)
-#define MAGENTA ((220 << 16) | (0 << 8) | 220)
+#define MAGENTA ((255 << 16) | (0 << 8) | 255)
 
 // Command for serial messages
-#define CMD_FORMAT_SPIFF 'f' //Format the SPIFF
-#define CMD_CREATE_FILE 'c'  //Create a new file in the SPIFF
-#define CMD_READ_FILE 'r'    //Read the file
-#define CMD_ADD_LINE 'a'     //Add a ne line in the SPIFFS (usefull for debugging)
-#define CMD_STOP_RECORD 's'  //Stop the record
-#define CMD_LISTING_DIR 'l'  //List files in the directory
-#define CMD_PRINT_DAT 'p'    //print one line of data
-#define CMD_SPIFF_INFO 'i'   //get informations about the spiff
+#define CMD_FORMAT_SPIFF 'f' // Format the SPIFF
+#define CMD_CREATE_FILE 'c'  // Create a new file in the SPIFF
+#define CMD_READ_FILE 'r'    // Read the file
+#define CMD_ADD_LINE 'a'     // Add a ne line in the SPIFFS (usefull for debugging)
+#define CMD_STOP_RECORD 's'  // Stop the record
+#define CMD_LISTING_DIR 'l'  // List files in the directory
+#define CMD_SPIFF_INFO 'i'   // Get informations about the spiff
 
 MovuinoMPU9250 mpu = MovuinoMPU9250();
 MovuinoButton button = MovuinoButton();
@@ -32,30 +31,37 @@ bool isBtnHold = false;
 bool isCallibrating = false;
 elapsedMillis dlyRec;
 
+String recordId = "SensitivePen";
+String colsId = "ax,ay,az,gx,gy,gz,mx,my,mz";
+
+int timeHoldCallib = 1800;
+
+uint32_t colOn = BLUE;
+uint32_t colRec = RED;
+uint32_t colCallib = MAGENTA;
+uint32_t colReadFiles = YELLOW;
+uint32_t colFormat = RED;
+
 void setup()
 {
   Serial.begin(115200);
+  
+  // Neopixel
+  neopix.begin();
+  neopix.setBrightness(5);
+  normalMode();
+  freezBlink(2);
+  neopix.update();
+  
+  // Other
   mpu.begin();
   button.begin();
   recorder.begin();
-
-  // Neopixel
-  neopix.begin();
-  neopix.setBrightness(10);
-  // neopix.setColor(WHITE255);
-  // neopix.breathOn(1000, 0.9);
-  // neopix.asyncBlinkOn(400, 200);
-  // neopix.rainbowOn();
-
-  // test lerp
-  neopix.setColor(RED);
+  freezBlink(4);
 }
 
 void loop()
 {
-  float r_ = 0.5 * (1 + sin(PI * (millis() / 500.)));
-  neopix.lerpTo(BLUE, r_);
-
   neopix.update();
   button.update();
 
@@ -69,52 +75,51 @@ void loop()
     //--------- Serial command -------------
     switch (serialMessage)
     {
-    case CMD_CREATE_FILE: //Create a new file and replace the previous one
+    case CMD_CREATE_FILE:
       Serial.println("Creation of ");
-      recorder.newRecord("SensitivePen");
+      recorder.newRecord(recordId);
       break;
-    case CMD_READ_FILE: //Reading File
-      Serial.println("reading ");
-      recorder.readAllRecords();
+    case CMD_READ_FILE:
+      Serial.println("reading all recorded files ");
+      readAllfiles();
       break;
     case CMD_FORMAT_SPIFF:
       Serial.println("Formating the SPIFFS (data files)...");
+      freezColorStrob(5, colFormat);
+      neopix.setColor(colFormat);
+      neopix.forceUpdate();
       recorder.formatSPIFFS();
+      normalMode();
       break;
     case CMD_LISTING_DIR:
       Serial.println("Listing directory");
+      neopix.blinkOn(50, 2);
       recorder.listDirectory();
       break;
     case CMD_SPIFF_INFO:
       Serial.println("Print info SPIFFS");
+      neopix.blinkOn(50, 2);
       recorder.printStateSPIFFS();
       break;
-    case 'b':
-      Serial.println("Pressed b");
-      neopix.asyncBlinkOn(666, 111, 4);
+    case CMD_ADD_LINE:
+      neopix.blinkOn(50, 2);
+      recorder.addRow();
       break;
-    case 'g':
-      Serial.println("Pressed g");
+    case CMD_STOP_RECORD:
+      stopRecord();
       break;
-    case 'h':
-      Serial.println("Pressed h");
-      break;
-    case 'e':
-      Serial.println("Pressed e");
-      break;
-    case 'z':
-      recorder.newRecord();
-      recorder.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
     default:
       break;
     }
   }
 
+  // -----------------------------------------
+  //                RECORDER
+  // -----------------------------------------
   if (button.isReleased())
   {
     if (!isBtnHold)
     {
-      Serial.println("isReleased");
       if (!recorder.isRecording())
       {
         startRecord();
@@ -125,35 +130,6 @@ void loop()
       }
     }
     isBtnHold = false;
-  }
-
-  if (button.isDoubleTap())
-  {
-    Serial.println("\t isDoubleTap");
-  }
-
-  if (button.timeHold())
-  {
-    Serial.print("\t\t");
-    Serial.println(button.timeHold());
-
-    neopix.setColor(GREEN);
-
-    if (button.timeHold() > 1000)
-    {
-      neopix.setColor(0, 0, 100);
-      if (button.timeHold() > 1020)
-      {
-        isBtnHold = true;
-        if (!recorder.isRecording() && !isCallibrating)
-        {
-          isCallibrating = true;
-          mpu.magnometerCalibration();
-          isCallibrating = false;
-          neopix.setColor(WHITE255);
-        }
-      }
-    }
   }
 
   if (recorder.isRecording())
@@ -175,15 +151,75 @@ void loop()
       recorder.pushData<float>(mpu.mz);
     }
   }
+
+  // -----------------------------------------
+  //               CALLIBRATION
+  // -----------------------------------------
+  if (button.timeHold())
+  {
+    // Color shade
+    float r_ = (button.timeHold() - 400) / (float)timeHoldCallib;
+    neopix.lerpTo(colCallib, r_);
+
+    if (button.timeHold() > timeHoldCallib)
+    {
+      neopix.setColor(colCallib); // lock color
+      if (button.timeHold() > timeHoldCallib + 20)
+      {
+        isBtnHold = true;
+        freezBlink(2);
+        if (!recorder.isRecording() && !isCallibrating)
+        {
+          isCallibrating = true;
+          mpu.magnometerCalibration();
+          isCallibrating = false;
+          neopix.blinkOn(100, 2);
+          normalMode();
+        }
+      }
+    }
+  }
+}
+
+void normalMode() {
+  neopix.setColor(colOn);
 }
 
 void startRecord()
 {
-  recorder.newRecord("SensitivePen");
-  recorder.defineColumns("ax,ay,az,gx,gy,gz,mx,my,mz");
-  neopix.setColor(RED);
+  recorder.newRecord(recordId);
+  recorder.defineColumns(colsId);
   
-  for (int i=0; i<2; i++) {
+  freezColorStrob(2, RED);
+  neopix.rainbowOn();
+  neopix.breathOn(1000, 0.8);
+}
+
+void stopRecord()
+{
+  freezColorStrob(2, GREEN);
+  neopix.rainbowOff();
+  neopix.breathOff();
+  recorder.stop();
+  normalMode();
+}
+
+void readAllfiles()
+{
+  freezColorStrob(2, colReadFiles);
+  neopix.setColor(colReadFiles);
+  neopix.forceUpdate();
+
+  recorder.readAllRecords();
+  
+  freezBlink(3);
+  normalMode();
+}
+
+void freezBlink(int nblink_)
+{
+  for (int i = 0; i < nblink_; i++)
+  {
     neopix.turnOff();
     neopix.forceUpdate();
     delay(50);
@@ -191,14 +227,18 @@ void startRecord()
     neopix.forceUpdate();
     delay(50);
   }
-
-  neopix.breathOn(1000, 0.9);
 }
 
-void stopRecord()
+void freezColorStrob(int nblink_, uint32_t color_)
 {
-  recorder.stop();
-  neopix.setColor(WHITE255);
-  neopix.blinkOn(100, 2);
-  neopix.breathOff();
+  uint32_t curCol_ = neopix.getColor();
+  for (int i = 0; i < nblink_; i++)
+  {
+    neopix.setColor(color_);
+    neopix.forceUpdate();
+    delay(100);
+    neopix.setColor(curCol_);
+    neopix.forceUpdate();
+    delay(100);
+  }
 }
