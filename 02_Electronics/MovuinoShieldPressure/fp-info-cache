@@ -1,183 +1,184 @@
-39208813973023
+39306644442195
 MovuinoESP8266
 0402-CAP
 <b>CAPACITOR</b><p>
 chip
-0
+
 0
 2
 2
 MovuinoESP8266
 0402-JUMPER-CLOSED
 <b>CAPACITOR</b><p>
-0
-0
+chip
+
 0
 2
 2
 MovuinoESP8266
 0402-JUMPER3-1-2-CLOSED
-0
-0
-0
+<b>CAPACITOR</b><p>
+chip
+
 0
 3
 3
 MovuinoESP8266
-402
-0
-0
+0402-RES
+<b>CAPACITOR</b><p>
+chip
 
 0
 2
 2
-0
-0
-0
+MovuinoESP8266
+BME280
+<p>Source: http://ae-bst.resource.bosch.com/media/products/dokumente/bme280/BST-BME280_DS001-09.pdf</p>
 
 0
 8
 8
-0
-0
-0
+MovuinoESP8266
+DF12-36-DP-NL
+Hirose DF12 Pattern with metal fitting, 32 positions
 
 0
 36
 36
+MovuinoESP8266
+DF12-36-DP-NL-noPad
+Hirose DF12 Pattern with metal fitting, 32 positions
+
 0
-0
-0
+36
+36
+MovuinoESP8266
+ESP-12-ALT
+
 
 0
 16
 16
-0
-0
-0
+MovuinoESP8266
+LCSC145875-3.5x3
+Korean Hroparts Elec K2-1821SN-A4SW-06 
 LCSC Part # C145875
 3.5*3mm
 
 0
 4
 4
-0
+MovuinoESP8266
 LEAD-QFN24-MPU9250
 
 
 0
 24
 24
-0
+MovuinoESP8266
 LED-0603-LCSC90692
 
 
 0
 2
 2
-0
+MovuinoESP8266
 LED3535
 
 
 0
 4
 4
-0
+MovuinoESP8266
 LOGO_CRI-NEW-BMP10MM-BOTTOM
 
 
 0
 0
 0
-0
+MovuinoESP8266
 LOGO_MOVUINO_BMP_11MM-BOTTOM
 Used parameters 0.007
 
 0
 0
 0
-0
+MovuinoESP8266
 MICRO-USB5+6P-SMD-0.65-AB-TB-LCSC10418
 
 
 0
 11
 11
-0
+MovuinoESP8266
 PAD-1X1.5_NOSILK
 1.5 x 2.0mm SMT pad (no solder paste)
 
 0
 1
 1
-0
+MovuinoESP8266
 PWR2P_1.0
 
 
 0
 4
 4
-0
+MovuinoESP8266
 QFN24_4MM_SMSC
 
 
 0
 25
 25
-0
+MovuinoESP8266
 R0402-SMALL-TDOCU
 <b>RESISTOR 0402 smaller footrpint according to 
 https://www.youtube.com/watch?v=zyXzorducoI
 <br>
-0
-0
-0
+- Name , Value and Outline on tDocu
+</b>
+
 0
 2
 2
 MovuinoESP8266
-0
-0
-0
+SOD-123
+<b>SOD-123</b>
+<p>Source: http://www.diodes.com/datasheets/ds30139.pdf</p>
 
 0
 2
 2
-0
-0
-0
+MovuinoESP8266
+SOT-323
+SOT23-3
 
 0
 3
 3
-0
-0
-0
+MovuinoESP8266
+SOT23-5
+<b>Small Outline Transistor</b> - 5 Pin
 
 0
 5
 5
-0
-0
-0
+MovuinoESP8266
+SOT23-R
+<b>SOT23</b> - Reflow soldering
 
 0
 3
 3
-0
-0
-0
+MovuinoESP8266
+TDFN12
+TDFN12 package: 2x3mm, 0.5mm-pitch<br/>
 Created for the STM6600/6601: http://www.st.com/web/en/resource/technical/document/datasheet/CD00226957.pdf<br/>
 http://www.digikey.com/product-search/en?vendor=0&keywords=stm6601d&stock=1<br/>
 <br/>
 Took their recommended footprint and lengthened the pads for hand soldering.
-0
-0
-12
-12
-SensitivePressure
-PressurePrint
 
 0
-0
-2
+12
+12

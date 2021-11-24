@@ -25,10 +25,10 @@ F 3 "~" H 4700 3750 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Connector_Generic:Conn_01x02 J2
+L Connector_Generic:Conn_01x02 J?
 U 1 1 619F9066
 P 3850 3750
-F 0 "J2" V 3722 3830 50  0000 L CNN
+F 0 "J?" V 3722 3830 50  0000 L CNN
 F 1 "Conn_01x02" V 3813 3830 50  0000 L CNN
 F 2 "SensitivePressure:PressurePrint" H 3850 3750 50  0001 C CNN
 F 3 "~" H 3850 3750 50  0001 C CNN
