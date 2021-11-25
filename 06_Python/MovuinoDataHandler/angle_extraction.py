@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 ############   SETTINGS   #############
 device = "sensitiPen"
 folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
-filename = "F20D_sentence_treated_SensitivePen.csv"
+filename = "D20C_sentence_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
 
-stationnarity_interval = (7, 38)  #Intervalle en sec
+stationnarity_interval = (4, 35)  #Intervalle en sec
 
 ###################################
 
@@ -26,8 +26,6 @@ index_end = int(stationnarity_interval[1]*1/Te)
 
 stationary_psi = sensitivPenDataSet.sensitivePenAngles[index_init:index_end, 0]
 stationary_theta = sensitivPenDataSet.sensitivePenAngles[index_init:index_end, 1]
-
-
 
 #Statistics calcul for psi and theta
 
@@ -45,11 +43,12 @@ print("Theta : -> mean : {}, -> sigma : {}".format(mean_theta, sig_theta))
 sensitivPenDataSet.DispOnlyPenAngles()
 
 #Regression :
-line_interval = (6,27.5)
+line_interval = (7000,32000) #secondes
 index_line_init = int(line_interval[0] * 1/Te)
 index_line_end = int(line_interval[1]*1/Te)
 
 line_psi = sensitivPenDataSet.sensitivePenAngles[index_line_init:index_line_end, 0]
+
 nbpts = len(line_psi)
 x = np.linspace(0, 1, nbpts)
 X = np.vstack([x, np.ones(len(x))]).T
@@ -57,8 +56,8 @@ X = np.vstack([x, np.ones(len(x))]).T
 #      [x2, 1],
 #      ...
 #      [xn, 1]]
-resultat = np.linalg.lstsq(X, line_psi,rcond=None)
-
+resultat = np.linalg.lstsq(X, line_psi, rcond=None)
+print(resultat)
 aopt, bopt = resultat[0]
 erreur = resultat[1][0]/nbpts
 
@@ -66,6 +65,8 @@ line_psi_estimated = [aopt*i+bopt for i in x]
 
 plt.plot(x, line_psi, "b+") # nuage de points
 plt.plot(x, line_psi_estimated,"r") # droite de régression
+plt.title("Psi = f(pourcentage d'avancement de la ligne)")
+
 plt.show()
 
 print("a =", aopt.round(2), ", b =", bopt.round(2),"; χ² =", erreur.round(2))
