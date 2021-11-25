@@ -1,4 +1,3 @@
 (fp_lib_table
   (lib (name MovuinoESP8266)(type KiCad)(uri ${KIPRJMOD}/MovuinoESP8266.pretty)(options "")(descr ""))
-  (lib (name SensitivePressure)(type KiCad)(uri ../SensitivePen_PressureConnector/SensitivePressure.pretty)(options "")(descr ""))
 )
