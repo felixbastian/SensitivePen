@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
-filename = "D20C_sentence_treated_SensitivePen.csv"
+folderPath = "..\\..\\08_DataPen\\Data_Elderly\\"
+filename = "M20F_loops_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
 
-stationnarity_interval = (4, 35)  #Intervalle en sec
+stationnarity_interval = (3000,26000) #Intervalle en sec
 
 ###################################
 
@@ -43,7 +43,7 @@ print("Theta : -> mean : {}, -> sigma : {}".format(mean_theta, sig_theta))
 sensitivPenDataSet.DispOnlyPenAngles()
 
 #Regression :
-line_interval = (7000,32000) #secondes
+line_interval = (3000,26000) #secondes
 index_line_init = int(line_interval[0] * 1/Te)
 index_line_end = int(line_interval[1]*1/Te)
 
@@ -63,7 +63,7 @@ erreur = resultat[1][0]/nbpts
 
 line_psi_estimated = [aopt*i+bopt for i in x]
 
-plt.plot(x, line_psi, "b+") # nuage de points
+plt.plot(x, line_psi, "b-+") # nuage de points
 plt.plot(x, line_psi_estimated,"r") # droite de régression
 plt.title("Psi = f(pourcentage d'avancement de la ligne)")
 

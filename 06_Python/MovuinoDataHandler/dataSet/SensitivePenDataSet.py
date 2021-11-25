@@ -289,7 +289,7 @@ class SensitivePenDataSet():
 
         psi = self.processedData["psi"]
         theta = self.processedData["theta"]
-
+        """
         accel = df.PlotVector(timeList, self.acceleration, "Acceleration m/s2", 221)
         accel.plot(timeList, self.normAcceleration_lp, color="black", label = "norm")
         accel.legend(loc="upper right")
@@ -299,8 +299,8 @@ class SensitivePenDataSet():
         mag = df.PlotVector(timeList, self.magnetometer, "Magnetometer unit mag", 223)
         mag.plot(timeList, self.normMagnetometer, color="black", label = "norm")
         mag.legend(loc="upper right")
-
-        sensitivePenAngle = plt.subplot(224)
+        """
+        sensitivePenAngle = plt.subplot(111)
         sensitivePenAngle.plot(timeList, psi, color="red", label='psi')
         sensitivePenAngle.plot(timeList, theta, color="blue", label='theta')
         sensitivePenAngle.grid(b=True, which='major')

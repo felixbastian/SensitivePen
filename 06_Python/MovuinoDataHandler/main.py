@@ -5,13 +5,13 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Elderly\\02_treated_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_Elderly\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
-toDataManage =False
+toDataManage = False
 toVisualize = True
 
 filter = 20
@@ -37,11 +37,8 @@ if toExtract:
 
 # -------- Data processing ----------------------
 
-file_start = 1
-end = 3
-
-
 for filename in os.listdir(folderPath):
+    print(filename)
     if os.path.basename(filename).endswith("csv"):
         sensitivPenDataSet = sp.SensitivePenDataSet(folderPath + filename)
         Te = sensitivPenDataSet.Te
