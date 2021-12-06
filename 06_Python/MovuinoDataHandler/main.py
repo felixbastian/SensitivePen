@@ -5,7 +5,7 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Elderly\\"
+folderPath = "..\\..\\08_DataPen\\testESP32\\02_treated_data\\"
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
@@ -57,7 +57,7 @@ for filename in os.listdir(folderPath):
             #ft.getDataSetFeatures(pathfeatures)
 
             #stock in processed.csv
-            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\..\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
+            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
             sensitivPenDataSet.stockProcessedData(treated_filepath)
 
             if toVisualize:
@@ -71,7 +71,7 @@ for filename in os.listdir(folderPath):
         if toVisualize and not toDataManage:
             # display
             # sensitivPenDataSet.DispProcessedData()
-            # sensitivPenDataSet.DispRawData()
+            sensitivPenDataSet.DispRawData()
             if "treated" in filename:
                 sensitivPenDataSet.DispOnlyPenAngles()
 

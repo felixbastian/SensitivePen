@@ -38,8 +38,8 @@ class SensitivePenDataSet():
         self.magnetometer = []
 
         # pressure
-        self.pressure = self.rawData["pressure"]
-        self.pressure = np.array(self.pressure)
+        #self.pressure = self.rawData["pressure"]
+        #self.pressure = np.array(self.pressure)
 
         # norm of
         self.normAcceleration = []
@@ -236,10 +236,11 @@ class SensitivePenDataSet():
         df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 221)
         df.PlotVector(time_list, self.magnetometer, 'Magnetometer', 222)
         df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 223)
-
+        """
         pressure = plt.subplot(224)
         pressure.plot(time_list, self.pressure)
         pressure.set_title('Pressure (pressure unit)')
+        """
         plt.show()
 
     def DispProcessedData(self):
@@ -258,11 +259,11 @@ class SensitivePenDataSet():
         normAcc = plt.subplot(337)
         normAcc.plot(time_list, self.normAcceleration, color="black")
         normAcc.set_title("Norm Acceleration")
-
+        """
         pressure = plt.subplot(339)
         pressure.plot(time_list, self.pressure)
         pressure.set_title('Pressure (pressure unit)')
-
+        """
         sensitivePenAngle = plt.subplot(336)
         sensitivePenAngle.plot(time_list, self.sensitivePenAngles[:, 0], color="red", label='psi')
         sensitivePenAngle.plot(time_list, self.sensitivePenAngles[:, 1], color="blue", label='theta')
