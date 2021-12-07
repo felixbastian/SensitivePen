@@ -57,12 +57,8 @@ class SensitivePenDataSet():
         self.magnetometer_lp = []
 
         # time list in seconds
-        if "treated" in self.filename:
-            self.time = list(self.rawData["time"])
-        else:
-            self.time = list(self.rawData["time"])
-        self.rawData["time"] = self.time
-        self.processedData["time"] = self.time
+        self.time = list(self.rawData["time"])
+
         # sample rate
         self.Te = (self.time[-1] - self.time[0]) / (len(self.time))
 
@@ -71,6 +67,8 @@ class SensitivePenDataSet():
 
         # Relevant angle for the pen
         self.sensitivePenAngles = []
+        self.psi=[]
+        self.theta=[]
 
         self.posAngAcc = []
         self.initEulerAngles = []
@@ -93,24 +91,37 @@ class SensitivePenDataSet():
         self.magnetometer = np.array(self.magnetometer)
 
         if "treated" in self.filename:
-            for k in range(self.nb_row):  # We stock rawData in variables
-                self.acceleration_lp.append(np.array([self.rawData["ax_filter"][k], self.rawData["ay_filter"][k], self.rawData["az_filter"][k]]))
-                self.gyroscope_lp.append(np.array([self.rawData["gx_filter"][k], self.rawData["gy_filter"][k], self.rawData["gz_filter"][k]]) * 180 / np.pi)
-                self.magnetometer_lp.append(np.array([self.rawData["mx_filter"][k], self.rawData["my_filter"][k], self.rawData["mz_filter"][k]]))
+            try :
+                for k in range(self.nb_row):  # We stock rawData in variables
+                    self.acceleration_lp.append(np.array([self.rawData["ax_filter"][k], self.rawData["ay_filter"][k], self.rawData["az_filter"][k]]))
+                    self.gyroscope_lp.append(np.array([self.rawData["gx_filter"][k], self.rawData["gy_filter"][k], self.rawData["gz_filter"][k]]) * 180 / np.pi)
+                    self.magnetometer_lp.append(np.array([self.rawData["mx_filter"][k], self.rawData["my_filter"][k], self.rawData["mz_filter"][k]]))
 
-                # Calculation of the norm
-                self.normAcceleration_lp.append(np.linalg.norm(self.acceleration_lp[k]))
-                self.normGyroscope_lp.append(np.linalg.norm(self.gyroscope_lp[k]))
-                self.normMagnetometer_lp.append(np.linalg.norm(self.magnetometer_lp[k]))
+                    # Calculation of the norm
+                    self.normAcceleration_lp.append(np.linalg.norm(self.acceleration_lp[k]))
+                    self.normGyroscope_lp.append(np.linalg.norm(self.gyroscope_lp[k]))
+                    self.normMagnetometer_lp.append(np.linalg.norm(self.magnetometer_lp[k]))
 
-                self.sensitivePenAngles.append(np.array([self.rawData["psi"][k], self.rawData["theta"][k]]))
+                    self.sensitivePenAngles.append(np.array([self.rawData["psi"][k], self.rawData["theta"][k]]))
 
-            self.acceleration_lp = np.array(self.acceleration_lp)
-            self.gyroscope_lp = np.array(self.gyroscope_lp)
-            self.normMagnetometer_lp = np.array(self.magnetometer_lp)
-            self.sensitivePenAngles = np.array(self.sensitivePenAngles)
-
-
+                self.acceleration_lp = np.array(self.acceleration_lp)
+                self.gyroscope_lp = np.array(self.gyroscope_lp)
+                self.normMagnetometer_lp = np.array(self.magnetometer_lp)
+                self.sensitivePenAngles = np.array(self.sensitivePenAngles)
+            except (KeyError):
+                print("____________________________________")
+                print("KeyError : Missing columns in the treated dataset : " + self.filename)
+                print("A Sensitive Pen's treated file should have : ")
+                print("time,ax,ay,az,gx,gy,gz,mx,my,mz")
+                print("normAccel,normMag,normGyr")
+                print("ax_filter,ay_filter,az_filter,gx_filter,gy_filter,gz_filter,mx_filter,my_filter,mz_filter")
+                print("psi,theta")
+                print("____________________________________")
+                self.acceleration_lp = np.array([np.zeros(shape=(1,3))]*len(self.rawData["time"]))
+                self.gyroscope_lp = np.array([np.zeros(shape=(1,3))]*len(self.rawData["time"]))
+                self.normMagnetometer_lp = np.array([np.zeros(shape=(1,3))]*len(self.rawData["time"]))
+                self.sensitivePenAngles = [[0,0]]*len(self.rawData["time"])
+                pass
 
     def computePenAngles(self):
         """
@@ -120,6 +131,7 @@ class SensitivePenDataSet():
         :return:
         """
         # --- Getting initial euler angles
+        print("--- Calculating Sensitive Pen's angles ---")
         initRotationMatrix = gam.rotationMatrixCreation(self.acceleration_lp[0], self.magnetometer[0])
         self.initPsi = math.atan2(initRotationMatrix[0, 1], initRotationMatrix[0, 0])
 
@@ -139,21 +151,30 @@ class SensitivePenDataSet():
                 psi = 0
             else:
                 psi = (math.atan2(a01, a00) - self.initPsi) * 180 / math.pi
-
+                """ 0->360°
+                if psi<0:
+                    psi += 360
+                elif psi > 360:
+                    psi -= 360
+                """
+                #  -180 > 180°
                 if -180 > psi >= -360:
                     psi += 360
                 elif 180 < psi <= 360:
                     psi -= 360
 
             self.sensitivePenAngles.append(np.array([psi, theta]))
+            self.theta.append(theta)
+            self.psi.append(psi)
 
         self.posAngAcc = np.array(self.posAngAcc)
         self.sensitivePenAngles = np.array(self.sensitivePenAngles)
 
+
         return self.sensitivePenAngles
 
     #--------- FILE MANAGE Functions -------------------
-    def stockProcessedData(self, filepath):
+    def stockData(self, filepath):
         """
 
         :param self:
@@ -163,26 +184,26 @@ class SensitivePenDataSet():
         dir = os.path.dirname(filepath)
         if not os.path.exists(os.path.dirname(filepath)) :
             os.makedirs(dir)
-        self.processedData["normAccel"] = self.normAcceleration
-        self.processedData["normMag"] = self.normMagnetometer
-        self.processedData["normGyr"] = self.normGyroscope
+        self.rawData["normAccel"] = self.normAcceleration
+        self.rawData["normMag"] = self.normMagnetometer
+        self.rawData["normGyr"] = self.normGyroscope
 
-        self.processedData["ax_filter"] = self.acceleration_lp[:, 0]
-        self.processedData["ay_filter"] = self.acceleration_lp[:, 1]
-        self.processedData["az_filter"] = self.acceleration_lp[:, 2]
+        self.rawData["ax_filter"] = self.acceleration_lp[:, 0]
+        self.rawData["ay_filter"] = self.acceleration_lp[:, 1]
+        self.rawData["az_filter"] = self.acceleration_lp[:, 2]
 
-        self.processedData["gx_filter"] = self.gyroscope_lp[:, 0] * 180 / np.pi
-        self.processedData["gy_filter"] = self.gyroscope_lp[:, 1] * 180 / np.pi
-        self.processedData["gz_filter"] = self.gyroscope_lp[:, 2] * 180 / np.pi
+        self.rawData["gx_filter"] = self.gyroscope_lp[:, 0] * 180 / np.pi
+        self.rawData["gy_filter"] = self.gyroscope_lp[:, 1] * 180 / np.pi
+        self.rawData["gz_filter"] = self.gyroscope_lp[:, 2] * 180 / np.pi
 
-        self.processedData["mx_filter"] = self.magnetometer_lp[:, 0]
-        self.processedData["my_filter"] = self.magnetometer_lp[:, 1]
-        self.processedData["mz_filter"] = self.magnetometer_lp[:, 2]
+        self.rawData["mx_filter"] = self.magnetometer_lp[:, 0]
+        self.rawData["my_filter"] = self.magnetometer_lp[:, 1]
+        self.rawData["mz_filter"] = self.magnetometer_lp[:, 2]
 
-        self.processedData["psi"] = self.sensitivePenAngles[:, 0]
-        self.processedData["theta"] = self.sensitivePenAngles[:, 1]
+        self.rawData["psi"] = self.psi
+        self.rawData["theta"] = self.theta
 
-        self.processedData.to_csv(filepath, sep=",", index=False, index_label=False)
+        self.rawData.to_csv(filepath, sep=",", index=False, index_label=False)
 
     @staticmethod
     def MovuinoExtraction(serialPort, path):
@@ -229,7 +250,6 @@ class SensitivePenDataSet():
                 isReading = True
                 print("Record begins")
 
-
     #--------- DISPLAY Functions -----------------------
     def DispRawData(self):
         time_list = self.time
@@ -244,8 +264,7 @@ class SensitivePenDataSet():
         plt.show()
 
     def DispProcessedData(self):
-
-        time_list = self.processedData["time"]
+        time_list = self.rawData["time"]
         df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 331)
         df.PlotVector(time_list, self.magnetometer, 'Magnetometer', 332)
         df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 333)
@@ -254,10 +273,22 @@ class SensitivePenDataSet():
 
         normMag = plt.subplot(338)
         normMag.plot(time_list, self.normMagnetometer, color="black")
+        normMag.grid(b=True, which='major')
+        normMag.grid(b=True, which='minor', color='#999999', linestyle='dotted')
+        normMag.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
+        normMag.minorticks_on()
+        normMag.set_yticks([0,50,100])
+        normMag.yaxis.set_minor_locator(MultipleLocator(10))
         normMag.set_title("Norm Magnetometer")
 
         normAcc = plt.subplot(337)
         normAcc.plot(time_list, self.normAcceleration, color="black")
+        normAcc.grid(b=True, which='major')
+        normAcc.grid(b=True, which='minor', color='#999999', linestyle='dotted')
+        normAcc.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
+        normAcc.minorticks_on()
+        normAcc.set_yticks([0,0])
+        normAcc.yaxis.set_minor_locator(MultipleLocator(10))
         normAcc.set_title("Norm Acceleration")
         """
         pressure = plt.subplot(339)
@@ -265,14 +296,14 @@ class SensitivePenDataSet():
         pressure.set_title('Pressure (pressure unit)')
         """
         sensitivePenAngle = plt.subplot(336)
-        sensitivePenAngle.plot(time_list, self.sensitivePenAngles[:, 0], color="red", label='psi')
-        sensitivePenAngle.plot(time_list, self.sensitivePenAngles[:, 1], color="blue", label='theta')
+        sensitivePenAngle.plot(time_list, self.psi, color="red", label='psi')
+        sensitivePenAngle.plot(time_list, self.theta, color="blue", label='theta')
         sensitivePenAngle.grid(b=True, which='major')
         sensitivePenAngle.grid(b=True, which='minor', color='#999999', linestyle='dotted')
         sensitivePenAngle.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
         sensitivePenAngle.minorticks_on()
-        sensitivePenAngle.set_yticks([-180, -90, 0, 90, 180])
-        sensitivePenAngle.set_ylim(-220, 220)
+        sensitivePenAngle.set_yticks([0, 90, 180, 270, 360])
+        sensitivePenAngle.set_ylim(-40, 400)
         sensitivePenAngle.yaxis.set_minor_locator(MultipleLocator(45))
         sensitivePenAngle.legend(loc='upper right')
         sensitivePenAngle.set_title("Relevant angle (psi, theta) (deg)")
@@ -285,22 +316,17 @@ class SensitivePenDataSet():
         plt.show()
 
     def DispOnlyPenAngles(self):
-        print("Plotting : {}".format(os.path.basename(self.filepath)))
-        timeList = self.processedData["time"]
+        print("Plotting angles from : {}".format(os.path.basename(self.filepath)))
+        timeList = self.rawData["time"]
 
-        psi = self.processedData["psi"]
-        theta = self.processedData["theta"]
-        """
-        accel = df.PlotVector(timeList, self.acceleration, "Acceleration m/s2", 221)
-        accel.plot(timeList, self.normAcceleration_lp, color="black", label = "norm")
-        accel.legend(loc="upper right")
+        try :
+            psi = self.rawData["psi"]
+            theta = self.rawData["theta"]
+        except (KeyError):
+            print("--- KeyError : Missing psi and/or theta in the treated dataset : " + self.filename)
+            psi = [0]*len(timeList)
+            theta = [0]*len(timeList)
 
-        df.PlotVector(timeList, self.gyroscope, "Gyroscope m/s", 222)
-
-        mag = df.PlotVector(timeList, self.magnetometer, "Magnetometer unit mag", 223)
-        mag.plot(timeList, self.normMagnetometer, color="black", label = "norm")
-        mag.legend(loc="upper right")
-        """
         sensitivePenAngle = plt.subplot(111)
         sensitivePenAngle.plot(timeList, psi, color="red", label='psi')
         sensitivePenAngle.plot(timeList, theta, color="blue", label='theta')

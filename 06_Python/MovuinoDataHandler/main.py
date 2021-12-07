@@ -5,13 +5,14 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\testESP32\\02_treated_data\\"
+folderPath = "..\\..\\08_DataPen\\testESP32\\"
+
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
-toDataManage = False
+toDataManage =True
 toVisualize = True
 
 filter = 20
@@ -33,7 +34,6 @@ if toExtract:
     """
     print("Data extraction..")
     sp.SensitivePenDataSet.MovuinoExtraction(serialPort, folderPath + fileName)
-
 
 # -------- Data processing ----------------------
 
@@ -58,7 +58,8 @@ for filename in os.listdir(folderPath):
 
             #stock in processed.csv
             treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
-            sensitivPenDataSet.stockProcessedData(treated_filepath)
+            sensitivPenDataSet.stockData(treated_filepath)
+            sensitivPenDataSet.DispProcessedData()
 
             if toVisualize:
                 # display
