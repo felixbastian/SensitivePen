@@ -5,7 +5,7 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\testESP32\\"
+folderPath = "..\\..\\08_DataPen\\Data_Postures\\Manip_061221\\01_raw_data\\"
 
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
@@ -57,7 +57,7 @@ for filename in os.listdir(folderPath):
             #ft.getDataSetFeatures(pathfeatures)
 
             #stock in processed.csv
-            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
+            treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\..\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
             sensitivPenDataSet.stockData(treated_filepath)
             sensitivPenDataSet.DispProcessedData()
 
