@@ -31,7 +31,7 @@ sep = ","
 decimal = "."
 ##### If no extract
 file_start = 1
-nbRecord = 10
+nbRecord = 1
 end = 10
 
 ###################################
