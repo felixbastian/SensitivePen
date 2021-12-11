@@ -5,14 +5,14 @@ import os
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Postures\\Manip_061221\\01_raw_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_Postures\\Manip_061221\\02_treated_data\\"
 
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
-toDataManage =True
+toDataManage =False
 toVisualize = True
 
 filter = 20
@@ -59,7 +59,7 @@ for filename in os.listdir(folderPath):
             #stock in processed.csv
             treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\..\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
             sensitivPenDataSet.stockData(treated_filepath)
-            sensitivPenDataSet.DispProcessedData()
+            #sensitivPenDataSet.DispProcessedData()
 
             if toVisualize:
                 # display
@@ -71,10 +71,11 @@ for filename in os.listdir(folderPath):
 
         if toVisualize and not toDataManage:
             # display
-            # sensitivPenDataSet.DispProcessedData()
-            sensitivPenDataSet.DispRawData()
+            #sensitivPenDataSet.DispRawData()
+
             if "treated" in filename:
-                sensitivPenDataSet.DispOnlyPenAngles()
+                sensitivPenDataSet.DispProcessedData()
+                #sensitivPenDataSet.DispOnlyPenAngles()
 
 
 

@@ -108,6 +108,7 @@ class SensitivePenDataSet():
 
                 self.acceleration_lp = np.array(self.acceleration_lp)
                 self.gyroscope_lp = np.array(self.gyroscope_lp)
+                self.magnetometer_lp = np.array(self.magnetometer_lp)
                 self.normMagnetometer_lp = np.array(self.magnetometer_lp)
                 self.sensitivePenAngles = np.array(self.sensitivePenAngles)
             except (KeyError):
@@ -153,17 +154,20 @@ class SensitivePenDataSet():
                 psi = 0
             else:
                 psi = (math.atan2(a01, a00) - self.initPsi) * 180 / math.pi
-                """ 0->360°
+
+                # 0->360°
                 if psi<0:
                     psi += 360
                 elif psi > 360:
                     psi -= 360
+
                 """
                 #  -180 > 180°
                 if -180 > psi >= -360:
                     psi += 360
                 elif 180 < psi <= 360:
                     psi -= 360
+                """
 
             self.sensitivePenAngles.append(np.array([psi, theta]))
             self.theta.append(theta)
@@ -266,7 +270,10 @@ class SensitivePenDataSet():
         plt.show()
 
     def DispProcessedData(self):
-        time_list = self.rawData["time"]
+        time_list = list(self.rawData["time"])
+
+        if time_list[-1]%1000 != 0:
+            time_list = [t/1000 for t in time_list]
         df.PlotVector(time_list, self.acceleration, 'Acceleration (m/s2)', 331)
         df.PlotVector(time_list, self.magnetometer, 'Magnetometer', 332)
         df.PlotVector(time_list, self.gyroscope, 'Gyroscope (deg/s)', 333)
@@ -279,7 +286,7 @@ class SensitivePenDataSet():
         normMag.grid(b=True, which='minor', color='#999999', linestyle='dotted')
         normMag.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
         normMag.minorticks_on()
-        normMag.set_yticks([0,50,100])
+        normMag.set_yticks([-10,0,50,100])
         normMag.yaxis.set_minor_locator(MultipleLocator(10))
         normMag.set_title("Norm Magnetometer")
 
@@ -289,7 +296,7 @@ class SensitivePenDataSet():
         normAcc.grid(b=True, which='minor', color='#999999', linestyle='dotted')
         normAcc.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
         normAcc.minorticks_on()
-        normAcc.set_yticks([0,0])
+        normAcc.set_yticks([-10,0,50])
         normAcc.yaxis.set_minor_locator(MultipleLocator(10))
         normAcc.set_title("Norm Acceleration")
         """
@@ -315,6 +322,8 @@ class SensitivePenDataSet():
         patchZ = mpatches.Patch(color='blue', label='z')
         plt.legend(handles=[patchX, patchY, patchZ], loc="upper right", bbox_to_anchor=(2.5, 3.6), ncol=1)
         plt.title(os.path.basename(self.filepath))
+        plt.subplots_adjust(hspace=0.4)
+
         plt.show()
 
     def DispOnlyPenAngles(self):
@@ -330,13 +339,14 @@ class SensitivePenDataSet():
             theta = [0]*len(timeList)
 
         sensitivePenAngle = plt.subplot(111)
-        sensitivePenAngle.plot(timeList, psi, color="red", label='psi')
-        sensitivePenAngle.plot(timeList, theta, color="blue", label='theta')
+        sensitivePenAngle.plot(timeList, self.psi, color="red", label='psi')
+        sensitivePenAngle.plot(timeList, self.theta, color="blue", label='theta')
         sensitivePenAngle.grid(b=True, which='major')
         sensitivePenAngle.grid(b=True, which='minor', color='#999999', linestyle='dotted')
         sensitivePenAngle.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
         sensitivePenAngle.minorticks_on()
-        sensitivePenAngle.set_yticks([-180, -90, 0, 90, 180])
+        sensitivePenAngle.set_yticks([0, 90, 180, 270, 360])
+        sensitivePenAngle.set_ylim(-40, 400)
         sensitivePenAngle.yaxis.set_minor_locator(MultipleLocator(45))
         sensitivePenAngle.legend(loc='upper right')
         sensitivePenAngle.set_title("Relevant angle (psi, theta) (deg)")
