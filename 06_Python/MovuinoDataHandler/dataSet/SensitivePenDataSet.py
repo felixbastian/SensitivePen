@@ -103,6 +103,8 @@ class SensitivePenDataSet():
                     self.normMagnetometer_lp.append(np.linalg.norm(self.magnetometer_lp[k]))
 
                     self.sensitivePenAngles.append(np.array([self.rawData["psi"][k], self.rawData["theta"][k]]))
+                    self.psi = self.rawData['psi']
+                    self.theta = self.rawData['theta']
 
                 self.acceleration_lp = np.array(self.acceleration_lp)
                 self.gyroscope_lp = np.array(self.gyroscope_lp)

@@ -1,4 +1,5 @@
 import dataSet.SensitivePenDataSet as sp
+import tools.angleModelUtilities as amu
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -43,33 +44,32 @@ print("Theta : -> mean : {}, -> sigma : {}".format(mean_theta, sig_theta))
 sensitivPenDataSet.DispOnlyPenAngles()
 
 #Regression :
+
 line_interval = (3000,26000) #secondes
 index_line_init = int(line_interval[0] * 1/Te)
 index_line_end = int(line_interval[1]*1/Te)
 
-line_psi = sensitivPenDataSet.sensitivePenAngles[index_line_init:index_line_end, 0]
+line_psi = sensitivPenDataSet.psi[index_line_init:index_line_end]
+line_theta = sensitivPenDataSet.theta[index_line_init:index_line_end]
 
-nbpts = len(line_psi)
-x = np.linspace(0, 1, nbpts)
-X = np.vstack([x, np.ones(len(x))]).T
-# X = [[x1, 1],
-#      [x2, 1],
-#      ...
-#      [xn, 1]]
-resultat = np.linalg.lstsq(X, line_psi, rcond=None)
-print(resultat)
-aopt, bopt = resultat[0]
-erreur = resultat[1][0]/nbpts
+x = np.linspace(0, 1, len(line_psi))
 
-line_psi_estimated = [aopt*i+bopt for i in x]
+a_psi, b_psi, er_psi, reg_psi = amu .LinearReg(line_psi)
+a_theta, b_theta, er_theta, reg_theta = amu .LinearReg(line_theta)
 
+print("a =", a_psi.round(2), ", b =", b_psi.round(2),"; χ² =", er_psi.round(2))
 plt.plot(x, line_psi, "b-+") # nuage de points
-plt.plot(x, line_psi_estimated,"r") # droite de régression
+plt.plot(x, reg_psi,"r") # droite de régression
 plt.title("Psi = f(pourcentage d'avancement de la ligne)")
-
 plt.show()
 
-print("a =", aopt.round(2), ", b =", bopt.round(2),"; χ² =", erreur.round(2))
+print("a =", a_theta.round(2), ", b =", b_theta.round(2),"; χ² =", er_theta.round(2))
+plt.plot(x, line_theta, "b-+") # nuage de points
+plt.plot(x, reg_theta,"r") # droite de régression
+plt.title("Psi = f(pourcentage d'avancement de la ligne)")
+plt.show()
+
+
 
 
 
