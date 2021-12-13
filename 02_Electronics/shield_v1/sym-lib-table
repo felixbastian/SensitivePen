@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name FT5316DME)(type Legacy)(uri C:/Users/wimpo/Desktop/CRI/Electronic/Lib/FT5316DME.lib)(options "")(descr ""))
+  (lib (name DF12_3.0_-40DP-0.5V_86_)(type Legacy)(uri C:/Users/wimpo/Desktop/CRI/Electronic/Lib/DF12_3.0_-40DP-0.5V_86_/DF12_3.0_-40DP-0.5V_86_.lib)(options "")(descr ""))
+)

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name FT5316dme)(type KiCad)(uri C:/Users/wimpo/Desktop/CRI/Electronic/muca-hardware-master/part-libraries/FT5316dme)(options "")(descr ""))
+  (lib (name DF12_3.0_-40DP-0)(type KiCad)(uri C:/Users/wimpo/Desktop/CRI/Electronic/Lib/DF12_3.0_-40DP-0.5V_86_)(options "")(descr ""))
+)
