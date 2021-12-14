@@ -1,4 +1,4 @@
-19222623862666692
+19426468154173802
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -48768,27 +48768,6 @@ THT ceramic resonator filter DSS6
 0
 3
 3
-DF12_3.0_-30DP-0
-DF123030DP05V86
-<b>DF12(3.0)-30DP-0.5V(86)-1</b><br>
-
-0
-32
-32
-DF12_3.0_-36DP-0.5V_86_
-DF123036DP05V86
-DF12(3.0)-36DP-0.5V(86)-2
-Connector
-0
-40
-40
-DF12_3.0_-40DP-0
-HRS_DF12(3.0)-40DP-0.5V(86)
-
-
-0
-38
-38
 Diode_SMD
 D_0201_0603Metric
 Diode SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
@@ -50735,20 +50714,6 @@ One digit LED 7 segment SA39-11 SC39-11 SA39-12 SC39-12
 0
 10
 10
-FH12-10S-0
-FH12-10S-0.5SH(55)_HIR
-
-
-0
-12
-12
-FT5316dme
-QFN40P600X600X60-49N
-
-
-0
-49
-49
 Ferrite_THT
 LairdTech_28C0236-0JW-10
 Ferrite, vertical, LairdTech 28C0236-0JW-10, https://assets.lairdtech.com/home/brandworld/files/28C0236-0JW-10.pdf, JW Miller core https://www.bourns.com/products/magnetic-products/j.w.-miller-through-hole-ferrite-beads-emi-filters
@@ -56244,13 +56209,6 @@ Yellow 5381 Series LED
 0
 2
 2
-Lib
-QFN40P600X600X60-49N
-
-
-0
-49
-49
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet
