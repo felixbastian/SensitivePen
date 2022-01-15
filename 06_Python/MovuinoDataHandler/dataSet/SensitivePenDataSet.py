@@ -108,10 +108,12 @@ class SensitivePenDataSet():
                     self.psi = self.rawData['psi']
                     self.theta = self.rawData['theta']
 
+
                 self.acceleration_lp = np.array(self.acceleration_lp)
                 self.gyroscope_lp = np.array(self.gyroscope_lp)
                 self.magnetometer_lp = np.array(self.magnetometer_lp)
-                self.normMagnetometer_lp = np.array(self.magnetometer_lp)
+                self.normMagnetometer_lp = np.array(self.normMagnetometer_lp)
+                self.normAcceleration_lp = np.array(self.normAcceleration_lp)
                 self.sensitivePenAngles = np.array(self.sensitivePenAngles)
             except (KeyError):
                 print("____________________________________")
@@ -170,7 +172,7 @@ class SensitivePenDataSet():
                 elif 180 < psi <= 360:
                     psi -= 360
                 """
-            self.angle_a_m.append(np.arcsin(np.linalg.norm(np.cross(self.acceleration[k], self.magnetometer[k])/(self.normAcceleration[k]*self.normMagnetometer[k])))*180/np.pi)
+            self.angle_a_m.append(np.arcsin(np.linalg.norm(np.cross(self.acceleration_lp[k], self.magnetometer_lp[k])/(self.normAcceleration_lp[k]*self.normMagnetometer_lp[k])))*180/np.pi)
             self.sensitivePenAngles.append(np.array([psi, theta]))
             self.theta.append(theta)
             self.psi.append(psi)
