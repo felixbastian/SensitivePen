@@ -2,17 +2,19 @@ import dataSet.SensitivePenDataSet as sp
 import tools.FilterMethods as fm
 import tools.features_extraction_scripts.runFeature as ft
 import os
+import numpy as np
+
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_Postures\\Manip_061221\\02_treated_data\\"
+folderPath = "..\\..\\08_DataPen\\Data_Postures\\Manip_101221_garche\\01_raw_data\\"
 
 fileName = "record"  # generic name numbers will be added for duplicates
 pathfeatures ="zozo.csv"
 serialPort = 'COM4'
 
 toExtract = False
-toDataManage =False
+toDataManage = True
 toVisualize = True
 
 filter = 20
@@ -58,8 +60,8 @@ for filename in os.listdir(folderPath):
 
             #stock in processed.csv
             treated_filepath = os.path.dirname(sensitivPenDataSet.filepath) + "\\..\\02_treated_data\\" + sensitivPenDataSet.filename[:-4] + "_treated_" + sensitivPenDataSet.name + ".csv"
-            sensitivPenDataSet.stockData(treated_filepath)
-            #sensitivPenDataSet.DispProcessedData()
+            #sensitivPenDataSet.stockData(treated_filepath)
+            sensitivPenDataSet.DispProcessedData()
 
             if toVisualize:
                 # display

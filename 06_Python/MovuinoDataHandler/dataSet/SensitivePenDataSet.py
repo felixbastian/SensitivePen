@@ -74,6 +74,8 @@ class SensitivePenDataSet():
         self.initEulerAngles = []
         self.eulerAngles = []
 
+        self.angle_a_m = []
+
 
         # ------ STOCK COLUMN OF DF IN VARIABLES ------
         for k in range(self.nb_row):  # We stock rawData in variables
@@ -168,7 +170,7 @@ class SensitivePenDataSet():
                 elif 180 < psi <= 360:
                     psi -= 360
                 """
-
+            self.angle_a_m.append(np.arcsin(np.linalg.norm(np.cross(self.acceleration[k], self.magnetometer[k])/(self.normAcceleration[k]*self.normMagnetometer[k])))*180/np.pi)
             self.sensitivePenAngles.append(np.array([psi, theta]))
             self.theta.append(theta)
             self.psi.append(psi)
@@ -323,6 +325,16 @@ class SensitivePenDataSet():
         plt.legend(handles=[patchX, patchY, patchZ], loc="upper right", bbox_to_anchor=(2.5, 3.6), ncol=1)
         plt.title(os.path.basename(self.filepath))
         plt.subplots_adjust(hspace=0.4)
+
+        angleAM = plt.subplot(339)
+        angleAM.plot(time_list, self.angle_a_m, color="black")
+        angleAM.grid(b=True, which='major')
+        angleAM.grid(b=True, which='minor', color='#999999', linestyle='dotted')
+        angleAM.tick_params(axis='y', which='minor', labelsize=12, color="#999999")
+        angleAM.minorticks_on()
+        angleAM.set_yticks([-90,0, 90])
+        angleAM.yaxis.set_minor_locator(MultipleLocator(10))
+        angleAM.set_title("Angle between g and B, mean : {}, std : {}".format(np.mean(self.angle_a_m), np.std(self.angle_a_m, dtype=np.float32)))
 
         plt.show()
 

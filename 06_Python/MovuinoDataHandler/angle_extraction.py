@@ -1,25 +1,23 @@
 import dataSet.SensitivePenDataSet as sp
 import tools.angleModelUtilities as amu
 import numpy as np
-
 import matplotlib.pyplot as plt
 
 ############   SETTINGS   #############
 device = "sensitiPen"
-folderPath = "..\\..\\08_DataPen\\Data_postures\\Manip_061221\\02_treated_data\\"
-filename = "G14_sentence_treated_SensitivePen.csv"
+folderPath = "..\\..\\08_DataPen\\Data_postures\\Manip_101221_garche\\02_treated_data\\"
+filename = "B6_sentence_en_treated_SensitivePen.csv"
 sep = ","
 decimal = "."
 
 
-stationnarity_interval = [7,23] #Intervalle en sec
+stationnarity_interval = [7, 23] #Intervalle en sec
 stationnarity_interval[0] *= 1000
 stationnarity_interval[1] *= 1000
 print(stationnarity_interval)
 ###################################
 
 # -------- Data processing ----------------------
-
 sensitivPenDataSet = sp.SensitivePenDataSet(folderPath + filename)
 Te = sensitivPenDataSet.Te
 print("sample frequency : " + str(1 / Te))
