@@ -1,15 +1,18 @@
 import numpy as np
 import math
 import GetDFT
+import createFeatures
+
 X = []
 dataWindow = 20
 
 def getFeaturesWindows(data, out):
 
+    norme = data['norme']
     print('activate')
     Xtemp = []
     X_ = []
-    lenDat_ = len(data)
+    lenDat_ = len(norme)
     i = 0
     targetcount = 0
 
@@ -21,8 +24,12 @@ def getFeaturesWindows(data, out):
             indStop_ = lenDat_ - 1
         if (indStop_ - indStart_ >= 1):
 
-            # Get Features By window
-            X_ = GetDFT.getDFT(data[indStart_:indStop_])
+            #Create window of raw data and pass it to the feature creator
+            window = data[indStart_:indStop_]
+            createdFeatureWindow = createFeatures.createFeatures(window)
+
+            # Get Fourier Features By window
+            X_ = GetDFT.getDFT(norme[indStart_:indStop_])
             targetcount += 1
             i += math.floor(dataWindow / 2.0)
 
@@ -49,7 +56,7 @@ def getFeaturesWindows(data, out):
         Y = np.ones(targetcount)
     if out == 0:
         Y = np.zeros(targetcount)
-    return (Xtemp,Y)
+    return (Xtemp,Y, window)
 
 
 

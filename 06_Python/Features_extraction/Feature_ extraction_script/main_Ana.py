@@ -6,7 +6,8 @@ import MathUtilities
 import os
 
 # Put the path of the directory where the data is located (keep the r before the string)
-path = r'C:\Users\CRI User\Documents\GitHub\PythonDFTMotionP3\goodata\Openclose'
+path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
+
 
 def runfeaturesextract():
 
@@ -24,21 +25,29 @@ def runfeaturesextract():
     # Operations for Different versions of Data
     Data = df[datatype]
     df['norme'] = MathUtilities.norme(df)
-    norme = df['norme']
 
     # Get Features by Window
-    # Choose Data or Norme :)
-    Xfinaldata, Yfinaldata = getFeaturesWindows.getFeaturesWindows(norme, 1)
+
+    #Xfinaldata = window of features (based on norm)
+    #Yfinaldata = boolean value indicating whether this feature could have been extracted (1) or not (0)
+    #window is the 20 units dataframe extraction of "raw" data (time, accX, accY, ...)
+
+    Xfinaldata, Yfinaldata, window = getFeaturesWindows.getFeaturesWindows(df, 1)
 
     # Create final DataFrame
     dffinaldata = pd.DataFrame(Xfinaldata)
     dffinaldata.columns = ['DC', 'energy', 'entropyDFT', 'Deviation']
 
-    # This show the final dataframe in the interpreter
+    # This show the final dataframe in the interpreter (final meaning the last iteration)
+
+    #final window of raw data
+    print(window)
+
+    #final window of feature extracted data
     print(dffinaldata)
 
     # This plot the little dashboard with the distributions of values
-    plot.plotfeaturesnotarget(dffinaldata)
+    #plot.plotfeaturesnotarget(dffinaldata)
 
         # This command create the new file with extracted features.
         # You could replace the path with where you want the file to be stocked in.
