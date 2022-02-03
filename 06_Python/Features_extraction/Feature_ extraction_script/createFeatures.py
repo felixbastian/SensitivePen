@@ -4,7 +4,7 @@ def createFeatures(data):
 
     #dummy feature
     print(data)
-    avgAccX = sum(data['accX'])/len(data['accX'])
+    #avgAccX = sum(data['accX'])/len(data['accX'])
     # print(avgAccX)
 
     return 0

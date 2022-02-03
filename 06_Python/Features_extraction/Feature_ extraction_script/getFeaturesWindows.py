@@ -32,10 +32,14 @@ def passThroughWindow(data, isRaw):
 
                 norme = data['norme']
                 X_ = GetDFT.getDFT(norme[indStart_:indStop_])
-                targetcount += 1
-                i += math.floor(dataWindow / 2.0)
+
 
                 getFeaturesWindows(data, X_)
+
+            targetcount += 1
+
+            #We define a rolling window that overlapps with the old window by half
+            i += math.floor(dataWindow / 2.0)
 
 
 def getFeaturesWindows(data, X_):

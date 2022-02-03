@@ -33,7 +33,7 @@ def runfeaturesextract():
     print(totalDF)
 
     #Pass dataframe through window and set isRaw to False
-    #getFeaturesWindows.passThroughWindow(totalDF, False)
+    getFeaturesWindows.passThroughWindow(totalDF, False)
     
     # Datatype is the axis of data you want, you just have to replace by the correpsonding column. (exemple 'accX')
     datatype = ['accZ']
