@@ -70,6 +70,7 @@ class SensitivePenDataSet(MovuinoDataSet):
 
     def StockIntoNewFile(self, filepath):
         self.rawData.to_csv(filepath + "_treated_" + self.name + ".csv", sep=",", index=False, index_label=False)
+        print("treated")
 
     def PlotImage(self):
         """

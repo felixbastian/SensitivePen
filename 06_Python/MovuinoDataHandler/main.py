@@ -1,4 +1,4 @@
-import serial
+# import serial
 import dataSet.SensitivePenDataSet as sp
 import dataSet.GlobalDataSet as gds
 import dataSet.MovuinoDataSet as dm
@@ -14,14 +14,15 @@ from scipy import signal
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
-folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_Montessori/"
+#folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_Montessori/"
+folderPath = 'C:/Users/felix/OneDrive/Desktop/DSBA-M2/CRP/'
 
-fileName = "record"  # generic name numbers will be added for duplicates
-
+#fileName = "record"  # generic name numbers will be added for duplicates
+fileName = 'B1_loops'
 serialPort = '/dev/cu.usbserial-0154D8DD'
 
-toExtract = True
-toDataManage = False
+toExtract = False
+toDataManage = True
 toVisualize = False
 
 filter = 25
@@ -101,6 +102,9 @@ if toDataManage:
         dataSet.DataManage()
         Te = dataSet.Te
         print("sample frequency : "+str(1/Te))
+
+        print("data here")
+        print(dataSet)
 
         if toVisualize:
             dataSet.VisualizeData()

@@ -97,6 +97,7 @@ class MovuinoDataSet():
         self.normMagnetometer_lp = []
 
         # time list in seconds
+        #use the .csv file and do time*0.001
         self.time = list(self.rawData["time"]*0.001)
         self.rawData["time"] = self.time
 

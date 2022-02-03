@@ -1,12 +1,13 @@
 import getFeaturesFromFile
-import getFeaturesWindows
+import getFeaturesWindow_old as getFeaturesWindows
 import plot
 from sklearn import preprocessing
 import pandas as pd
 import MathUtilities
 import os, fnmatch
 datatype = 'accZ'
-path = r'C:\Users\CRI User\PycharmProjects\SensitivePen\08_DataPen\Manip_2807\atelle'
+# path = r'C:\Users\CRI User\PycharmProjects\SensitivePen\08_DataPen\Manip_2807\atelle'
+path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
 pattern = "*good*"
 pattern2 = "*bad*"
 
