@@ -25,7 +25,7 @@ def passThroughWindow(data, isRaw):
             window = data[indStart_:indStop_]
 
             if(isRaw == False):
-                createdFeatures = createFeatures.createFeatures(window)
+                createdFeatures = createFeatures.createFeatures(window,indStart_, dataWindow, data)
 
             if (isRaw ==True):
                 # Get Fourier Features By window

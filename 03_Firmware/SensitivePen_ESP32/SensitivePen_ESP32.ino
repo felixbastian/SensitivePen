@@ -22,6 +22,10 @@
 #define CMD_LISTING_DIR 'l'  // List files in the directory
 #define CMD_SPIFF_INFO 'i'   // Get informations about the spiff
 
+#define BATTERY_PIN 36       // Used to read the battery level
+#define BATTERY_MIN_VAL 1900 // ~3.3v
+#define BATTERY_MAX_VAL 2500 // ~4.2v
+
 MovuinoMPU9250 mpu = MovuinoMPU9250();
 MovuinoButton button = MovuinoButton();
 MovuinoRecorder recorder = MovuinoRecorder();
@@ -45,10 +49,12 @@ uint32_t colFormat = RED;
 void setup()
 {
   Serial.begin(115200);
+  pinMode(BATTERY_PIN, INPUT);
   
   // Neopixel
   neopix.begin();
   neopix.setBrightness(5);
+  showBatteryLevel();
   normalMode();
   freezBlink(2);
   neopix.update();
@@ -241,4 +247,35 @@ void freezColorStrob(int nblink_, uint32_t color_)
     neopix.forceUpdate();
     delay(100);
   }
+}
+
+void showBatteryLevel(void)
+{
+  int sum;
+  int level;
+
+  sum = 0;
+  for (uint8_t i = 0; i < 10; i++) // Do the average over 10 values
+    sum += analogRead(BATTERY_PIN);
+  
+  if (sum < BATTERY_MIN_VAL * 10)
+    sum = BATTERY_MIN_VAL * 10;
+
+  if (sum > BATTERY_MAX_VAL * 10)
+    sum = BATTERY_MAX_VAL * 10;
+   
+  level = ((float)((sum / 10) - BATTERY_MIN_VAL ) / (float)(BATTERY_MAX_VAL - BATTERY_MIN_VAL)) * 100.0;
+  
+  if (level >= 50)
+    neopix.setColor((uint32_t)GREEN);
+  else if (level >= 25)
+    neopix.setColor((uint32_t)YELLOW);
+  else
+    neopix.setColor((uint32_t)RED);
+    
+  neopix.forceUpdate();
+  delay(2500);
+  Serial.printf("Battery Reading: %d\n", sum / 10);
+  Serial.printf("Battery Level: %d%%\n", level);
+  delay(2500);
 }

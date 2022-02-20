@@ -1,4 +1,4 @@
-# import serial
+import serial
 import dataSet.SensitivePenDataSet as sp
 import dataSet.GlobalDataSet as gds
 import dataSet.MovuinoDataSet as dm
@@ -8,22 +8,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 
-
-
 ############   SETTINGS   #############
 
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
 #folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_Montessori/"
-folderPath = 'C:/Users/felix/OneDrive/Desktop/DSBA-M2/CRP/'
+folderPath = 'C:/Users/felix/OneDrive/Desktop/DSBA-M2/CRP/testing'
 
 #fileName = "record"  # generic name numbers will be added for duplicates
-fileName = 'B1_loops'
-serialPort = '/dev/cu.usbserial-0154D8DD'
+fileName = 'new'
+serialPort = '/dev/cu.usbserial-COM3'
 
-toExtract = False
+toExtract = True
 toDataManage = True
-toVisualize = False
+toVisualize = True
 
 filter = 25
 
