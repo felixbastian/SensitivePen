@@ -4,9 +4,8 @@ import GetDFT
 import createFeatures
 
 X = []
-dataWindow = 20
 
-def passThroughWindow(data, isRaw):
+def passThroughWindow(data, isRaw, dataWindow):
 
     X_ = []
     targetcount = 0

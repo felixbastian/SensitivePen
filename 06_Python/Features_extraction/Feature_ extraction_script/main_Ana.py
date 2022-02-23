@@ -8,6 +8,7 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy import integrate
+from statsmodels.tsa.statespace.tools import diff
 
 # Put the path of the directory where the data is located (keep the r before the string)
 #path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
@@ -34,7 +35,12 @@ def runfeaturesextract():
     tipDF = calculateTip.calculateTip(df)
     totalDF = pd.concat([totalDF,tipDF], axis=1)
 
-    sns.lineplot(totalDF['time'], integrate.cumtrapz(totalDF['accX_Top'],initial = 0))
+    #calculate integration
+    # integrate.cumtrapz(totalDF['accX_Top'],initial = 0)
+    accX_top_diff = diff(totalDF['accX_Top'], k_diff=1)
+
+
+    sns.lineplot(totalDF['time'], accX_top_diff)
     #sns.lineplot(totalDF['time'], totalDF['accY_Top'])
     #sns.lineplot(totalDF['time'], totalDF['accZ_Top'])
     plt.show()
@@ -46,7 +52,9 @@ def runfeaturesextract():
     # sns.lineplot(data['time'], data['accZ_Top'])
 
     #Pass dataframe through window and set isRaw to False
-    getFeaturesWindows.passThroughWindow(totalDF, False)
+    #define windowsize
+    windowSize = 20
+    getFeaturesWindows.passThroughWindow(totalDF, False, windowSize)
     
     # Datatype is the axis of data you want, you just have to replace by the correpsonding column. (exemple 'accX')
     datatype = ['accZ']
