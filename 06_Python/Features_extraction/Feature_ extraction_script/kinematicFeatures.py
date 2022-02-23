@@ -11,7 +11,7 @@ def tilt_azimuth(df):
 
     return mean, max, min, SD
 
-def tiltFeatures(df):
+def kinematicFeatures(df):
 
     #create tilt_azimuth features
     mean_AZ, max_AZ, min_AZ, SD_AZ = tilt_azimuth(df)
