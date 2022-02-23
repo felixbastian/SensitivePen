@@ -48,6 +48,7 @@ def runfeaturesextract():
     sns.lineplot(totalDF['time'], totalDF['psi'])
     sns.lineplot(totalDF['time'], totalDF['theta'])
     plt.show()
+
     # sns.lineplot(data['time'], data['accY_Top'])
     # sns.lineplot(data['time'], data['accZ_Top'])
 

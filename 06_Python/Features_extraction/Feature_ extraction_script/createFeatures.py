@@ -24,9 +24,13 @@ def handwritingMoment():
 def createFeatures(window, indStart, windowSize, data):
 
     tiltDataFrame = tiltFeatures.tiltFeatures(window)
-    #we initialize a result dataframe that contains the resulting data per window
-    byWindowFrame = tiltDataFrame
     kinematicDataFrame = kinematicFeatures.kinematicFeatures(window)
+    staticDataFrame = staticFeatures.staticFeatures(window)
+
+    byWindowFrame = pd.concat([tiltDataFrame,kinematicDataFrame,staticDataFrame],axis=1)
+
+    # we initialize a result dataframe that contains the resulting data per window
+
 
 
     #print(data)
