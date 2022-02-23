@@ -38,15 +38,25 @@ def runfeaturesextract():
     #calculate integration
     # integrate.cumtrapz(totalDF['accX_Top'],initial = 0)
     accX_top_diff = diff(totalDF['accX_Top'], k_diff=1)
+    accY_top_diff = diff(totalDF['accY_Top'], k_diff=1)
+    accZ_top_diff = diff(totalDF['accZ_Top'], k_diff=1)
+    acc_comb = round(accX_top_diff + accY_top_diff + accZ_top_diff,5)
 
+    pd.set_option("display.precision", 8)
+    print(totalDF['accX_Top'].head())
+    print(accX_top_diff[200:210])
+    print(accY_top_diff[200:210])
+    print(accZ_top_diff[200:210])
+    print('result')
+    print(acc_comb[200:210])
 
     sns.lineplot(totalDF['time'], accX_top_diff)
     #sns.lineplot(totalDF['time'], totalDF['accY_Top'])
     #sns.lineplot(totalDF['time'], totalDF['accZ_Top'])
     plt.show()
 
-    sns.lineplot(totalDF['time'], totalDF['psi'])
-    sns.lineplot(totalDF['time'], totalDF['theta'])
+    #sns.lineplot(totalDF['time'], totalDF['psi'])
+    #sns.lineplot(totalDF['time'], totalDF['theta'])
     plt.show()
 
     # sns.lineplot(data['time'], data['accY_Top'])
@@ -55,7 +65,7 @@ def runfeaturesextract():
     #Pass dataframe through window and set isRaw to False
     #define windowsize
     windowSize = 20
-    getFeaturesWindows.passThroughWindow(totalDF, False, windowSize)
+    #getFeaturesWindows.passThroughWindow(totalDF, False, windowSize)
     
     # Datatype is the axis of data you want, you just have to replace by the correpsonding column. (exemple 'accX')
     datatype = ['accZ']

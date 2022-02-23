@@ -29,13 +29,4 @@ def createFeatures(window, indStart, windowSize, data):
 
     byWindowFrame = pd.concat([tiltDataFrame,kinematicDataFrame,staticDataFrame],axis=1)
 
-    # we initialize a result dataframe that contains the resulting data per window
-
-
-
-    #print(data)
-
-    #avgAccX = sum(data['accX'])/len(data['accX'])
-    # print(avgAccX)
-
-    return 0
+    return byWindowFrame

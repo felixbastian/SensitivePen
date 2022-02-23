@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
+from statsmodels.tsa.statespace.tools import diff
 
 #calculating mean, max, min SD of tilt-azimuth
-def tilt_azimuth(df):
-    print('test')
+def differentiate(df):
     mean = 0
     max = 0
     min = 0
@@ -13,8 +13,8 @@ def tilt_azimuth(df):
 
 def staticFeatures(df):
 
-    #create tilt_azimuth features
-    mean_AZ, max_AZ, min_AZ, SD_AZ = tilt_azimuth(df)
+    #differentiate
+    mean_AZ, max_AZ, min_AZ, SD_AZ = differentiate(df)
 
     #add features to DataFrame
     staticDataFrame = pd.DataFrame([mean_AZ, max_AZ, min_AZ, SD_AZ])

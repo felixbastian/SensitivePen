@@ -18,7 +18,7 @@ def calculateTip(df):
     #Looking at the translation and rotation together:
     #Formula = TranslationAdjusment + length*rotationAdjustment
     translatedDF = pd.DataFrame(np.add(lengthOfPen*np.array(rotationAdjustment),translationAdjustment))
-    translatedDF = translatedDF.rename(index={0: "AccX_Tip", 1: "AccY_Tip", 2: "AccZ_Tip"})
+    translatedDF = translatedDF.rename(index={0: "accX_Tip", 1: "accY_Tip", 2: "accZ_Tip"})
 
     translatedDF = translatedDF.append(df['psi'])
     translatedDF = translatedDF.append(df['theta'])
