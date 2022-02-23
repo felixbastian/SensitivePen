@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 import seaborn as sns
 import staticFeatures
@@ -22,7 +23,10 @@ def handwritingMoment():
 
 def createFeatures(window, indStart, windowSize, data):
 
-    tiltFeatures.tiltFeatures(window)
+    tiltDataFrame = tiltFeatures.tiltFeatures(window)
+
+    #we initialize a result dataframe that contains the resulting data per window
+    byWindowFrame = tiltDataFrame
     #dummy feature
 
 
