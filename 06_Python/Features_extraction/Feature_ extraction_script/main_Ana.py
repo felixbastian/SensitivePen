@@ -12,7 +12,7 @@ from statsmodels.tsa.statespace.tools import diff
 
 # Put the path of the directory where the data is located (keep the r before the string)
 #path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
-path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\testing\test1'
+path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\testing_files\test1'
 
 def runfeaturesextract():
 
@@ -42,13 +42,14 @@ def runfeaturesextract():
     accZ_top_diff = diff(totalDF['accZ_Top'], k_diff=1)
     acc_comb = round(accX_top_diff + accY_top_diff + accZ_top_diff,5)
 
-    pd.set_option("display.precision", 8)
-    print(totalDF['accX_Top'].head())
-    print(accX_top_diff[200:210])
-    print(accY_top_diff[200:210])
-    print(accZ_top_diff[200:210])
-    print('result')
-    print(acc_comb[200:210])
+    #testing some stuff
+    # pd.set_option("display.precision", 8)
+    # print(totalDF['accX_Top'].head())
+    # print(accX_top_diff[200:210])
+    # print(accY_top_diff[200:210])
+    # print(accZ_top_diff[200:210])
+    # print('result')
+    # print(acc_comb[200:210])
 
     sns.lineplot(totalDF['time'], accX_top_diff)
     #sns.lineplot(totalDF['time'], totalDF['accY_Top'])
@@ -65,7 +66,8 @@ def runfeaturesextract():
     #Pass dataframe through window and set isRaw to False
     #define windowsize
     windowSize = 20
-    #getFeaturesWindows.passThroughWindow(totalDF, False, windowSize)
+    featuresByWindowDF = getFeaturesWindows.passThroughWindow(totalDF, False, windowSize)
+    print(featuresByWindowDF.head())
     
     # Datatype is the axis of data you want, you just have to replace by the correpsonding column. (exemple 'accX')
     datatype = ['accZ']

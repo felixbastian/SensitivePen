@@ -2,6 +2,7 @@ import numpy as np
 import math
 import GetDFT
 import createFeatures
+import pandas as pd
 
 X = []
 
@@ -11,6 +12,7 @@ def passThroughWindow(data, isRaw, dataWindow):
     targetcount = 0
     lenDat_ = len(data)
     i = 0
+    featuresByWindowDF = pd.DataFrame([])
 
     # Window rolling
     while i < (lenDat_ - 1):
@@ -24,7 +26,8 @@ def passThroughWindow(data, isRaw, dataWindow):
             window = data[indStart_:indStop_]
 
             if(isRaw == False):
-                createdFeatures = createFeatures.createFeatures(window,indStart_, dataWindow, data)
+                featuresByWindowDF = featuresByWindowDF.append(createFeatures.createFeatures(window,indStart_, dataWindow, data))
+
 
             if (isRaw ==True):
                 # Get Fourier Features By window
@@ -39,6 +42,7 @@ def passThroughWindow(data, isRaw, dataWindow):
 
             #We define a rolling window that overlapps with the old window by half
             i += math.floor(dataWindow / 2.0)
+    return featuresByWindowDF
 
 
 def getFeaturesWindows(data, X_):
