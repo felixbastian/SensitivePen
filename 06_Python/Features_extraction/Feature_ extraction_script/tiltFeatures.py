@@ -80,6 +80,7 @@ def tiltFeatures(df):
 
     #create features
     features_AZ = tilt_azimuth(df)
+
     features_AL = tilt_altitude(df)
     features_AZ_diff = tilt_azimuth_change(df)
     features_AL_diff = tilt_altitude_change(df)

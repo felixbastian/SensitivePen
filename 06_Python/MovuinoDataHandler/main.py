@@ -13,15 +13,15 @@ from scipy import signal
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
 #folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_Montessori/"
-folderPath = 'C:/Users/felix/OneDrive/Desktop/DSBA-M2/CRP/testing'
+folderPath = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Adults_test'
 
 #fileName = "record"  # generic name numbers will be added for duplicates
-fileName = 'new'
+fileName = r'\B1_loops'
 serialPort = '/dev/cu.usbserial-COM3'
 
-toExtract = True
+toExtract = False
 toDataManage = True
-toVisualize = True
+toVisualize = False
 
 filter = 25
 
@@ -90,7 +90,8 @@ if toDataManage:
     for i in range(file_start, file_start+nbRecord+1):
         if (device == 'sensitivePen'):
             print("--- Processing : " + folderPath + fileName + "_" + str(i) + " --- ")
-            dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i), filter)
+            # dataSet = sp.SensitivePenDataSet(folderPath + fileName + "_" + str(i), filter)
+            dataSet = sp.SensitivePenDataSet(folderPath + fileName, filter)
         elif (device == 'globalDataSet'):
             print("Processing : " + folderPath + fileName + "_" + str(i))
             dataSet = gds.GlobalDataSet(folderPath + fileName + "_" + str(i), filter)
