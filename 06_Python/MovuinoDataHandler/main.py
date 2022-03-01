@@ -13,10 +13,10 @@ from scipy import signal
 device = 'sensitivePen'  # devices available : sensitivePen / globalDataSet
 
 #folderPath = "/Users/phelippeau/Documents/PhD/Data/Manip_Montessori/"
-folderPath = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Adults_test'
+folderPath = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Adults'
 
 #fileName = "record"  # generic name numbers will be added for duplicates
-fileName = r'\B1_loops'
+fileName = r'\G6_loops'
 serialPort = '/dev/cu.usbserial-COM3'
 
 toExtract = False

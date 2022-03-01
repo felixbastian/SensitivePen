@@ -14,15 +14,16 @@ import ML_Model_AND_Evaluation
 # Put the path of the directory where the data is located (keep the r before the string)
 #path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
 path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
-subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary_test.xlsx',header=0)
+subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary.xlsx',header=0)
 
 def runfeaturesextract():
+    total_df = pd.DataFrame()
 
     # Go through the file indexing all existing files
     for ind in subjectLabels.index:
 
-        # DataFrame Creation with the Data
-        reference = '\\' + subjectLabels['Dataset'][ind] + '_test\\' + subjectLabels['Link'][ind] + '_treated_SensitivePen.csv'
+        # DataFrame Creation with the Data by looking up the link in the excel file corresponding to proband
+        reference = '\\' + subjectLabels['Dataset'][ind] + '\\' + subjectLabels[scope][ind] + '_treated_SensitivePen.csv'
         link = path + reference
         raw_df = pd.read_csv(link)
         df = raw_df[['time', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz', 'psi', 'theta', 'normAccel', 'normMag','normGyr']]
@@ -68,16 +69,19 @@ def runfeaturesextract():
 
 
         # Insert label of subject
-        featuresByWindowDF.insert(0, 'subjectLabel', subjectLabels['Dataset'][ind] + "_" + subjectLabels['Subject'][ind] + "_" + subjectLabels['Type'][ind])
+        featuresByWindowDF.insert(0, 'subjectLabel', subjectLabels['Dataset'][ind] + "_" + subjectLabels['Subject'][ind])
 
         #Insert BHK scores of subject
         featuresByWindowDF.insert(1, 'BHK_speed', subjectLabels['Speed_score'][ind])
         featuresByWindowDF.insert(2, 'BHK_quality', subjectLabels['Quality_score'][ind])
 
-        print('Final dataframe for model')
+        # print('Final dataframe for model')
+        # print(len(featuresByWindowDF))
+        #
+        # print(featuresByWindowDF.head())
+        total_df = pd.concat([total_df,featuresByWindowDF], axis=0)
 
-        print(featuresByWindowDF.head())
-    return featuresByWindowDF
+    return total_df
     #The following might be legacy#########
     # # Datatype is the axis of data you want, you just have to replace by the correpsonding column. (exemple 'accX')
     # datatype = ['accZ']
@@ -88,13 +92,17 @@ def runfeaturesextract():
 
 
 if __name__ == "__main__":
+
     # define windowsize
-    windowSize = 20
+    windowSize = 30
+
+    #define scope: 'Link_loops'/'Link_sentences'
+    scope = 'Link_loops'
 
     #extract features by window
-    featuresByWindowDF = runfeaturesextract()
+    total_df = runfeaturesextract()
 
     #run model pipeline and predict
-    ML_Model_AND_Evaluation.pipeline(featuresByWindowDF)
+    ML_Model_AND_Evaluation.pipeline(total_df)
 
 
