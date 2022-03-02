@@ -3,6 +3,8 @@ import numpy as np
 from statsmodels.tsa.statespace.tools import diff
 from scipy.stats import skew
 from scipy.stats import entropy
+from scipy.signal import argrelmax
+from scipy.signal import argrelmin
 
 # calculating mean, max, min SD of tilt-azimuth
 def acceleration_basic_stats(df):
@@ -39,6 +41,15 @@ def get_jerk(df):
     features['jerk_entropy'] = [entropy(df['jerk'].value_counts())]
 
     return features
+
+def nb_peaks_acceleration(df):
+    acc = df["normAccel"]
+    features = {}
+    #nb of local max and local min normalized by the length of the time series
+    features["nb_max_acc"] = len([argrelmax(acc)[0]])/len(acc)
+    features["nb_min_acc"] = len([argrelmin(acc)[0]])/len(acc)
+    return features
+
 
 def kinematicFeatures(df):
     # differentiate
