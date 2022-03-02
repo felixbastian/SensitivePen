@@ -43,11 +43,11 @@ def get_jerk(df):
     return features
 
 def nb_peaks_acceleration(df):
-    acc = df["normAccel"]
+    acc = np.array(df["normAccel"])
     features = {}
     #nb of local max and local min normalized by the length of the time series
-    features["nb_max_acc"] = len([argrelmax(acc)[0]])/len(acc)
-    features["nb_min_acc"] = len([argrelmin(acc)[0]])/len(acc)
+    features["nb_max_acc"] = [len([argrelmax(acc)[0]])/len(acc)]
+    features["nb_min_acc"] = [len([argrelmin(acc)[0]])/len(acc)]
     return features
 
 
@@ -55,9 +55,10 @@ def kinematicFeatures(df):
     # differentiate
     features_diff = acceleration_basic_stats(df)
     features_jerk = get_jerk(df)
+    features_peaks = nb_peaks_acceleration(df)
 
     # add features to DataFrame
-    all = [features_diff, features_jerk]
+    all = [features_diff, features_jerk, features_peaks]
     kinematic_df = pd.concat([pd.DataFrame.from_dict(i) for i in all], axis=1)
 
     return kinematic_df
