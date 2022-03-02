@@ -75,6 +75,8 @@ def pipeline(df):
     score = cross_val_score(RandomForestRegressor(random_state=42), x, y, cv=kf, scoring="neg_mean_squared_error")
     rmse(score.mean())
 
+
+
     print("Ridge Regression")
     score = cross_val_score(Ridge(), x, y, cv=kf, scoring="neg_mean_squared_error")
     rmse(score.mean())

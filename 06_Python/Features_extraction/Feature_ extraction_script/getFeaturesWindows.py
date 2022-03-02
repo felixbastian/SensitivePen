@@ -6,7 +6,7 @@ import pandas as pd
 
 X = []
 
-def passThroughWindow(data, isRaw, dataWindow):
+def passThroughWindow(data, isRaw, dataWindow, overlapRatio):
 
     X_ = []
     targetcount = 0
@@ -41,7 +41,7 @@ def passThroughWindow(data, isRaw, dataWindow):
             targetcount += 1
 
             #We define a rolling window that overlapps with the old window by half
-            i += math.floor(dataWindow / 2.0)
+            i += math.floor(dataWindow / overlapRatio)
     return featuresByWindowDF
 
 
