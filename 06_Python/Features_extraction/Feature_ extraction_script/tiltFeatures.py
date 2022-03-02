@@ -75,6 +75,15 @@ def tilt_altitude_change(df):
 
     return features
 
+def altitude_percentile(df, percentile=0.6):
+    features = {}
+    
+    #will output eg. 'AL_percentile_60' for percentile=0.6
+    features['AL_percentile_' + str(int(percentile*100))] = [df['theta'].quantile(percentile)]
+
+    return features
+
+
 
 def tiltFeatures(df):
 
@@ -85,8 +94,10 @@ def tiltFeatures(df):
     features_AZ_diff = tilt_azimuth_change(df)
     features_AL_diff = tilt_altitude_change(df)
 
+    features_AL_percentile = altitude_percentile(df)
+
     #add features to DataFrame
-    all = [features_AZ,features_AL,features_AZ_diff,features_AL_diff]
+    all = [features_AZ,features_AL,features_AZ_diff,features_AL_diff, features_AL_percentile]
     tilt_df = pd.concat([pd.DataFrame.from_dict(i) for i in all], axis =1)
 
     return tilt_df

@@ -13,9 +13,12 @@ import ML_Model_AND_Evaluation
 
 # Put the path of the directory where the data is located (keep the r before the string)
 #path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
-path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
+# path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
 #path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\testing_files\test1\test_1_tilt_on_paper.csv'
-subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary.xlsx',header=0)
+# subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary.xlsx',header=0)
+# jen path
+# path = r'/Users/jedrzejalchimowicz/Documents/GitHub/SensitivePen/09_Data_probands'
+# subjectLabels = pd.read_excel(r'/Users/jedrzejalchimowicz/Documents/GitHub/SensitivePen/09_Data_probands/Data_summary.xlsx',header=0)
 
 def runfeaturesextract():
     total_df = pd.DataFrame()
@@ -25,7 +28,7 @@ def runfeaturesextract():
     #for ind in range(1):
 
         # DataFrame Creation with the Data by looking up the link in the excel file corresponding to proband
-        reference = '\\' + subjectLabels['Dataset'][ind] + '\\' + subjectLabels[scope][ind] + '_treated_SensitivePen.csv'
+        reference = '/' + subjectLabels['Dataset'][ind] + '/' + subjectLabels[scope][ind] + '_treated_SensitivePen.csv'
         link = path + reference
         #link = path
         raw_df = pd.read_csv(link)
