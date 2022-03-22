@@ -25,9 +25,16 @@ def createFeatures(window, indStart, windowSize, data):
 
     tiltDataFrame = tiltFeatures.tiltFeatures(window)
 
-    #kinematicDataFrame = kinematicFeatures.kinematicFeatures(window)
+    kinematicDataFrame = kinematicFeatures.kinematicFeatures(window)
     #staticDataFrame = staticFeatures.staticFeatures(window)
     #featuresByWindowDF = pd.concat([tiltDataFrame,kinematicDataFrame,staticDataFrame],axis=1)
-    featuresByWindowDF = tiltDataFrame
+    # featuresByWindowDF = tiltDataFrame
+
+    featuresByWindowDF = pd.concat([tiltDataFrame, kinematicDataFrame], axis=1, join="inner")
+
+    # print('HERE')
+    # print(tiltDataFrame.head(5))
+    # print(kinematicDataFrame.head(5))
+    # print(featuresByWindowDF.head(5))
 
     return featuresByWindowDF

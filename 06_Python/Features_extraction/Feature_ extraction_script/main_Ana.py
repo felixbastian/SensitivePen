@@ -13,21 +13,24 @@ import ML_Model_AND_Evaluation
 
 # Put the path of the directory where the data is located (keep the r before the string)
 #path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\06_Python\Features_extraction\Data\goodata\Openclose'
-#path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
-path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\testing_files\test1\test_1_tilt_on_paper.csv'
-subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary.xlsx',header=0)
-# print(len(subjectLabels))
+# path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
+#path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\testing_files\test1\test_1_tilt_on_paper.csv'
+# subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary.xlsx',header=0)
+# jen path
+path = r'/Users/jedrzejalchimowicz/Documents/GitHub/SensitivePen/09_Data_probands'
+subjectLabels = pd.read_excel(r'/Users/jedrzejalchimowicz/Documents/GitHub/SensitivePen/09_Data_probands/Data_summary.xlsx',header=0)
+
 def runfeaturesextract():
     total_df = pd.DataFrame()
 
     # Go through the file indexing all existing files
-    #for ind in subjectLabels.index:
-    for ind in range(len(subjectLabels)):
+    for ind in subjectLabels.index:
+    #for ind in range(1):
 
         # DataFrame Creation with the Data by looking up the link in the excel file corresponding to proband
-        reference = '\\' + subjectLabels['Dataset'][ind] + '\\' + subjectLabels[scope][ind] + '_treated_SensitivePen.csv'
-        #link = path + reference
-        link = path
+        reference = '/' + subjectLabels['Dataset'][ind] + '/' + subjectLabels[scope][ind] + '_treated_SensitivePen.csv'
+        link = path + reference
+        #link = path
         raw_df = pd.read_csv(link)
         df = raw_df[['time', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz', 'psi', 'theta', 'normAccel', 'normMag','normGyr']]
 
@@ -39,14 +42,12 @@ def runfeaturesextract():
         #When the length of the df changes, also change "getFeaturesFromFile.py"
         df.columns = ['time', 'accX', 'accY', 'accZ', 'gyrX', 'gyrY', 'gyrZ', 'magX', 'magY', 'magZ','psi','theta','normAccel','normMag','normGyr']
 
-
-
         #topDF
         totalDF = df[["time", "accX", 'accY', 'accZ','normAccel','psi','theta']]
         totalDF = totalDF.rename(columns={'accX': "accX_Top", 'accY': "accY_Top", 'accZ': "accZ_Top"})
         #totalDF = df[["time", "accX", 'accY', 'accZ']].rename(index={1: "AccX_Top", 2: "AccY_Top", 3: "AccZ_Top"})
         #tipDF is the dataframe that contains the vectors of the tip of the pen (Acceleration in three directions + psi, theta)
-        tipDF = calculateTip.calculateTip(totalDF)
+        tipDF = calculateTip.calculateTip(df)
         totalDF = pd.concat([totalDF,tipDF], axis=1)
 
         #calculate integration
@@ -60,14 +61,6 @@ def runfeaturesextract():
         # sns.lineplot(totalDF['time'], totalDF['accY_Tip'])
         # sns.lineplot(totalDF['time'], totalDF['accY_Top'])
         # plt.show()
-        #
-        # plt.figure()
-        # sns.lineplot(totalDF['time'], totalDF['psi'])
-        # sns.lineplot(totalDF['time'], totalDF['theta'])
-        # plt.show()
-
-
-
         #sns.lineplot(totalDF['time'], totalDF['accY_Tip'])
         #sns.lineplot(totalDF['time'], totalDF['accZ_Top'])
         #plt.show()
@@ -80,13 +73,6 @@ def runfeaturesextract():
         # sns.lineplot(data['time'], data['accZ_Top'])
 
         #Pass dataframe through window and set isRaw to False
-        #reduce size to not inlcude beginning and end
-        padding = 200
-        print(len(totalDF))
-        totalDF = totalDF.iloc[padding:(len(totalDF)-padding),:]
-        # totalDF = totalDF[:, :]
-
-        windowSize = len(totalDF-2*padding)
 
         featuresByWindowDF = getFeaturesWindows.passThroughWindow(totalDF, False, windowSize, overlapRatio)
 
@@ -108,8 +94,8 @@ def runfeaturesextract():
 
 if __name__ == "__main__":
 
-    # define windowsize - 30 works well
-    windowSize = 500
+    # define windowsize
+    windowSize = 30
 
     #define the overlapping ratio meaning: windowStart += math.floor(dataWindow / overlapRatio)
     # 1 is resulting in no overlap
@@ -122,11 +108,11 @@ if __name__ == "__main__":
     #extract features by window
     total_df = runfeaturesextract()
 
-    print(total_df)
+
     #data export
-    total_df.to_excel('total_df_sentences.xlsx')
+    # total_df.to_csv('total_df_sentences.csv', sep=',')
 
     #run model pipeline and predict
-    #ML_Model_AND_Evaluation.pipeline(total_df)
+    ML_Model_AND_Evaluation.pipeline(total_df)
 
 
