@@ -8,7 +8,7 @@ from scipy.signal import argrelmin
 
 # calculating mean, max, min SD of tilt-azimuth
 def acceleration_basic_stats(df):
-    print(df.head(3))
+    # print(df.head(3))
     mean = df['normAccel'].mean()
     max = df['normAccel'].max()
     min = df['normAccel'].min()

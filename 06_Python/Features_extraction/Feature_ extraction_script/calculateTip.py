@@ -4,7 +4,6 @@ import numpy as np
 
 def calculateTip(df):
     lengthOfPen = 0.1
-    print(df)
 
     #The difference between the top (where data gets collected) and the tip (where the ink comes out) is relative to the length of the pen
     #When only looking at the translation, the tip and the top move the same in the coordinate system -> accX, accY, accZ
