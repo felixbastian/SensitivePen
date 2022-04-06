@@ -47,6 +47,21 @@ def rmse(score):
     rmse = np.sqrt(-score)
     print("RMSE", rmse)
 
+def preprocess_nan(x):
+    '''
+    preprocess Nan in Age and Gender
+    substitute Nan with 0 and create a dummy to account for it
+    if there are no Nan it does not do anything
+    '''
+    if x.Age.isna().sum() > 0:
+        x["has_age"] = 1
+        x.loc[x.Age.isna(), "has_age"] = 0
+        x.loc[x.Age.isna(), "Age"] = 0
+    if x.Gender.isna().sum() > 0:
+        x["has_gender"] = 1
+        x.loc[x.Gender.isna(), "has_gender"] = 0
+        x.loc[x.Gender.isna(), "Gender"] = 0
+
 def pipeline(df):
     #df_extracted_features = pd.read_csv(feature_exctracted_source).iloc[:, 1:]  # ignore old index
     #df_meta_data = pd.read_csv(meta_data_source).iloc[:, 1:]
@@ -60,6 +75,8 @@ def pipeline(df):
     # split in training and test data
     x, y = split_df_in_xy(df=df, y_choosen="BHK_quality")  # for y we need to check again how to handle speed score
 
+    preprocess_nan(x)   
+
     # apply Random Forest Regressor and get importance
     rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
     rnd_clf.fit(x, y)  # fit it to the data
@@ -71,7 +88,7 @@ def pipeline(df):
 
     ## include k-fold, include validation set split
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
-    print("Random Forrest Regression")
+    print("Random Forest Regression")
     score = cross_val_score(RandomForestRegressor(random_state=42), x, y, cv=kf, scoring="neg_mean_squared_error")
     rmse(score.mean())
 
@@ -80,3 +97,4 @@ def pipeline(df):
     print("Ridge Regression")
     score = cross_val_score(Ridge(), x, y, cv=kf, scoring="neg_mean_squared_error")
     rmse(score.mean())
+

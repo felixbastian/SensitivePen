@@ -19,8 +19,10 @@ import ML_Model_AND_Evaluation
 # jen path
 # path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
 # subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary_children.xlsx',header=0)
-path = r'../../../09_Data_probands'
-subjectLabels = pd.read_excel(r'../../../09_Data_probands/Data_summary_children.xlsx',header=0)
+
+#path = r'../../../09_Data_probands'
+path = r"09_Data_probands"
+subjectLabels = pd.read_excel(r'09_Data_probands\Data_summary_children.xlsx',header=0)
 
 def runfeaturesextract():
     total_df = pd.DataFrame()
@@ -98,10 +100,13 @@ def runfeaturesextract():
             featuresByWindowDF.insert(1, 'BHK_speed', subjectLabels['Speed_score'][ind])
             featuresByWindowDF.insert(2, 'BHK_quality', subjectLabels['Quality_score'][ind])
 
+            #Add Age and Gender to the features
+            featuresByWindowDF["Age"] = subjectLabels["Age"][ind]
+            featuresByWindowDF["Gender"] = int(subjectLabels["Gender (0=boys)"][ind])
+
             # print('Final dataframe for model')
             # print(len(featuresByWindowDF))
-            #
-            # print(featuresByWindowDF.head())
+            #print(featuresByWindowDF.head())
             total_df = pd.concat([total_df,featuresByWindowDF], axis=0)
         except TypeError:
             pass
