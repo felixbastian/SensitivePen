@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold, cross_val_score
 import matplotlib.pyplot as plt
 from sklearn.linear_model import Ridge
+from Feature_Selection import FeatureSelector
 
 import warnings
 
@@ -75,7 +76,21 @@ def pipeline(df):
     # split in training and test data
     x, y = split_df_in_xy(df=df, y_choosen="BHK_quality")  # for y we need to check again how to handle speed score
 
-    preprocess_nan(x)   
+    preprocess_nan(x)
+
+
+    ########### Feature Selection ###########
+    steps = {'Constant_Features': {'frac_constant_values': 0.9},
+             'Correlated_Features': {'correlation_threshold': 0.9},
+             'Lasso_Remover': {'alpha': 1, 'coef_threshold':1e-05},
+             'Mutual_Info_Remover': {'mi_threshold': 0.05},
+             'Boruta_Remover': {'max_depth': 10}}  #Random forest features
+
+    FS = FeatureSelector()
+    FS.fit(x, y, steps)
+    FS.transform(x)
+
+
 
     # apply Random Forest Regressor and get importance
     rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
