@@ -78,6 +78,8 @@ def pipeline(df):
 
     preprocess_nan(x)
 
+    print(x.columns)
+
 
     ########### Feature Selection ###########
     steps = {'Constant_Features': {'frac_constant_values': 0.9},
@@ -93,6 +95,11 @@ def pipeline(df):
 
 
     # apply Random Forest Regressor and get importance
+    
+    #### Timestmp added at some point!
+    x = x.select_dtypes(['number'])
+    #### Remove later
+
     rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
     rnd_clf.fit(x, y)  # fit it to the data
 
