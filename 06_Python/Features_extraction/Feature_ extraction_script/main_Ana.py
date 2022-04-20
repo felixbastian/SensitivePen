@@ -43,8 +43,17 @@ def runfeaturesextract(subjectLabels):
             reference = '/' + subjectLabels['Dataset'][ind] + '/' + subjectLabels[scope][ind] + '.csv'
             link = path + reference
             #link = path
+            start, end = subjectLabels['Start'][ind], subjectLabels['End'][ind]
+
+
             raw_df = pd.read_csv(link)
+            #raw_df = raw_df.iloc[start:end,:]
+
+            raw_df = raw_df.loc[start:end,:]
+            raw_df = raw_df.reset_index()
+            #print(raw_df)
             df = raw_df[['time', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz', 'psi', 'theta', 'normAccel', 'normMag','normGyr']]
+            #df = df.iloc[start:end,:]
 
             #padding (taking away at beginning and end
             # df=df.iloc[padding:(len(df)-padding),:]
@@ -109,6 +118,9 @@ def runfeaturesextract(subjectLabels):
             featuresByWindowDF["Age"] = subjectLabels["Age"][ind]
             featuresByWindowDF["Gender"] = int(subjectLabels["Gender (0=boys)"][ind])
 
+            pd.set_option('display.max_columns', None)
+            #print(featuresByWindowDF.head())
+
             # print('Final dataframe for model')
             # print(len(featuresByWindowDF))
             #print(featuresByWindowDF.head())
@@ -124,7 +136,7 @@ if __name__ == "__main__":
     subjectLabels = pd.read_excel(path + 'Data_summary_children.xlsx', header=0)
 
     # define windowsize
-    windowSize = 500
+    windowSize = 300
 
     #define padding (amount to take away at beginning and end of each dataset)
     #not functional yet.. leads to errors
@@ -147,7 +159,10 @@ if __name__ == "__main__":
     #export
     total_df.to_excel("Data_summary.xlsx")
 
-    #summarize windows
+
+    #we take the features out for model creation
+    total_df = total_df.drop(columns=['Age', 'Gender'])
+
     #new_df = total_df.apply(lambda x: total_df['subjectLabel'].values)
 
     #run model pipeline and predict

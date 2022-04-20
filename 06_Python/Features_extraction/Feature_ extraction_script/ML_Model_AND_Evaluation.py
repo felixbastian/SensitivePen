@@ -77,9 +77,8 @@ def pipeline(df):
     # split in training and test data
     x, y, labels = split_df_in_xy(df=df, y_choosen="BHK_quality")  # for y we need to check again how to handle speed score
 
-
     #ACTIVATE FOR AGE AND GENDER
-    preprocess_nan(x)
+    #preprocess_nan(x)
 
 
     ########### Feature Selection ###########
@@ -101,11 +100,6 @@ def pipeline(df):
     fr_desc_importance = get_Random_Forest_Regressor_feature_importance(rnd_clf, x, y)
 
     x_slected = x[fr_desc_importance[:5]]  ### select a numebr of features
-
-    regressor = RandomForestRegressor(random_state=42)
-    regressor.fit(x,y)
-
-    y_pred = regressor.predict()
 
 
     ## include k-fold, include validation set split

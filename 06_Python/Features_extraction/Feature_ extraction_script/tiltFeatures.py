@@ -27,6 +27,7 @@ def tilt_azimuth(df):
 
     return features
 
+
 def tilt_azimuth_change(df):
     '''
     Input: window
