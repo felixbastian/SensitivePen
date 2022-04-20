@@ -20,15 +20,18 @@ import ML_Model_AND_Evaluation
 # path = r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands'
 # subjectLabels = pd.read_excel(r'C:\Users\felix\OneDrive\Desktop\DSBA-M2\CRP\SensitivePen\09_Data_probands\Data_summary_children.xlsx',header=0)
 
-# path = r'../../../09_Data_probands'
-path = r"09_Data_probands"
-subjectLabels = pd.read_excel(r'09_Data_probands/Data_summary_children.xlsx',header=0)
+path = r'../../../09_Data_probands'
+
+
 
 # 09_Data_probands/Data_summary_children.xlsx
 
-def runfeaturesextract():
+def runfeaturesextract(subjectLabels):
     total_df = pd.DataFrame()
 
+    #filter the database to only include the desired scope
+
+    subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
     # Go through the file indexing all existing files
     for ind in subjectLabels.index:
         print(subjectLabels[scope][ind])
@@ -117,6 +120,9 @@ def runfeaturesextract():
 
 if __name__ == "__main__":
 
+    path = r"../../../09_Data_probands/"
+    subjectLabels = pd.read_excel(path + 'Data_summary_children.xlsx', header=0)
+
     # define windowsize
     windowSize = 500
 
@@ -132,12 +138,17 @@ if __name__ == "__main__":
     #define scope: 'Link_loops'/'Link_sentences'
     scope = 'Link_sentences'
 
+    #define scope of Dataset
+    datasetScope = 'Children'
+
     #extract features by window
-    total_df = runfeaturesextract()
+    total_df = runfeaturesextract(subjectLabels)
 
     #export
     total_df.to_excel("Data_summary.xlsx")
 
+    #summarize windows
+    #new_df = total_df.apply(lambda x: total_df['subjectLabel'].values)
 
     #run model pipeline and predict
     ML_Model_AND_Evaluation.pipeline(total_df)

@@ -24,9 +24,10 @@ def remove_cols(df, c):
 
 
 def split_df_in_xy(df, y_choosen):
+    labels = df['subjectLabel']
     x = remove_cols(df, ["BHK_quality", "BHK_speed", "subjectLabel"])
     y = df[y_choosen]
-    return x, y  # train_test_split(x, y)
+    return x, y,labels  # train_test_split(x, y)
 
 
 def get_Random_Forest_Regressor_feature_importance(rf, x, y):
@@ -74,8 +75,10 @@ def pipeline(df):
     #  Devillaine2021
 
     # split in training and test data
-    x, y = split_df_in_xy(df=df, y_choosen="BHK_quality")  # for y we need to check again how to handle speed score
+    x, y, labels = split_df_in_xy(df=df, y_choosen="BHK_quality")  # for y we need to check again how to handle speed score
 
+
+    #ACTIVATE FOR AGE AND GENDER
     preprocess_nan(x)
 
 
@@ -90,8 +93,6 @@ def pipeline(df):
     FS.fit(x, y, steps)
     FS.transform(x)
 
-
-
     # apply Random Forest Regressor and get importance
     rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
     rnd_clf.fit(x, y)  # fit it to the data
@@ -100,6 +101,12 @@ def pipeline(df):
     fr_desc_importance = get_Random_Forest_Regressor_feature_importance(rnd_clf, x, y)
 
     x_slected = x[fr_desc_importance[:5]]  ### select a numebr of features
+
+    regressor = RandomForestRegressor(random_state=42)
+    regressor.fit(x,y)
+
+    y_pred = regressor.predict()
+
 
     ## include k-fold, include validation set split
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
