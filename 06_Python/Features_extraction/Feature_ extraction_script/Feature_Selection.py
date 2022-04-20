@@ -190,8 +190,9 @@ class FeatureSelector():
         
     def fit(self, x, y, steps = {}):
         
-        # Do not make changes to original df (for now)
-        x_temp = x.copy()
+        # Do not make changes to original df (for now) + keep only numeric variables
+        x_temp = x.select_dtypes(['number']).copy()
+        # x_temp = x.copy()
         
         # Check validity of call
         for key in steps.keys():
