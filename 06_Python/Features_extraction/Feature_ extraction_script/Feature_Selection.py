@@ -231,10 +231,10 @@ class FeatureSelector():
                 self.features_to_delete.extend(features_to_drop)
                 x_temp.drop(columns=features_to_drop, inplace=True) 
                 
-            print(method)
-            print(f'Number of features removed: {len(features_to_drop)}')
-            print(f'Features removed: {features_to_drop}')
-            print('-'*100)
+            # print(method)
+            # print(f'Number of features removed: {len(features_to_drop)}')
+            # print(f'Features removed: {features_to_drop}')
+            # print('-'*100)
             
             
     def transform(self, X):
