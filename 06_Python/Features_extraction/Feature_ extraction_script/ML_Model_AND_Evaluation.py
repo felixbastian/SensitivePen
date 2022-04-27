@@ -3,6 +3,7 @@ import numpy as np
 from datetime import datetime
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold, cross_val_score
 import matplotlib.pyplot as plt
@@ -34,7 +35,7 @@ def split_df_in_xy(df, y_choosen,index, uniqueChildren):
     df = df[df['subjectLabel'].isin(split)]
 
     label = df['subjectLabel']
-    x = remove_cols(df, ["BHK_quality", "BHK_speed", "subjectLabel"])
+    x = remove_cols(df, ["BHK_quality", "BHK_speed", "subjectLabel", "Class_binary", "Class_three"])
     y = df[y_choosen]
 
     return x,y,label
@@ -95,8 +96,8 @@ def pipeline(df):
     for train_index, test_index in tqdm(kf.split(uniqueChildren)):
 
 
-        train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
-        test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
+        train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
+        test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
 
         # print(train_x)
         # print(train_y)
@@ -126,7 +127,8 @@ def pipeline(df):
 
         #train the model
 
-        rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
+        rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
+        #rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
         rnd_clf.fit(train_x, train_y)  # fit it to the data
 
         # get importance
@@ -161,7 +163,69 @@ def pipeline(df):
         predictFrame = pd.concat([predictFrame,entry], axis=0)
 
 
+    #calculation of classification scores - binary
+    def calculateScores(crp):
+        tp = 0
+        tn = 0
+        fp = 0
+        fn = 0
 
+        p = 0
+        n = 0
+
+        for item in crp['labels'].unique():
+            data = crp[crp['labels'] == item]
+            count = data.groupby(['y_pred']).size()
+
+            try:
+                yes = count.at['yes']
+            except Exception as e:
+                yes = 0
+            try:
+                no = count.at['no']
+            except Exception as e:
+                yes = 0
+
+            # print(f'yes: {yes}, no: {no}')
+            if (no > yes):
+                pred = 'no'
+
+            else:
+                pred = 'yes'
+
+            real = data['y_real'].iloc[0]
+            if (real == 'yes'):
+                p = p + 1
+            else:
+                n = n + 1
+            # print(f'real: {real}')
+
+            # ratio
+            if (pred == 'yes'):
+                if (pred == real): tp = tp + 1
+                if (pred != real): fp = fp + 1
+            if (pred == 'no'):
+                if (pred == real): tn = tn + 1
+                if (pred != real): fn = fn + 1
+
+        print(tp)
+        print(fp)
+        print(tn)
+        print(fn)
+
+        sensitivity = tp / (tp + fn)
+        specificity = tn / (fp + tn)
+        accuracy = (tp + tn) / (tp + tn + fp + fn)
+
+        print(f'sensitivity: {sensitivity}')
+        print(f'specificity: {specificity}')
+        print(f'accuracy: {accuracy}')
+
+        print()
+        print(f'positive: {p}')
+        print(f'negative: {n}')
+        
+    '''
     finalFrame =[]
     for item in predictFrame['labels'].unique():
         data = predictFrame[predictFrame['labels'] == item]
@@ -169,10 +233,11 @@ def pipeline(df):
     finalFrame = pd.DataFrame(finalFrame).rename(columns={0:'labels', 1:'y_real', 2:'y_pred',3:'iter'})
 
     plotPrediction(finalFrame)
+    '''
     # print(predictFrame)
     # print(finalFrame)
     predictFrame.to_csv('selectionOfPrediction.csv')
-    finalFrame.to_csv('prediction.csv')
+    #finalFrame.to_csv('prediction.csv')
 
 
     # predictFrame.apply(lambda x: x)
@@ -197,5 +262,8 @@ def pipeline(df):
     print("Ridge Regression")
     score = cross_val_score(Ridge(), x, y, cv=kf, scoring="neg_mean_squared_error")
     rmse(score.mean())
+    
+    
+    #calculation 
 
 '''

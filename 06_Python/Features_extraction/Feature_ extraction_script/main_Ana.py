@@ -110,9 +110,13 @@ def runfeaturesextract(subjectLabels):
             # Insert label of subject
             featuresByWindowDF.insert(0, 'subjectLabel', subjectLabels['Dataset'][ind] + "_" + subjectLabels['Subject'][ind])
 
-            #Insert BHK scores of subject
+            #Insert BHK scores of subject - insert command for insertion at specific space
             featuresByWindowDF.insert(1, 'BHK_speed', subjectLabels['Speed_score'][ind])
             featuresByWindowDF.insert(2, 'BHK_quality', subjectLabels['Quality_score'][ind])
+
+            #Insert classification labels of subject
+            featuresByWindowDF.insert(3, 'Class_binary', subjectLabels['Classification_binary'][ind])
+            featuresByWindowDF.insert(4, 'Class_three', subjectLabels['Classification_three'][ind])
 
             #Add Age and Gender to the features
             featuresByWindowDF["Age"] = subjectLabels["Age"][ind]
