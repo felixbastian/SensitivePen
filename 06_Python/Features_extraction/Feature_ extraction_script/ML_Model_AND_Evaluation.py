@@ -224,7 +224,7 @@ def pipeline(df):
         print()
         print(f'positive: {p}')
         print(f'negative: {n}')
-        
+
     '''
     finalFrame =[]
     for item in predictFrame['labels'].unique():
