@@ -97,12 +97,12 @@ def pipeline(df):
     for train_index, test_index in tqdm(kf.split(uniqueChildren)):
 
 
-        train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
-        test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
+        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
+        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
         # train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
         # test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
-        #train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
-        #test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
+        train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
+        test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
 
         # print(BHK_quality)
         # print(train_y)
@@ -131,8 +131,8 @@ def pipeline(df):
         #### Remove later
         #train the model
 
-        rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
-        #rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
+        #rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
+        rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
         rnd_clf.fit(train_x, train_y)  # fit it to the data
 
         # get importance
@@ -172,8 +172,8 @@ def pipeline(df):
 
     #calculation of classification scores - binary or tri(no,yes,mild)
     #calculateBinaryScores(predictFrame)
-    calculateTriScores(predictFrame)
-'''
+    #calculateTriScores(predictFrame)
+
 
     finalFrame =[]
     for item in predictFrame['labels'].unique():
@@ -182,7 +182,7 @@ def pipeline(df):
     finalFrame = pd.DataFrame(finalFrame).rename(columns={0:'labels', 1:'y_real', 2:'y_pred',3:'iter'})
 
     plotPrediction(finalFrame)
-'''
+
     # print(predictFrame)
     # print(finalFrame)
     #predictFrame.to_csv('selectionOfPrediction.csv')

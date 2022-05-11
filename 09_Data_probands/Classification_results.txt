@@ -314,6 +314,7 @@ Process finished with exit code 0
 
 ########################################### MULTICLASS ###########################################
 
+All Data - Loops
 C:\Users\felix\Anaconda3\python.exe "C:/Users/felix/OneDrive/Desktop/DSBA-M2/CRP/SensitivePen/06_Python/Features_extraction/Feature_ extraction_script/main_Ana.py"
 200
 1
@@ -362,5 +363,52 @@ Nbr. of subjects: 27
 Accuracy: 0.4074074074074074
 
 Process finished with exit code 0
+
+
+Only Children - Loops
+C:\Users\felix\Anaconda3\python.exe "C:/Users/felix/OneDrive/Desktop/DSBA-M2/CRP/SensitivePen/06_Python/Features_extraction/Feature_ extraction_script/main_Ana.py"
+200
+1
+10it [00:03,  2.60it/s]
+Confusion Matrix
+[[5 0 2]
+ [2 0 3]
+ [4 5 1]]
+Nbr. of subjects: 22
+Accuracy: 0.2727272727272727
+300
+1
+10it [00:05,  1.68it/s]
+Confusion Matrix
+[[4 0 3]
+ [2 1 3]
+ [5 4 0]]
+Nbr. of subjects: 22
+Accuracy: 0.22727272727272727
+400
+1
+10it [00:04,  2.11it/s]
+Confusion Matrix
+[[4 0 2]
+ [4 1 3]
+ [3 4 1]]
+Nbr. of subjects: 22
+Accuracy: 0.2727272727272727
+500
+1
+10it [00:03,  2.68it/s]
+Confusion Matrix
+[[4 1 3]
+ [3 1 3]
+ [4 3 0]]
+Nbr. of subjects: 22
+Accuracy: 0.22727272727272727
+600
+1
+10it [00:03,  2.55it/s]
+Confusion Matrix
+[[3 1 2]
+ [3 1 3]
+ [5 3 1]]
 
 
