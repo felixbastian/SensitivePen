@@ -22,16 +22,15 @@ import ML_Model_AND_Evaluation
 
 path = r'../../../09_Data_probands'
 
-
-
 # 09_Data_probands/Data_summary_children.xlsx
 
 def runfeaturesextract(subjectLabels):
     total_df = pd.DataFrame()
 
     #filter the database to only include the desired scope
+    #subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
 
-    subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
+
     # Go through the file indexing all existing files
     for ind in subjectLabels.index:
         print(subjectLabels[scope][ind])
@@ -51,16 +50,10 @@ def runfeaturesextract(subjectLabels):
 
             raw_df = raw_df.loc[start:end,:]
             raw_df = raw_df.reset_index()
-            #print(raw_df)
+
             df = raw_df[['time', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz', 'psi', 'theta', 'normAccel', 'normMag','normGyr']]
-            #df = df.iloc[start:end,:]
 
-            #padding (taking away at beginning and end
-            # df=df.iloc[padding:(len(df)-padding),:]
 
-            # df = pd.DataFrame()
-            # df = df.append(pd.DataFrame(getFeaturesFromFile.datafromfile(path + '\\' + filename)), ignore_index=True)
-            # #df.columns = ['time', 'accX', 'accY', 'accZ', 'gyrX', 'gyrY', 'gyrZ', 'magX', 'magY', 'magZ']
 
             #When the length of the df changes, also change "getFeaturesFromFile.py"
             df.columns = ['time', 'accX', 'accY', 'accZ', 'gyrX', 'gyrY', 'gyrZ', 'magX', 'magY', 'magZ','psi','theta','normAccel','normMag','normGyr']
@@ -99,11 +92,6 @@ def runfeaturesextract(subjectLabels):
             # sns.lineplot(data['time'], data['accZ_Top'])
 
 
-            ##DATA EXPORT FOR ANA
-            # padding = 200
-            # totalDF=totalDF.iloc[padding:(len(totalDF)-padding),:]
-            # windowSize = len(totalDF)
-
             # Pass dataframe through window and set isRaw to False
             featuresByWindowDF = getFeaturesWindows.passThroughWindow(totalDF, False, windowSize, overlapRatio)
 
@@ -126,9 +114,9 @@ def runfeaturesextract(subjectLabels):
             #print(featuresByWindowDF.head())
 
             # print('Final dataframe for model')
-            # print(len(featuresByWindowDF))
-            #print(featuresByWindowDF.head())
+
             total_df = pd.concat([total_df,featuresByWindowDF], axis=0)
+
         except TypeError:
             pass
     return total_df
@@ -136,42 +124,41 @@ def runfeaturesextract(subjectLabels):
 
 if __name__ == "__main__":
 
-    path = r"../../../09_Data_probands/"
-    subjectLabels = pd.read_excel(path + 'Data_summary_children.xlsx', header=0)
+    #t = True
+    window=[200,300,400,500,600]
+    over=[1]
 
-    # define windowsize
-    windowSize = 300
+    for windowInd in window:
+        for overInd in over:
+            print(windowInd)
+            print(overInd)
 
-    #define padding (amount to take away at beginning and end of each dataset)
-    #not functional yet.. leads to errors
-    # padding = 200
+            path = r"../../../09_Data_probands/"
+            subjectLabels = pd.read_excel(path + 'Data_summary_children.xlsx', header=0)
 
-    #define the overlapping ratio meaning: windowStart += math.floor(dataWindow / overlapRatio)
-    # 1 is resulting in no overlap
-    # 2 results in 50% overlap
-    overlapRatio = 1
+            # define windowsize
+            windowSize = windowInd
 
-    #define scope: 'Link_loops'/'Link_sentences'
-    scope = 'Link_sentences'
+            #define the overlapping ratio meaning: windowStart += math.floor(dataWindow / overlapRatio)
+            # 1 is resulting in no overlap
+            # 2 results in 50% overlap
+            overlapRatio = overInd
 
-    #define scope of Dataset
-    datasetScope = 'Children'
+            #define scope: 'Link_loops'/'Link_sentences'
+            scope = 'Link_loops'
 
-    #extract features by window
-    total_df = runfeaturesextract(subjectLabels)
+            #define scope of Dataset
+            datasetScope = 'Children'
 
+            #extract features by window
+            total_df = runfeaturesextract(subjectLabels)
 
+            #we take the features out for model creation
+            total_df = total_df.drop(columns=['Age', 'Gender'])
+            #total_df = total_df.drop(columns=['Age'])
 
+            #export
+            total_df.to_excel("Data_summary.xlsx")
 
-    #we take the features out for model creation
-    total_df = total_df.drop(columns=['Age', 'Gender'])
-
-    #export
-    total_df.to_excel("Data_summary.xlsx")
-
-    #new_df = total_df.apply(lambda x: total_df['subjectLabel'].values)
-
-    #run model pipeline and predict
-    ML_Model_AND_Evaluation.pipeline(total_df)
-
-
+            #run model pipeline and predict
+            ML_Model_AND_Evaluation.pipeline(total_df)

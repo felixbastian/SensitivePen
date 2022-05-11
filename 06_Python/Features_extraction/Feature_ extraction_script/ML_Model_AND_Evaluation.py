@@ -12,6 +12,7 @@ from Feature_Selection import FeatureSelector
 import random
 from plotPrediction import plotPrediction
 from tqdm import tqdm
+from classification_scoring import calculateBinaryScores, calculateTriScores
 
 
 import warnings
@@ -96,10 +97,14 @@ def pipeline(df):
     for train_index, test_index in tqdm(kf.split(uniqueChildren)):
 
 
+        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
+        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
         train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
         test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
+        #train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
+        #test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
 
-        # print(train_x)
+        # print(BHK_quality)
         # print(train_y)
         # print(train_label)
 
@@ -124,7 +129,6 @@ def pipeline(df):
         #### Timestmp added at some point!
         train_x = train_x.select_dtypes(['number'])
         #### Remove later
-
         #train the model
 
         rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
@@ -132,8 +136,8 @@ def pipeline(df):
         rnd_clf.fit(train_x, train_y)  # fit it to the data
 
         # get importance
-        #fr_desc_importance = get_Random_Forest_Regressor_feature_importance(rnd_clf,train_x, train_y)
-        #x_slected = train_x[fr_desc_importance[:5]]  ### select a number of features
+        fr_desc_importance = get_Random_Forest_Regressor_feature_importance(rnd_clf,train_x, train_y)
+        x_slected = train_x[fr_desc_importance[:5]]  ### select a number of features
 
         #create prediction
         '''
@@ -143,6 +147,9 @@ def pipeline(df):
         #save prediction and re-iterate
 
         #create column iterator
+        #this puts numbers to each window prediction to later merge them into a full prediction
+        #or to analyse each predictions by window
+
         i=0
         iterCol=[]
         lab = test_label.tolist()
@@ -163,69 +170,11 @@ def pipeline(df):
         predictFrame = pd.concat([predictFrame,entry], axis=0)
 
 
-    #calculation of classification scores - binary
-    def calculateScores(crp):
-        tp = 0
-        tn = 0
-        fp = 0
-        fn = 0
+    #calculation of classification scores - binary or tri(no,yes,mild)
+    calculateBinaryScores(predictFrame)
+    #calculateTriScores(predictFrame)
+'''
 
-        p = 0
-        n = 0
-
-        for item in crp['labels'].unique():
-            data = crp[crp['labels'] == item]
-            count = data.groupby(['y_pred']).size()
-
-            try:
-                yes = count.at['yes']
-            except Exception as e:
-                yes = 0
-            try:
-                no = count.at['no']
-            except Exception as e:
-                yes = 0
-
-            # print(f'yes: {yes}, no: {no}')
-            if (no > yes):
-                pred = 'no'
-
-            else:
-                pred = 'yes'
-
-            real = data['y_real'].iloc[0]
-            if (real == 'yes'):
-                p = p + 1
-            else:
-                n = n + 1
-            # print(f'real: {real}')
-
-            # ratio
-            if (pred == 'yes'):
-                if (pred == real): tp = tp + 1
-                if (pred != real): fp = fp + 1
-            if (pred == 'no'):
-                if (pred == real): tn = tn + 1
-                if (pred != real): fn = fn + 1
-
-        print(tp)
-        print(fp)
-        print(tn)
-        print(fn)
-
-        sensitivity = tp / (tp + fn)
-        specificity = tn / (fp + tn)
-        accuracy = (tp + tn) / (tp + tn + fp + fn)
-
-        print(f'sensitivity: {sensitivity}')
-        print(f'specificity: {specificity}')
-        print(f'accuracy: {accuracy}')
-
-        print()
-        print(f'positive: {p}')
-        print(f'negative: {n}')
-
-    '''
     finalFrame =[]
     for item in predictFrame['labels'].unique():
         data = predictFrame[predictFrame['labels'] == item]
@@ -233,10 +182,10 @@ def pipeline(df):
     finalFrame = pd.DataFrame(finalFrame).rename(columns={0:'labels', 1:'y_real', 2:'y_pred',3:'iter'})
 
     plotPrediction(finalFrame)
-    '''
+'''
     # print(predictFrame)
     # print(finalFrame)
-    predictFrame.to_csv('selectionOfPrediction.csv')
+    #predictFrame.to_csv('selectionOfPrediction.csv')
     #finalFrame.to_csv('prediction.csv')
 
 
