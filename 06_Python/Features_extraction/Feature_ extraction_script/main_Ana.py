@@ -28,12 +28,12 @@ def runfeaturesextract(subjectLabels):
     total_df = pd.DataFrame()
 
     #filter the database to only include the desired scope
-    #subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
+    subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
 
 
     # Go through the file indexing all existing files
     for ind in subjectLabels.index:
-        print(subjectLabels[scope][ind])
+        #print(subjectLabels[scope][ind])
     #for ind in range(1):
 
         #some probands do not have data -> skip
@@ -41,19 +41,15 @@ def runfeaturesextract(subjectLabels):
             # DataFrame Creation with the Data by looking up the link in the excel file corresponding to proband
             reference = '/' + subjectLabels['Dataset'][ind] + '/' + subjectLabels[scope][ind] + '.csv'
             link = path + reference
-            #link = path
-            start, end = subjectLabels['Start'][ind], subjectLabels['End'][ind]
+            #link = path + start & end
+            start, end = subjectLabels[f'Start_{scope}'][ind], subjectLabels[f'End_{scope}'][ind]
 
 
             raw_df = pd.read_csv(link)
-            #raw_df = raw_df.iloc[start:end,:]
-
             raw_df = raw_df.loc[start:end,:]
             raw_df = raw_df.reset_index()
 
             df = raw_df[['time', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz', 'psi', 'theta', 'normAccel', 'normMag','normGyr']]
-
-
 
             #When the length of the df changes, also change "getFeaturesFromFile.py"
             df.columns = ['time', 'accX', 'accY', 'accZ', 'gyrX', 'gyrY', 'gyrZ', 'magX', 'magY', 'magZ','psi','theta','normAccel','normMag','normGyr']
@@ -134,7 +130,7 @@ if __name__ == "__main__":
             print(overInd)
 
             path = r"../../../09_Data_probands/"
-            subjectLabels = pd.read_excel(path + 'Data_summary_children.xlsx', header=0)
+            subjectLabels = pd.read_excel(path + 'Data_summary_all.xlsx', header=0)
 
             # define windowsize
             windowSize = windowInd

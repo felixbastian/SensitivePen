@@ -97,10 +97,10 @@ def pipeline(df):
     for train_index, test_index in tqdm(kf.split(uniqueChildren)):
 
 
-        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
-        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
-        train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
-        test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
+        train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
+        test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
+        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
+        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
         #train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
         #test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
 
@@ -136,8 +136,8 @@ def pipeline(df):
         rnd_clf.fit(train_x, train_y)  # fit it to the data
 
         # get importance
-        fr_desc_importance = get_Random_Forest_Regressor_feature_importance(rnd_clf,train_x, train_y)
-        x_slected = train_x[fr_desc_importance[:5]]  ### select a number of features
+        #fr_desc_importance = get_Random_Forest_Regressor_feature_importance(rnd_clf,train_x, train_y)
+        #x_slected = train_x[fr_desc_importance[:5]]  ### select a number of features
 
         #create prediction
         '''
@@ -171,8 +171,8 @@ def pipeline(df):
 
 
     #calculation of classification scores - binary or tri(no,yes,mild)
-    calculateBinaryScores(predictFrame)
-    #calculateTriScores(predictFrame)
+    #calculateBinaryScores(predictFrame)
+    calculateTriScores(predictFrame)
 '''
 
     finalFrame =[]
