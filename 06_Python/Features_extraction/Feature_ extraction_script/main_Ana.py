@@ -28,13 +28,14 @@ def runfeaturesextract(subjectLabels):
     total_df = pd.DataFrame()
 
     #filter the database to only include the desired scope
-    subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
+    #subjectLabels = subjectLabels[subjectLabels['Dataset']==datasetScope]
 
 
     # Go through the file indexing all existing files
     for ind in subjectLabels.index:
+
+        #print subjects that will be used for the model
         #print(subjectLabels[scope][ind])
-    #for ind in range(1):
 
         #some probands do not have data -> skip
         try:
@@ -107,9 +108,6 @@ def runfeaturesextract(subjectLabels):
             featuresByWindowDF["Gender"] = int(subjectLabels["Gender (0=boys)"][ind])
 
             pd.set_option('display.max_columns', None)
-            #print(featuresByWindowDF.head())
-
-            # print('Final dataframe for model')
 
             total_df = pd.concat([total_df,featuresByWindowDF], axis=0)
 
@@ -120,7 +118,6 @@ def runfeaturesextract(subjectLabels):
 
 if __name__ == "__main__":
 
-    #t = True
     window=[200,300,400,500,600]
     over=[1]
 
@@ -151,7 +148,6 @@ if __name__ == "__main__":
 
             #we take the features out for model creation
             total_df = total_df.drop(columns=['Age', 'Gender'])
-            #total_df = total_df.drop(columns=['Age'])
 
             #export
             total_df.to_excel("Data_summary.xlsx")

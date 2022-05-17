@@ -99,10 +99,10 @@ def pipeline(df):
 
         # train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
         # test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
-        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
-        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
-        train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
-        test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
+        train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
+        test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
+        # train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
+        # test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
 
         # print(BHK_quality)
         # print(train_y)
@@ -171,10 +171,10 @@ def pipeline(df):
 
 
     #calculation of classification scores - binary or tri(no,yes,mild)
-    #calculateBinaryScores(predictFrame)
+    calculateBinaryScores(predictFrame)
     #calculateTriScores(predictFrame)
 
-
+'''
     finalFrame =[]
     for item in predictFrame['labels'].unique():
         data = predictFrame[predictFrame['labels'] == item]
@@ -182,6 +182,7 @@ def pipeline(df):
     finalFrame = pd.DataFrame(finalFrame).rename(columns={0:'labels', 1:'y_real', 2:'y_pred',3:'iter'})
 
     plotPrediction(finalFrame)
+    '''
 
     # print(predictFrame)
     # print(finalFrame)
