@@ -146,9 +146,6 @@ if __name__ == "__main__":
             #extract features by window
             total_df = runfeaturesextract(subjectLabels)
 
-            #we take the features out for model creation
-            total_df = total_df.drop(columns=['Age', 'Gender'])
-
             #export
             total_df.to_excel("Data_summary.xlsx")
 

@@ -17,7 +17,7 @@ def plotPrediction(df):
     plt.figure(figsize=(10,8))
     plt.grid()
     plt.plot([y.min(), y.max()], [y.min(), y.max()], "k--")
-    plt.scatter(df.y_real, df.y_pred, c=df.rmse, cmap='viridis')
+    plt.scatter(df.y_real, df.y_pred, c=df.age, cmap='viridis')
     plt.colorbar()
 
     plt.title("Prediction Error Distribution")

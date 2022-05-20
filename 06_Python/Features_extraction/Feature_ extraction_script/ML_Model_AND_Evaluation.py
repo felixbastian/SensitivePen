@@ -88,9 +88,16 @@ def pipeline(df):
 
     ############# Prediction pipeline #################
 
+    # ageList index to map subjects to their age after shuffeling the data
+    #ageList = df[['subjectLabel','Age']].to_dict()
+    ageList = dict(zip(df.subjectLabel, df.Age))
+
+    # we take the features out for model creation
+    df = df.drop(columns=['Age', 'Gender'])
+
     predictFrame = pd.DataFrame()
 
-    # we identify the inique children in the database
+    # we identify the unique children in the database
     uniqueChildren = df['subjectLabel'].unique()
     kf = KFold(n_splits=10, shuffle=True, random_state=3)
 
@@ -99,10 +106,10 @@ def pipeline(df):
 
         # train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
         # test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
-        train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
-        test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
-        # train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
-        # test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
+        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
+        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
+        train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
+        test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
 
         # print(BHK_quality)
         # print(train_y)
@@ -131,7 +138,10 @@ def pipeline(df):
         #### Remove later
         #train the model
 
+        #define the classifier
         #rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
+
+        #define the regressor
         rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
         rnd_clf.fit(train_x, train_y)  # fit it to the data
 
@@ -171,18 +181,19 @@ def pipeline(df):
 
 
     #calculation of classification scores - binary or tri(no,yes,mild)
-    calculateBinaryScores(predictFrame)
+    # calculateBinaryScores(predictFrame)
     #calculateTriScores(predictFrame)
 
-'''
+    #calculation of regression scores
     finalFrame =[]
-    for item in predictFrame['labels'].unique():
+    for ind,item in enumerate(predictFrame['labels'].unique()):
         data = predictFrame[predictFrame['labels'] == item]
-        finalFrame.append([item,data['y_real'].mean(),data['y_pred'].mean()])
-    finalFrame = pd.DataFrame(finalFrame).rename(columns={0:'labels', 1:'y_real', 2:'y_pred',3:'iter'})
+        finalFrame.append([item,data['y_real'].mean(),data['y_pred'].mean(),ageList[item]])
+    finalFrame = pd.DataFrame(finalFrame).rename(columns={0:'labels', 1:'y_real', 2:'y_pred',3:'age'})
+
 
     plotPrediction(finalFrame)
-    '''
+
 
     # print(predictFrame)
     # print(finalFrame)
