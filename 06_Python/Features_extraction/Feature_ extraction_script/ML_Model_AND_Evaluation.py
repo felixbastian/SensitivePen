@@ -106,10 +106,10 @@ def pipeline(df):
 
         # train_x, train_y, train_label = split_df_in_xy(df, 'Class_three', train_index, uniqueChildren)
         # test_x, test_y, test_label = split_df_in_xy(df, 'Class_three', test_index, uniqueChildren)
-        # train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
-        # test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
-        train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
-        test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
+        train_x, train_y, train_label = split_df_in_xy(df, 'Class_binary', train_index, uniqueChildren)
+        test_x, test_y, test_label = split_df_in_xy(df, 'Class_binary',test_index,uniqueChildren)
+        # train_x, train_y, train_label = split_df_in_xy(df, 'BHK_quality', train_index, uniqueChildren)
+        # test_x, test_y, test_label = split_df_in_xy(df, 'BHK_quality',test_index,uniqueChildren)
 
         # print(BHK_quality)
         # print(train_y)
@@ -139,10 +139,10 @@ def pipeline(df):
         #train the model
 
         #define the classifier
-        #rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
+        rnd_clf = RandomForestClassifier(random_state=42)  # create the rf regressor
 
         #define the regressor
-        rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
+        #rnd_clf = RandomForestRegressor(random_state=42)  # create the rf regressor
         rnd_clf.fit(train_x, train_y)  # fit it to the data
 
         # get importance
@@ -181,9 +181,10 @@ def pipeline(df):
 
 
     #calculation of classification scores - binary or tri(no,yes,mild)
-    # calculateBinaryScores(predictFrame)
+    calculateBinaryScores(predictFrame)
     #calculateTriScores(predictFrame)
 
+'''
     #calculation of regression scores
     finalFrame =[]
     for ind,item in enumerate(predictFrame['labels'].unique()):
@@ -193,7 +194,7 @@ def pipeline(df):
 
 
     plotPrediction(finalFrame)
-
+'''
 
     # print(predictFrame)
     # print(finalFrame)
