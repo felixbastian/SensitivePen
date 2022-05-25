@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from scipy.signal import welch 
 
 #general function that computes all stats
 def add_stats(column):
@@ -85,6 +86,31 @@ def altitude_percentile(df, percentile=0.6):
     return features
 
 
+def calculate_median_of_Power_Spectral_of_speed_of_tilt_y_change(df):
+    '''
+    Input: window
+    Output: median_of_Power_Spectral_of_speed_of_tilt_y_change
+    '''
+    features = {}
+    altitude_change_speed = df["theta"].diff().diff()
+    _, psd = welch(altitude_change_speed.values[2:])
+    features["median_of_Power_Spectral_of_speed_of_tilt_y_change"] = [np.median(psd)]
+    return features
+
+
+def calculate_bandwidth_of_power_spectral_of_speed_of_tilt_x_change(df):
+    '''
+    Input: window
+    Output: bandwidth_of_power_spectral_of_speed_of_tilt_x_change
+    '''
+    features = {}
+    azimuth_change_speed = df["psi"].diff().diff()
+    _, psd = welch(azimuth_change_speed.values[2:])
+    features["bandwidth_of_power_spectral_of_speed_of_tilt_x_change"] = [np.max(psd)-np.min(psd)]
+    return features
+
+
+
 
 def tiltFeatures(df):
 
@@ -96,9 +122,12 @@ def tiltFeatures(df):
     features_AL_diff = tilt_altitude_change(df)
 
     features_AL_percentile = altitude_percentile(df)
+    features_median_of_Power_Spectral_of_speed_of_tilt_y_change = calculate_median_of_Power_Spectral_of_speed_of_tilt_y_change(df)
+    features_bandwidth_of_power_spectral_of_speed_of_tilt_x_change =calculate_bandwidth_of_power_spectral_of_speed_of_tilt_x_change(df)
 
     #add features to DataFrame
-    all = [features_AZ,features_AL,features_AZ_diff,features_AL_diff, features_AL_percentile]
+    all = [features_AZ,features_AL,features_AZ_diff,features_AL_diff,features_median_of_Power_Spectral_of_speed_of_tilt_y_change,
+           features_bandwidth_of_power_spectral_of_speed_of_tilt_x_change]
     tilt_df = pd.concat([pd.DataFrame.from_dict(i) for i in all], axis =1)
 
     return tilt_df
